@@ -1,0 +1,9 @@
+# view AndroidManifest.xml #generated:12
+-keep class net.votebrian.games.sof.Global { <init>(...); }
+
+# view AndroidManifest.xml #generated:17
+-keep class net.votebrian.games.sof.SoFActivity { <init>(...); }
+
+# view res/layout/main.xml #generated:8
+-keep class net.votebrian.games.sof.SurfaceView { <init>(...); }
+

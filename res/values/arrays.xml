@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="blends">
+        <item>GL_ZERO</item>
+        <item>GL_ONE</item>
+        <item>GL_SRC_COLOR</item>
+        <item>GL_ONE_MINUS_SRC_COLOR</item>
+        <item>GL_DST_COLOR</item>
+        <item>GL_ONE_MINUS_DST_COLOR</item>
+        <item>GL_SRC_ALPHA</item>
+        <item>GL_ONE_MINUS_SRC_ALPHA</item>
+        <item>GL_DST_ALPHA</item>
+        <item>GL_ONE_MINUS_DST_ALPHA</item>
+    </string-array>
+
+    <string-array name="tex_envs">
+        <item>GL_ADD</item>
+        <item>GL_BLEND</item>
+        <item>GL_COMBINE</item>
+        <item>GL_DECAL</item>
+        <item>GL_MODULATE</item>
+        <item>GL_REPLACE</item>
+    </string-array>
+</resources>
