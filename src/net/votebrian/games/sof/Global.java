@@ -11,7 +11,7 @@ public class Global extends Application {
     private static int mBlendFunc = 0;
 
     public Global() {
-        mod1 = new Model(0, 0, -6, this);
+        mod1 = new Model(0, 0, -15, this);
     }
 
     public int getSomething() {
@@ -36,18 +36,6 @@ public class Global extends Application {
 
     public void loadTexture(GL10 gl) {
         mod1.loadTexture(gl);
-    }
-
-    public void setBlendFunction(int pos) {
-        mBlendFunc = pos;
-    }
-
-    public int getBlendFunction() {
-        return mBlendFunc;
-    }
-
-    public void setTextureFunction(int pos) {
-        mod1.setTextureFunction(pos);
     }
 
     public void reset() {

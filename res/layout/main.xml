@@ -20,28 +20,5 @@
         android:background="#88FFFFFF"
         android:text="TextView, here." />
 
-    <LinearLayout
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:orientation="horizontal"
-        android:background="#FF000000" >
-
-            <Spinner
-                android:id="@+id/blend_func"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="Blend" />
-
-            <Spinner
-                android:id="@+id/tex_env"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="Texture" />
-
-    </LinearLayout>
-
 </RelativeLayout>
 

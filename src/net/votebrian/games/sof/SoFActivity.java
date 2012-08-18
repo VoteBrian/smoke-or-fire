@@ -27,37 +27,6 @@ public class SoFActivity extends Activity
         gbl = (Global) getApplication();
         gbl.setSomething(1);  // blue = 0, red = 1, green = 2 in GLESRenderer.
 
-        Spinner s1 = (Spinner) findViewById(R.id.blend_func);
-        ArrayAdapter<CharSequence> sAdapter1 = ArrayAdapter.createFromResource(this, R.array.blends, android.R.layout.simple_spinner_item);
-        sAdapter1.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        s1.setAdapter(sAdapter1);
-
-        s1.setOnItemSelectedListener(
-            new OnItemSelectedListener(){
-                public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                    gbl.setBlendFunction(position);
-                }
-
-                public void onNothingSelected(AdapterView<?> parent) {
-                    // chill
-                }
-        });
-
-        Spinner s2 = (Spinner) findViewById(R.id.tex_env);
-        ArrayAdapter<CharSequence> sAdapter2 = ArrayAdapter.createFromResource(this, R.array.tex_envs, android.R.layout.simple_spinner_item);
-        sAdapter2.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        s2.setAdapter(sAdapter2);
-
-        s2.setOnItemSelectedListener(
-            new OnItemSelectedListener(){
-                public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                    gbl.setTextureFunction(position);
-                }
-
-                public void onNothingSelected(AdapterView<?> parent) {
-                    // chill
-                }
-        });
     }
 
     @Override
