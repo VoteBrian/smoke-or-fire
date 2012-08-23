@@ -1,5 +1,9 @@
 /Users/brianflores/Documents/android/SmokeOrFire/gen/net/votebrian/games/sof/R.java \
  : /Users/brianflores/Documents/android/SmokeOrFire/res/drawable/cardbase.png \
+/Users/brianflores/Documents/android/SmokeOrFire/res/drawable/cardbaseclub.png \
+/Users/brianflores/Documents/android/SmokeOrFire/res/drawable/cardbasediamond.png \
+/Users/brianflores/Documents/android/SmokeOrFire/res/drawable/cardbaseheart.png \
+/Users/brianflores/Documents/android/SmokeOrFire/res/drawable/cardbasespade.png \
 /Users/brianflores/Documents/android/SmokeOrFire/res/drawable/cardsuit.png \
 /Users/brianflores/Documents/android/SmokeOrFire/res/drawable/cardvalue.png \
 /Users/brianflores/Documents/android/SmokeOrFire/res/drawable/overlay.png \
@@ -13,6 +17,10 @@
 /Users/brianflores/Documents/android/SmokeOrFire/res/values/arrays.xml \
 /Users/brianflores/Documents/android/SmokeOrFire/res/values/strings.xml \
 /Users/brianflores/Documents/android/SmokeOrFire/bin/res/drawable/cardbase.png \
+/Users/brianflores/Documents/android/SmokeOrFire/bin/res/drawable/cardbaseclub.png \
+/Users/brianflores/Documents/android/SmokeOrFire/bin/res/drawable/cardbasediamond.png \
+/Users/brianflores/Documents/android/SmokeOrFire/bin/res/drawable/cardbaseheart.png \
+/Users/brianflores/Documents/android/SmokeOrFire/bin/res/drawable/cardbasespade.png \
 /Users/brianflores/Documents/android/SmokeOrFire/bin/res/drawable/cardsuit.png \
 /Users/brianflores/Documents/android/SmokeOrFire/bin/res/drawable/cardvalue.png \
 /Users/brianflores/Documents/android/SmokeOrFire/bin/res/drawable/overlay.png \

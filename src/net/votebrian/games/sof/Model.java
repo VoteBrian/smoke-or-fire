@@ -33,19 +33,15 @@ public class Model {
     private ByteBuffer mNbb;
     private ByteBuffer mTbb;
     private ByteBuffer mTVbb;
-    private ByteBuffer mIbb;
-
-    private ShortBuffer mIndexBuffer;
 
     private FloatBuffer mVertexBuffer;
     private FloatBuffer mNormalBuffer;
-    private FloatBuffer mTextureBuffer;
+    private FloatBuffer mTextureSuitBuffer;
     private FloatBuffer mTextureValueBuffer;
 
     private int[] mTextures = new int[3];
-    private Bitmap mBitmap;
-    private Bitmap mBitmap2;
-    private Bitmap mBitmap3;
+    private Bitmap mSuitBitmap;
+    private Bitmap mValueBitmap;
 
     public Model(int centX, int centY, int centZ, Context context) {
         mCentX = centX;
@@ -70,51 +66,23 @@ public class Model {
 
         mTbb = ByteBuffer.allocateDirect(mNumTexCoordinatesA * VERTEX_PER_TRIANGLE * BYTES_PER_VERTEX);
         mTbb.order(ByteOrder.nativeOrder());
-        mTextureBuffer = mTbb.asFloatBuffer();
-        mTextureBuffer.put(mTexCoordinatesA);
-        mTextureBuffer.position(0);
+        mTextureSuitBuffer = mTbb.asFloatBuffer();
+        mTextureSuitBuffer.put(mTexCoordinatesA);
+        mTextureSuitBuffer.position(0);
 
         mTVbb = ByteBuffer.allocateDirect(mNumTexCoordinatesB * VERTEX_PER_TRIANGLE * BYTES_PER_VERTEX);
         mTVbb.order(ByteOrder.nativeOrder());
         mTextureValueBuffer = mTVbb.asFloatBuffer();
         mTextureValueBuffer.put(mTexCoordinatesB);
         mTextureValueBuffer.position(0);
-
-        /*
-        mIbb = ByteBuffer.allocateDirect(mNumIndices);
-        mIbb.order(ByteOrder.nativeOrder());
-        mIndexBuffer = mIbb.asFloatBuffer();
-        mIndexBuffer.put(mIndices);
-        mIndexBuffer.position(0);
-        */
-
-        /*
-        mIndexBuffer = ShortBuffer.allocate(mNumIndices);
-        mIndexBuffer.put(mIndices);
-        mIndexBuffer.position(0);
-        */
     }
 
     public void loadTexture(GL10 gl) {
-        InputStream is = mCtx.getResources().openRawResource(R.drawable.cardbase);
-        mBitmap = null;
+        InputStream is = mCtx.getResources().openRawResource(R.drawable.cardbasespade);
+        mSuitBitmap = null;
 
         try {
-            mBitmap = BitmapFactory.decodeStream(is);
-        } finally {
-            try {
-                is.close();
-                is = null;
-            } catch (IOException e) {
-                is = null;
-            }
-        }
-
-        is = mCtx.getResources().openRawResource(R.drawable.cardsuit);
-        mBitmap2 = null;
-
-        try {
-            mBitmap2 = BitmapFactory.decodeStream(is);
+            mSuitBitmap = BitmapFactory.decodeStream(is);
         } finally {
             try {
                 is.close();
@@ -125,10 +93,10 @@ public class Model {
         }
 
         is = mCtx.getResources().openRawResource(R.drawable.cardvalue);
-        mBitmap3 = null;
+        mValueBitmap = null;
 
         try {
-            mBitmap3 = BitmapFactory.decodeStream(is);
+            mValueBitmap = BitmapFactory.decodeStream(is);
         } finally {
             try {
                 is.close();
@@ -141,28 +109,20 @@ public class Model {
         gl.glGenTextures(3, mTextures, 0);
 
         gl.glBindTexture(GL10.GL_TEXTURE_2D, mTextures[0]);
-        GLUtils.texImage2D(GL10.GL_TEXTURE_2D, 0, mBitmap, 0);
+        GLUtils.texImage2D(GL10.GL_TEXTURE_2D, 0, mSuitBitmap, 0);
 
         gl.glTexParameterf(GL10.GL_TEXTURE_2D, GL10.GL_TEXTURE_MAG_FILTER, GL10.GL_LINEAR);
         gl.glTexParameterf(GL10.GL_TEXTURE_2D, GL10.GL_TEXTURE_MIN_FILTER, GL10.GL_LINEAR);
 
 
         gl.glBindTexture(GL10.GL_TEXTURE_2D, mTextures[1]);
-        GLUtils.texImage2D(GL10.GL_TEXTURE_2D, 0, mBitmap2, 0);
+        GLUtils.texImage2D(GL10.GL_TEXTURE_2D, 0, mValueBitmap, 0);
 
         gl.glTexParameterf(GL10.GL_TEXTURE_2D, GL10.GL_TEXTURE_MAG_FILTER, GL10.GL_LINEAR);
         gl.glTexParameterf(GL10.GL_TEXTURE_2D, GL10.GL_TEXTURE_MIN_FILTER, GL10.GL_LINEAR);
 
-
-        gl.glBindTexture(GL10.GL_TEXTURE_2D, mTextures[2]);
-        GLUtils.texImage2D(GL10.GL_TEXTURE_2D, 0, mBitmap3, 0);
-
-        gl.glTexParameterf(GL10.GL_TEXTURE_2D, GL10.GL_TEXTURE_MAG_FILTER, GL10.GL_LINEAR);
-        gl.glTexParameterf(GL10.GL_TEXTURE_2D, GL10.GL_TEXTURE_MIN_FILTER, GL10.GL_LINEAR);
-
-        mBitmap.recycle();
-        mBitmap2.recycle();
-        mBitmap3.recycle();
+        mSuitBitmap.recycle();
+        mValueBitmap.recycle();
 
         buildBuffers();
     }
@@ -176,7 +136,7 @@ public class Model {
         gl.glEnableClientState(GL10.GL_TEXTURE_COORD_ARRAY);
         gl.glBindTexture(GL10.GL_TEXTURE_2D, mTextures[0]);
         gl.glTexEnvf(GL10.GL_TEXTURE_ENV, GL10.GL_TEXTURE_ENV_MODE, GL10.GL_REPLACE);
-        gl.glTexCoordPointer(2, GL10.GL_FLOAT, 0, mTextureBuffer);
+        gl.glTexCoordPointer(2, GL10.GL_FLOAT, 0, mTextureSuitBuffer);
         gl.glEnable(GL10.GL_TEXTURE_2D);
 
         // TEXTURE 1
@@ -188,19 +148,10 @@ public class Model {
         gl.glTexCoordPointer(2, GL10.GL_FLOAT, 0, mTextureValueBuffer);
         gl.glEnable(GL10.GL_TEXTURE_2D);
 
-        // TEXTURE 2
-        gl.glClientActiveTexture(GL10.GL_TEXTURE2);
-        gl.glActiveTexture(GL10.GL_TEXTURE2);
-        gl.glEnableClientState(GL10.GL_TEXTURE_COORD_ARRAY);
-        gl.glBindTexture(GL10.GL_TEXTURE_2D, mTextures[2]);
-        gl.glTexEnvf(GL10.GL_TEXTURE_ENV, GL10.GL_TEXTURE_ENV_MODE, GL10.GL_DECAL);
-        gl.glTexCoordPointer(2, GL10.GL_FLOAT, 0, mTextureValueBuffer);
-        gl.glEnable(GL10.GL_TEXTURE_2D);
-
 
         // NORMALS
-        gl.glNormalPointer(GL10.GL_FLOAT, 0, mNormalBuffer);
-        gl.glEnableClientState(GL10.GL_NORMAL_ARRAY);
+        // gl.glNormalPointer(GL10.GL_FLOAT, 0, mNormalBuffer);
+        // gl.glEnableClientState(GL10.GL_NORMAL_ARRAY);
 
 
         // VERTICES
