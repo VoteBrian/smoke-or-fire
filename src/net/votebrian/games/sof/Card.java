@@ -15,7 +15,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.opengl.GLUtils;
 
-public class Model {
+public class Card {
     private static int VERTEX_PER_TRIANGLE = 3;
     private static int BYTES_PER_VERTEX = 4;
 
@@ -43,7 +43,7 @@ public class Model {
     private Bitmap mSuitBitmap;
     private Bitmap mValueBitmap;
 
-    public Model(int centX, int centY, int centZ, Context context) {
+    public Card(int centX, int centY, int centZ, Context context) {
         mCentX = centX;
         mCentY = centY;
         mCentZ = centZ;
