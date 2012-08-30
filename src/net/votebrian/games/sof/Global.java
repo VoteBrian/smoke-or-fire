@@ -6,12 +6,23 @@ import android.app.Application;
 
 public class Global extends Application {
     private static int something = 0;
-    private Deck mDeck;
+    private static Deck mDeck;
 
     private static int mBlendFunc = 0;
 
+    private static float mXAngle = 0;
+    private static float mYAngle = 0;
+
+    public enum Suit {
+        HEARTS, DIAMONDS, CLUBS, SPADES;
+    }
+
     public Global() {
-        mDeck = new Deck();
+        //mDeck = new Deck(this);
+    }
+
+    public void createDeck(GL10 gl) {
+        mDeck = new Deck(this, gl);
     }
 
     public int getSomething() {
@@ -27,11 +38,13 @@ public class Global extends Application {
     }
 
     public void setXAngle(float angle) {
-        // mod1.setXAngle(angle);
+        mDeck.setXAngle(angle);
+        // mXAngle += angle;
     }
 
     public void setYAngle(float angle) {
-        // mod1.setYAngle(angle);
+        mDeck.setYAngle(angle);
+        // mYAngle += angle;
     }
 
     public void loadTexture(GL10 gl) {
@@ -40,5 +53,13 @@ public class Global extends Application {
 
     public void reset() {
         // mDeck.reset();
+    }
+
+    public float getXAngle() {
+        return mXAngle;
+    }
+
+    public float getYAngle() {
+        return mYAngle;
     }
 }

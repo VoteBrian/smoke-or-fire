@@ -47,7 +47,7 @@ public class SurfaceView extends GLSurfaceView {
                 break;
             case MotionEvent.ACTION_MOVE:
                 gbl.setXAngle(x-mStartX);
-                gbl.setYAngle(y-mStartY);
+                gbl.setYAngle(mStartY-y);
 
                 mStartX = x;
                 mStartY = y;

@@ -17,15 +17,18 @@ class GLESRenderer implements GLSurfaceView.Renderer {
 
     private int mViewW = 0;
     private int mViewH = 0;
-    private float mViewAngle = 10f;
+    private float mViewAngle = 30f;
 
     private float mNearH = 0f;
     private float mNearW = 0f;
-    private float mNearZ = 0.01f;
-    private float mFarZ  = 40f;
+    private float mNearZ = 1f;
+    private float mFarZ  = 10f;
 
     private FloatBuffer mPositionBuffer;
     private FloatBuffer mDiffuseBuffer;
+
+    private float mXAngle = 0;
+    private float mYAngle = 0;
 
     public final int SS_SUNLIGHT = GL10.GL_LIGHT0;
 
@@ -37,7 +40,7 @@ class GLESRenderer implements GLSurfaceView.Renderer {
     public void onSurfaceCreated(GL10 gl, EGLConfig config) {
         setDisplayProperties(gl);
         initLighting(gl);
-        gbl.loadTexture(gl);
+        gbl.createDeck(gl);
     }
 
     public void onDrawFrame(GL10 gl) {
@@ -46,8 +49,16 @@ class GLESRenderer implements GLSurfaceView.Renderer {
         gl.glEnableClientState(GL10.GL_VERTEX_ARRAY);
         gl.glLoadIdentity();
 
-        gbl.draw(gl);
+        // rotate
+        /*
+        getRotation();
+        gl.glTranslatef(0, 0, -25);
+        gl.glRotatef(mXAngle, 0f, 1f, 0f);
+        gl.glRotatef(mYAngle, 1f, 0f, 0f);
+        gl.glTranslatef(0, 0, 25);
+        */
 
+        gbl.draw(gl);
     }
 
     public void onSurfaceChanged(GL10 gl, int width, int height) {
@@ -115,5 +126,10 @@ class GLESRenderer implements GLSurfaceView.Renderer {
         gl.glShadeModel(GL10.GL_SMOOTH);
         gl.glEnable(GL10.GL_LIGHTING);
         gl.glEnable(SS_SUNLIGHT);
+    }
+
+    private void getRotation() {
+        mXAngle = gbl.getXAngle();
+        mYAngle = gbl.getYAngle();
     }
 }

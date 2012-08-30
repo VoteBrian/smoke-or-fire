@@ -1,8 +1,10 @@
 /Users/brianflores/Documents/android/SmokeOrFire/bin/classes.dex : \
 /Users/brianflores/Documents/android/SmokeOrFire/bin/classes/net/votebrian/games/sof/BuildConfig.class \
+/Users/brianflores/Documents/android/SmokeOrFire/bin/classes/net/votebrian/games/sof/Card.class \
+/Users/brianflores/Documents/android/SmokeOrFire/bin/classes/net/votebrian/games/sof/Deck.class \
 /Users/brianflores/Documents/android/SmokeOrFire/bin/classes/net/votebrian/games/sof/GLESRenderer.class \
+/Users/brianflores/Documents/android/SmokeOrFire/bin/classes/net/votebrian/games/sof/Global$Suit.class \
 /Users/brianflores/Documents/android/SmokeOrFire/bin/classes/net/votebrian/games/sof/Global.class \
-/Users/brianflores/Documents/android/SmokeOrFire/bin/classes/net/votebrian/games/sof/Model.class \
 /Users/brianflores/Documents/android/SmokeOrFire/bin/classes/net/votebrian/games/sof/R$attr.class \
 /Users/brianflores/Documents/android/SmokeOrFire/bin/classes/net/votebrian/games/sof/R$drawable.class \
 /Users/brianflores/Documents/android/SmokeOrFire/bin/classes/net/votebrian/games/sof/R$id.class \
