@@ -5,11 +5,11 @@ import javax.microedition.khronos.opengles.GL10;
 import java.io.InputStream;
 import java.io.IOException;
 import java.lang.reflect.Array;
-
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.nio.FloatBuffer;
 import java.nio.ShortBuffer;
+import java.util.Random;
 
 import android.content.Context;
 import android.graphics.Bitmap;
@@ -23,6 +23,8 @@ public class Card {
     private Context mCtx;
     private Global gbl;
 
+    private Random mRandom;
+
     private int mValue = 0;
     private int mSuit = 0;
 
@@ -33,8 +35,18 @@ public class Card {
     private float mXAngle = 0;
     private float mYAngle = 0;
 
+    private float mAngleSkew = 0f;
+    private float mXSkew = 0f;
+    private float mYSkew = 0f;
+
     private int[] mTextures = new int[2];
     private float[] mVertices;
+
+    private int mState = 0;
+    // Describes where the card is placed
+    // state = 0;  Card is in deck, face down
+    // state = 1;  Card is on table, face up
+    // state = 3;  Card is not drawn
 
     // Buffers
     private ByteBuffer mVbb;
@@ -53,8 +65,14 @@ public class Card {
         mCtx = context;
         gbl = (Global) context.getApplicationContext();
 
+        mRandom = new Random();
+
         mSuit = suit;
         mValue = value;
+
+        mAngleSkew = 15 * (mRandom.nextFloat() - 0.5f);
+        mXSkew = 0.5f * (mRandom.nextFloat() - 0.5f);
+        mYSkew = 0.3f * (mRandom.nextFloat() - 0.5f);
     }
 
     public void setPosition(float x, float y, float z) {
@@ -112,9 +130,18 @@ public class Card {
         gl.glVertexPointer(3, GL10.GL_FLOAT, 0, mVertexBuffer);
         gl.glEnableClientState(GL10.GL_VERTEX_ARRAY);
 
-
+        switch(mState) {
+            case 0:  // In Deck
+                gl.glTranslatef(-5f, mCentY, mCentZ);
+                gl.glRotatef(180, 0f, 1f, 0f);
+                break;
+            case 1:  // On Table
+                gl.glTranslatef(0f + mXSkew, mCentY + mYSkew, mCentZ);
+                gl.glRotatef(0, 0f, 1f, 0f);
+                gl.glRotatef(mAngleSkew, 0f, 0f, 1f);
+        }
         // TRANSLATION/ROTATION
-        gl.glTranslatef(mCentX, mCentY, mCentZ);
+        // gl.glTranslatef(mCentX, mCentY, mCentZ);
 
         // gl.glRotatef(mXAngle, 0f, 1f, 0f);
         // gl.glRotatef(mYAngle, 1f, 0f, 0f);
@@ -138,5 +165,9 @@ public class Card {
     public void reset() {
         mXAngle = 0;
         mYAngle = 0;
+    }
+
+    public void deal() {
+        mState = 1;
     }
 }

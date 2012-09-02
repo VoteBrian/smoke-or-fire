@@ -22,7 +22,14 @@ public class Deck {
     private int mNumCards = 52;
     private Card[] mCards = new Card[mNumCards];
 
-    private int mZBase = -5;
+    private int[] inDeck = new int[52];
+    private int numInDeck = 0;
+    private int[] onTable = new int[52];
+    private int numOnTable = 0;
+
+    private int mCurrent = 0;
+
+    private int mZBase = -10;
 
     private Bitmap mHeartBitmap;
     private Bitmap mDiamondBitmap;
@@ -91,7 +98,7 @@ public class Deck {
 
         // generate the 52 cards
         for (counter = 0; counter < mNumCards; counter++) {
-            x = -5f;
+            x = 0f;
             y = 0f;
             z = (float) (mZBase + (0.016 * counter) );
 
@@ -163,6 +170,11 @@ public class Deck {
         for(int counter = 0; counter < mNumCards; counter++) {
             mCards[counter].setYAngle( (float) (counter * angle * 0.0005));
         }
+    }
+
+    public void deal() {
+        mCards[mCurrent].deal();
+        mCurrent++;
     }
 
     // Load texture bitmaps
@@ -404,17 +416,17 @@ public class Deck {
     private void newTexCoords(int count) {
         // TOP LEFT
         // X Coordinates
-        mTexCoordinatesB[48] = Math.round( (count-2)/4 ) * (float)0.25;
+        mTexCoordinatesB[48] = Math.round( (count-2)/4 ) * 0.25f;
         mTexCoordinatesB[50] = mTexCoordinatesB[48];
-        mTexCoordinatesB[52] = mTexCoordinatesB[48] + (float) 0.25;
+        mTexCoordinatesB[52] = mTexCoordinatesB[48] + 0.25f;
 
         mTexCoordinatesB[54] = mTexCoordinatesB[48];
         mTexCoordinatesB[56] = mTexCoordinatesB[52];
         mTexCoordinatesB[58] = mTexCoordinatesB[52];
 
         // Y Coordinates
-        mTexCoordinatesB[49] = (float) 0.75 - (( (count-2) % 4) * (float) 0.25);
-        mTexCoordinatesB[51] = (float) mTexCoordinatesB[49] + (float) 0.25;
+        mTexCoordinatesB[49] = (float) 0.75 - (( (count-2) % 4) * 0.25f);
+        mTexCoordinatesB[51] = (float) mTexCoordinatesB[49] + 0.25f;
         mTexCoordinatesB[53] = mTexCoordinatesB[51];
 
         mTexCoordinatesB[55] = mTexCoordinatesB[49];

@@ -28,10 +28,11 @@ public class SurfaceView extends GLSurfaceView {
 
         switch(action) {
             case MotionEvent.ACTION_DOWN:
-                mStartX = x;
-                mStartY = y;
+                // mStartX = x;
+                // mStartY = y;
                 break;
             case MotionEvent.ACTION_UP:
+                /*
                 int curr = gbl.getSomething();
 
                 if(curr == 0) {
@@ -44,13 +45,17 @@ public class SurfaceView extends GLSurfaceView {
 
                 mStartX = 0;
                 mStartY = 0;
+                */
+                gbl.deal();
                 break;
             case MotionEvent.ACTION_MOVE:
+                /*
                 gbl.setXAngle(x-mStartX);
                 gbl.setYAngle(mStartY-y);
 
                 mStartX = x;
                 mStartY = y;
+                */
                 break;
         }
 

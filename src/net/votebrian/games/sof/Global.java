@@ -62,4 +62,8 @@ public class Global extends Application {
     public float getYAngle() {
         return mYAngle;
     }
+
+    public void deal() {
+        mDeck.deal();
+    }
 }

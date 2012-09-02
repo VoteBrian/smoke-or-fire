@@ -17,12 +17,12 @@ class GLESRenderer implements GLSurfaceView.Renderer {
 
     private int mViewW = 0;
     private int mViewH = 0;
-    private float mViewAngle = 30f;
+    private float mViewAngle = 15f;
 
     private float mNearH = 0f;
     private float mNearW = 0f;
-    private float mNearZ = 1f;
-    private float mFarZ  = 10f;
+    private float mNearZ = 5f;
+    private float mFarZ  = 15f;
 
     private FloatBuffer mPositionBuffer;
     private FloatBuffer mDiffuseBuffer;
