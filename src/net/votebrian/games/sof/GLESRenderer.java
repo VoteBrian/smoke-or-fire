@@ -17,7 +17,7 @@ class GLESRenderer implements GLSurfaceView.Renderer {
 
     private int mViewW = 0;
     private int mViewH = 0;
-    private float mViewAngle = 15f;
+    private float mViewAngle = 10f;
 
     private float mNearH = 0f;
     private float mNearW = 0f;
@@ -50,13 +50,9 @@ class GLESRenderer implements GLSurfaceView.Renderer {
         gl.glLoadIdentity();
 
         // rotate
-        /*
-        getRotation();
-        gl.glTranslatef(0, 0, -25);
-        gl.glRotatef(mXAngle, 0f, 1f, 0f);
-        gl.glRotatef(mYAngle, 1f, 0f, 0f);
-        gl.glTranslatef(0, 0, 25);
-        */
+        gl.glRotatef(-10f, 1f, 0f, 0f);
+        gl.glRotatef( 10f, 0f, 0f, 1f);
+        gl.glTranslatef(2f, 1f, 0f);
 
         gbl.draw(gl);
     }
