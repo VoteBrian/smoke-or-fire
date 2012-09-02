@@ -25,7 +25,6 @@ public class SoFActivity extends Activity
 
         // if this works, the app should start with a red-ish SurfaceView background
         gbl = (Global) getApplication();
-        gbl.setSomething(1);  // blue = 0, red = 1, green = 2 in GLESRenderer.
 
     }
 

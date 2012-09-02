@@ -200,8 +200,10 @@ public class Deck {
 
     private void shuffle() {
         for(int c = 0; c < mNumBurnt; c++) {
-            int intRand = random.nextInt(mNumBurnt);
-            mBurnt[c] = mBurnt[random.nextInt(mNumBurnt-1)];
+            int intRand = random.nextInt(mNumBurnt-1);
+            int temp = mBurnt[c];
+            mBurnt[c] = mBurnt[intRand];
+            mBurnt[intRand] = temp;
         }
     }
 
