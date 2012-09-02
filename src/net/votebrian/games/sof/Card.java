@@ -32,6 +32,8 @@ public class Card {
     private float mCentY;
     private float mCentZ;
 
+    private float mZBase = 0;
+
     private float mXAngle = 0;
     private float mYAngle = 0;
 
@@ -79,6 +81,8 @@ public class Card {
         mCentX = x;
         mCentY = y;
         mCentZ = z;
+
+        mZBase = z;
     }
 
     public void setVertices(float[] vertices) {
@@ -167,7 +171,16 @@ public class Card {
         mYAngle = 0;
     }
 
-    public void deal() {
+    public void deal(int place) {
         mState = 1;
+        mCentZ = (float) (mZBase + (0.016 * place) );
+    }
+
+    // Card goes into deck
+    // place determines how high in the stack the card sits.
+    // place = 0 would be the card on the bottom of stack
+    public void load(int place) {
+        mState = 0;
+        mCentZ = (float) (mZBase + (0.016 * place) );
     }
 }

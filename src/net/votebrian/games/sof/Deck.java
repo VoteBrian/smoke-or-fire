@@ -8,6 +8,7 @@ import java.lang.Math;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.nio.FloatBuffer;
+import java.util.Random;
 
 import android.content.Context;
 import android.graphics.Bitmap;
@@ -19,13 +20,17 @@ public class Deck {
     private Context mCtx;
     private Global gbl;
 
+    private Random random;
+
     private int mNumCards = 52;
     private Card[] mCards = new Card[mNumCards];
 
-    private int[] inDeck = new int[52];
-    private int numInDeck = 0;
-    private int[] onTable = new int[52];
-    private int numOnTable = 0;
+    private int[] mInDeck = new int[52];
+    private int mNumInDeck = 0;
+    private int[] mOnTable = new int[52];
+    private int mNumOnTable = 0;
+    private int[] mBurnt = new int[52];
+    private int mNumBurnt = 0;
 
     private int mCurrent = 0;
 
@@ -94,13 +99,15 @@ public class Deck {
 
         gbl = (Global) mCtx.getApplicationContext();
 
+        random = new Random();
+
         loadTexture(gl);
 
         // generate the 52 cards
         for (counter = 0; counter < mNumCards; counter++) {
             x = 0f;
             y = 0f;
-            z = (float) (mZBase + (0.016 * counter) );
+            z = mZBase;
 
             suit = counter % 4;
             value = counter/4 + 2;
@@ -152,6 +159,17 @@ public class Deck {
                     break;
             }
         }
+
+        // initialize deck
+        for(int c = 0; c < mNumCards; c++) {
+            mBurnt[c] = c;
+        }
+        mNumBurnt = mNumCards;
+        mNumInDeck = 0;
+        mNumOnTable = 0;
+
+        shuffle();      // shuffle burnt cards.  All cards, in this case
+        reloadDeck();   // move all cards from burnt to deck.
     }
 
     public void draw(GL10 gl) {
@@ -173,8 +191,36 @@ public class Deck {
     }
 
     public void deal() {
-        mCards[mCurrent].deal();
-        mCurrent++;
+        mNumOnTable++;
+        mNumInDeck--;
+        if(mNumInDeck >= 0) {
+            mCards[mInDeck[mNumInDeck]].deal(mNumOnTable);
+        }
+    }
+
+    private void shuffle() {
+        for(int c = 0; c < mNumBurnt; c++) {
+            int intRand = random.nextInt(mNumBurnt);
+            mBurnt[c] = mBurnt[random.nextInt(mNumBurnt-1)];
+        }
+    }
+
+    private void reloadDeck() {
+        // push up the cards already in the deck
+        for(int c = 0; c < mNumInDeck; c++) {
+            mInDeck[c] = mInDeck[c+mNumBurnt];
+        }
+
+        for(int c = 0; c < mNumBurnt; c++) {
+            mInDeck[c] = mBurnt[c];
+        }
+
+        mNumInDeck = mNumInDeck + mNumBurnt;
+        mNumBurnt = 0;
+
+        for(int c = 0; c < mNumInDeck; c++) {
+            mCards[ mInDeck[c] ].load(c);
+        }
     }
 
     // Load texture bitmaps
