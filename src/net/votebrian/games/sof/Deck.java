@@ -4,7 +4,7 @@ import javax.microedition.khronos.opengles.GL10;
 
 import java.io.InputStream;
 import java.io.IOException;
-
+import java.lang.Math;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.nio.FloatBuffer;
@@ -35,12 +35,36 @@ public class Deck {
     private ByteBuffer mVbb;    // Vertices
     private ByteBuffer mNbb;    // Normals
     private ByteBuffer mTbb1;   // Suit Texture
-    private ByteBuffer mTVbb;   // Value Texture
+    private ByteBuffer mTV2bb;   // Value Texture
+    private ByteBuffer mTV3bb;
+    private ByteBuffer mTV4bb;
+    private ByteBuffer mTV5bb;
+    private ByteBuffer mTV6bb;
+    private ByteBuffer mTV7bb;
+    private ByteBuffer mTV8bb;
+    private ByteBuffer mTV9bb;
+    private ByteBuffer mTV10bb;
+    private ByteBuffer mTVJbb;
+    private ByteBuffer mTVQbb;
+    private ByteBuffer mTVKbb;
+    private ByteBuffer mTVAbb;
 
     private FloatBuffer mVertexBuffer;
     private FloatBuffer mNormalBuffer;
     private FloatBuffer mSuitBuffer;
-    private FloatBuffer mTextureValueBuffer;
+    private FloatBuffer mTextureValue2Buffer;
+    private FloatBuffer mTextureValue3Buffer;
+    private FloatBuffer mTextureValue4Buffer;
+    private FloatBuffer mTextureValue5Buffer;
+    private FloatBuffer mTextureValue6Buffer;
+    private FloatBuffer mTextureValue7Buffer;
+    private FloatBuffer mTextureValue8Buffer;
+    private FloatBuffer mTextureValue9Buffer;
+    private FloatBuffer mTextureValue10Buffer;
+    private FloatBuffer mTextureValueJBuffer;
+    private FloatBuffer mTextureValueQBuffer;
+    private FloatBuffer mTextureValueKBuffer;
+    private FloatBuffer mTextureValueABuffer;
 
     private static int VERTEX_PER_TRIANGLE = 3;
     private static int BYTES_PER_VERTEX = 4;
@@ -79,7 +103,47 @@ public class Deck {
             mCards[counter].setVertices(mVertices);
             mCards[counter].setTextures(mTextures);
             mCards[counter].setVertexBuffer(mVertexBuffer);
-            mCards[counter].setTexureBuffers(mSuitBuffer, mTextureValueBuffer);
+            switch(value) {
+                case 2:
+                    mCards[counter].setTextureBuffers(mSuitBuffer, mTextureValue2Buffer);
+                    break;
+                case 3:
+                    mCards[counter].setTextureBuffers(mSuitBuffer, mTextureValue3Buffer);
+                    break;
+                case 4:
+                    mCards[counter].setTextureBuffers(mSuitBuffer, mTextureValue4Buffer);
+                    break;
+                case 5:
+                    mCards[counter].setTextureBuffers(mSuitBuffer, mTextureValue5Buffer);
+                    break;
+                case 6:
+                    mCards[counter].setTextureBuffers(mSuitBuffer, mTextureValue6Buffer);
+                    break;
+                case 7:
+                    mCards[counter].setTextureBuffers(mSuitBuffer, mTextureValue7Buffer);
+                    break;
+                case 8:
+                    mCards[counter].setTextureBuffers(mSuitBuffer, mTextureValue8Buffer);
+                    break;
+                case 9:
+                    mCards[counter].setTextureBuffers(mSuitBuffer, mTextureValue9Buffer);
+                    break;
+                case 10:
+                    mCards[counter].setTextureBuffers(mSuitBuffer, mTextureValue10Buffer);
+                    break;
+                case 11:
+                    mCards[counter].setTextureBuffers(mSuitBuffer, mTextureValueJBuffer);
+                    break;
+                case 12:
+                    mCards[counter].setTextureBuffers(mSuitBuffer, mTextureValueQBuffer);
+                    break;
+                case 13:
+                    mCards[counter].setTextureBuffers(mSuitBuffer, mTextureValueKBuffer);
+                    break;
+                case 14:
+                    mCards[counter].setTextureBuffers(mSuitBuffer, mTextureValueABuffer);
+                    break;
+            }
         }
     }
 
@@ -246,11 +310,135 @@ public class Deck {
         mSuitBuffer.position(0);
 
         // Value Coordinates
-        mTVbb = ByteBuffer.allocateDirect(mNumTexCoordinatesB * VERTEX_PER_TRIANGLE * BYTES_PER_VERTEX);
-        mTVbb.order(ByteOrder.nativeOrder());
-        mTextureValueBuffer = mTVbb.asFloatBuffer();
-        mTextureValueBuffer.put(mTexCoordinatesB);
-        mTextureValueBuffer.position(0);
+        mTV2bb = ByteBuffer.allocateDirect(mNumTexCoordinatesB * VERTEX_PER_TRIANGLE * BYTES_PER_VERTEX);
+        mTV2bb.order(ByteOrder.nativeOrder());
+        mTextureValue2Buffer = mTV2bb.asFloatBuffer();
+        mTextureValue2Buffer.put(mTexCoordinatesB);
+        mTextureValue2Buffer.position(0);
+
+        newTexCoords(3);
+        mTV3bb = ByteBuffer.allocateDirect(mNumTexCoordinatesB * VERTEX_PER_TRIANGLE * BYTES_PER_VERTEX);
+        mTV3bb.order(ByteOrder.nativeOrder());
+        mTextureValue3Buffer = mTV3bb.asFloatBuffer();
+        mTextureValue3Buffer.put(mTexCoordinatesB);
+        mTextureValue3Buffer.position(0);
+
+        newTexCoords(4);
+        mTV4bb = ByteBuffer.allocateDirect(mNumTexCoordinatesB * VERTEX_PER_TRIANGLE * BYTES_PER_VERTEX);
+        mTV4bb.order(ByteOrder.nativeOrder());
+        mTextureValue4Buffer = mTV4bb.asFloatBuffer();
+        mTextureValue4Buffer.put(mTexCoordinatesB);
+        mTextureValue4Buffer.position(0);
+
+        newTexCoords(5);
+        mTV5bb = ByteBuffer.allocateDirect(mNumTexCoordinatesB * VERTEX_PER_TRIANGLE * BYTES_PER_VERTEX);
+        mTV5bb.order(ByteOrder.nativeOrder());
+        mTextureValue5Buffer = mTV5bb.asFloatBuffer();
+        mTextureValue5Buffer.put(mTexCoordinatesB);
+        mTextureValue5Buffer.position(0);
+
+        newTexCoords(6);
+        mTV6bb = ByteBuffer.allocateDirect(mNumTexCoordinatesB * VERTEX_PER_TRIANGLE * BYTES_PER_VERTEX);
+        mTV6bb.order(ByteOrder.nativeOrder());
+        mTextureValue6Buffer = mTV6bb.asFloatBuffer();
+        mTextureValue6Buffer.put(mTexCoordinatesB);
+        mTextureValue6Buffer.position(0);
+
+        newTexCoords(7);
+        mTV7bb = ByteBuffer.allocateDirect(mNumTexCoordinatesB * VERTEX_PER_TRIANGLE * BYTES_PER_VERTEX);
+        mTV7bb.order(ByteOrder.nativeOrder());
+        mTextureValue7Buffer = mTV7bb.asFloatBuffer();
+        mTextureValue7Buffer.put(mTexCoordinatesB);
+        mTextureValue7Buffer.position(0);
+
+        newTexCoords(8);
+        mTV8bb = ByteBuffer.allocateDirect(mNumTexCoordinatesB * VERTEX_PER_TRIANGLE * BYTES_PER_VERTEX);
+        mTV8bb.order(ByteOrder.nativeOrder());
+        mTextureValue8Buffer = mTV8bb.asFloatBuffer();
+        mTextureValue8Buffer.put(mTexCoordinatesB);
+        mTextureValue8Buffer.position(0);
+
+        newTexCoords(9);
+        mTV9bb = ByteBuffer.allocateDirect(mNumTexCoordinatesB * VERTEX_PER_TRIANGLE * BYTES_PER_VERTEX);
+        mTV9bb.order(ByteOrder.nativeOrder());
+        mTextureValue9Buffer = mTV9bb.asFloatBuffer();
+        mTextureValue9Buffer.put(mTexCoordinatesB);
+        mTextureValue9Buffer.position(0);
+
+        newTexCoords(10);
+        mTV10bb = ByteBuffer.allocateDirect(mNumTexCoordinatesB * VERTEX_PER_TRIANGLE * BYTES_PER_VERTEX);
+        mTV10bb.order(ByteOrder.nativeOrder());
+        mTextureValue10Buffer = mTV10bb.asFloatBuffer();
+        mTextureValue10Buffer.put(mTexCoordinatesB);
+        mTextureValue10Buffer.position(0);
+
+        newTexCoords(11);
+        mTVJbb = ByteBuffer.allocateDirect(mNumTexCoordinatesB * VERTEX_PER_TRIANGLE * BYTES_PER_VERTEX);
+        mTVJbb.order(ByteOrder.nativeOrder());
+        mTextureValueJBuffer = mTVJbb.asFloatBuffer();
+        mTextureValueJBuffer.put(mTexCoordinatesB);
+        mTextureValueJBuffer.position(0);
+
+        newTexCoords(12);
+        mTVQbb = ByteBuffer.allocateDirect(mNumTexCoordinatesB * VERTEX_PER_TRIANGLE * BYTES_PER_VERTEX);
+        mTVQbb.order(ByteOrder.nativeOrder());
+        mTextureValueQBuffer = mTVQbb.asFloatBuffer();
+        mTextureValueQBuffer.put(mTexCoordinatesB);
+        mTextureValueQBuffer.position(0);
+
+        newTexCoords(13);
+        mTVKbb = ByteBuffer.allocateDirect(mNumTexCoordinatesB * VERTEX_PER_TRIANGLE * BYTES_PER_VERTEX);
+        mTVKbb.order(ByteOrder.nativeOrder());
+        mTextureValueKBuffer = mTVKbb.asFloatBuffer();
+        mTextureValueKBuffer.put(mTexCoordinatesB);
+        mTextureValueKBuffer.position(0);
+
+        newTexCoords(14);
+        mTVAbb = ByteBuffer.allocateDirect(mNumTexCoordinatesB * VERTEX_PER_TRIANGLE * BYTES_PER_VERTEX);
+        mTVAbb.order(ByteOrder.nativeOrder());
+        mTextureValueABuffer = mTVAbb.asFloatBuffer();
+        mTextureValueABuffer.put(mTexCoordinatesB);
+        mTextureValueABuffer.position(0);
+    }
+
+    private void newTexCoords(int count) {
+        // TOP LEFT
+        // X Coordinates
+        mTexCoordinatesB[48] = Math.round( (count-2)/4 ) * (float)0.25;
+        mTexCoordinatesB[50] = mTexCoordinatesB[48];
+        mTexCoordinatesB[52] = mTexCoordinatesB[48] + (float) 0.25;
+
+        mTexCoordinatesB[54] = mTexCoordinatesB[48];
+        mTexCoordinatesB[56] = mTexCoordinatesB[52];
+        mTexCoordinatesB[58] = mTexCoordinatesB[52];
+
+        // Y Coordinates
+        mTexCoordinatesB[49] = (float) 0.75 - (( (count-2) % 4) * (float) 0.25);
+        mTexCoordinatesB[51] = (float) mTexCoordinatesB[49] + (float) 0.25;
+        mTexCoordinatesB[53] = mTexCoordinatesB[51];
+
+        mTexCoordinatesB[55] = mTexCoordinatesB[49];
+        mTexCoordinatesB[57] = mTexCoordinatesB[51];
+        mTexCoordinatesB[59] = mTexCoordinatesB[49];
+
+        //BOTTOM RIGHT
+        // X Coordinates
+        mTexCoordinatesB[192] = mTexCoordinatesB[52];
+        mTexCoordinatesB[194] = mTexCoordinatesB[52];
+        mTexCoordinatesB[196] = mTexCoordinatesB[48];
+
+        mTexCoordinatesB[198] = mTexCoordinatesB[52];
+        mTexCoordinatesB[200] = mTexCoordinatesB[48];
+        mTexCoordinatesB[202] = mTexCoordinatesB[48];
+
+
+        mTexCoordinatesB[193] = mTexCoordinatesB[51];
+        mTexCoordinatesB[195] = mTexCoordinatesB[49];
+        mTexCoordinatesB[197] = mTexCoordinatesB[49];
+
+        mTexCoordinatesB[199] = mTexCoordinatesB[51];
+        mTexCoordinatesB[201] = mTexCoordinatesB[49];
+        mTexCoordinatesB[203] = mTexCoordinatesB[51];
     }
 
 
@@ -1791,96 +1979,115 @@ public class Deck {
         0.972981f, 0.188022f,
         0.947981f, 0.188022f,
         0.972981f, 0.188022f,
+
         0.947981f, 0.183992f,
         0.947981f, 0.188022f,
         0.947981f, 0.183992f,
         0.907981f, 0.183938f,
         0.947981f, 0.188022f,
+
         0.907981f, 0.183938f,
         0.907981f, 0.188022f,
         0.907981f, 0.188022f,
         0.907981f, 0.183938f,
         0.882981f, 0.183022f,
+
         0.907981f, 0.188022f,
         0.882981f, 0.183022f,
         0.882981f, 0.188022f,
         0.977981f, 0.183022f,
         0.977981f, 0.158022f,
+
         0.972981f, 0.158022f,
         0.977981f, 0.183022f,
         0.972981f, 0.158022f,
         0.972981f, 0.183022f,
+
         0.000000f, 0.75f,
         0.000000f, 1.0f,
         0.250000f, 1.0f,
         0.000000f, 0.75f,
         0.250000f, 1.0f,
         0.250000f, 0.75f,
+
         0.947981f, 0.183992f,
         0.947981f, 0.158022f,
         0.907981f, 0.158022f,
         0.947981f, 0.183992f,
         0.907981f, 0.158022f,
+
         0.907981f, 0.183938f,
         0.907981f, 0.183938f,
         0.907981f, 0.158022f,
         0.882981f, 0.158022f,
         0.907981f, 0.183938f,
+
         0.882981f, 0.158022f,
         0.882981f, 0.183022f,
         0.882981f, 0.183022f,
         0.882981f, 0.158022f,
         0.877981f, 0.158022f,
+
         0.882981f, 0.183022f,
         0.877981f, 0.158022f,
         0.877981f, 0.183022f,
         0.977981f, 0.158022f,
         0.977981f, 0.078022f,
+
         0.972981f, 0.078022f,
         0.977981f, 0.158022f,
         0.972981f, 0.078022f,
         0.972981f, 0.158022f,
         0.882981f, 0.078022f,
+
         0.882981f, 0.158022f,
         0.907981f, 0.158022f,
         0.882981f, 0.078022f,
         0.907981f, 0.158022f,
         0.907981f, 0.078022f,
+
         0.907981f, 0.078022f,
         0.907981f, 0.158022f,
         0.947981f, 0.158022f,
         0.907981f, 0.078022f,
         0.947981f, 0.158022f,
+
         0.947981f, 0.078022f,
         0.947981f, 0.078022f,
         0.947981f, 0.158022f,
         0.972981f, 0.158022f,
         0.947981f, 0.078022f,
+
         0.972981f, 0.158022f,
         0.972981f, 0.078022f,
         0.882981f, 0.158022f,
         0.882981f, 0.078022f,
         0.877981f, 0.078022f,
+
         0.882981f, 0.158022f,
         0.877981f, 0.078022f,
         0.877981f, 0.158022f,
         0.977981f, 0.078022f,
         0.977981f, 0.053022f,
+
         0.972981f, 0.053022f,
         0.977981f, 0.078022f,
         0.972981f, 0.053022f,
         0.972981f, 0.078022f,
         0.972981f, 0.078022f,
+
         0.972981f, 0.053022f,
         0.947981f, 0.053022f,
         0.972981f, 0.078022f,
         0.947981f, 0.053022f,
         0.947981f, 0.078022f,
+
         0.947981f, 0.078022f,
         0.947981f, 0.053022f,
         0.907981f, 0.053022f,
         0.947981f, 0.078022f,
         0.907981f, 0.053022f,
+
         0.907981f, 0.078022f,
         0.250000f, 1.0f,
         0.250000f, 0.75f,

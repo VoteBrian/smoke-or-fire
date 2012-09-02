@@ -76,7 +76,7 @@ public class Card {
         mVertexBuffer = buffer;
     }
 
-    public void setTexureBuffers(FloatBuffer suit, FloatBuffer value) {
+    public void setTextureBuffers(FloatBuffer suit, FloatBuffer value) {
         mTextureSuitBuffer = suit;
         mTextureValueBuffer = value;
     }
