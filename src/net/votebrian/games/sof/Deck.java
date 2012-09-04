@@ -32,6 +32,8 @@ public class Deck {
     private int[] mBurnt = new int[52];
     private int mNumBurnt = 0;
 
+    private int mResult = Global.GOOD;
+
     private int mCurrent = 0;
 
     private int mZBase = -10;
@@ -190,12 +192,100 @@ public class Deck {
         }
     }
 
-    public void deal() {
-        mNumOnTable++;
-        mNumInDeck--;
-        if(mNumInDeck >= 0) {
-            mCards[mInDeck[mNumInDeck]].deal(mNumOnTable);
+    public int deal(int pick) {
+        // first check to make sure we have a card in deck to deal
+        if(mNumInDeck == 0) {
+            return -1;
         }
+
+        int selSuit = 0;
+        int selValue = 0;
+
+        int prevSuit = 0;
+        int prevValue = 0;
+
+        if(mNumOnTable == 0) {      // first selection
+            selSuit = mCards[mInDeck[mNumInDeck-1]].mSuit;
+            selValue = mCards[mInDeck[mNumInDeck-1]].mValue;
+
+            Log.v("Deal", "Suit: " + selSuit + ", Value: " + selValue);
+        } else {                    // card already on table
+            prevSuit = mCards[mOnTable[mNumOnTable-1]].mSuit;
+            prevValue = mCards[mOnTable[mNumOnTable-1]].mValue;
+
+            selSuit = mCards[mInDeck[mNumInDeck-1]].mSuit;
+            selValue = mCards[mInDeck[mNumInDeck-1]].mValue;
+
+            Log.v("Deal Prev", "Suit: " + prevSuit + ", Value: " + prevValue);
+            Log.v("Deal Curr", "Suit: " + selSuit + ", Value: " + selValue);
+        }
+
+        // Transfer card from top of deck to table
+        // change card state and animation
+        mCards[ mInDeck[mNumInDeck-1] ].deal(mNumOnTable);
+
+        mNumOnTable++;
+        mOnTable[mNumOnTable-1] = mInDeck[mNumInDeck-1];
+        mInDeck[mNumInDeck-1] = -1;
+        mNumInDeck--;
+
+
+        // Check against selection
+        switch(pick) {
+            case Global.SMOKE:
+                if(selSuit > 1) {
+                    mResult = Global.GOOD;
+                } else {
+                    mResult = Global.BAD;
+                }
+                break;
+            case Global.FIRE:
+                if(selSuit < 1) {
+                    mResult = Global.GOOD;
+                } else {
+                    mResult = Global.BAD;
+                }
+                break;
+            case Global.HIGHER:
+                if(selValue > prevValue) {
+                    mResult = Global.GOOD;
+                } else if(selValue < prevValue) {
+                    mResult = Global.BAD;
+                } else {
+                    mResult = Global.SOCIAL;
+                }
+                break;
+            case Global.LOWER:
+                if(selValue < prevValue) {
+                    mResult = Global.GOOD;
+                } else if(selValue > prevValue) {
+                    mResult = Global.BAD;
+                } else {
+                    mResult = Global.SOCIAL;
+                }
+                break;
+        }
+        return mResult;
+    }
+
+    public void reset() {
+        burnAll();
+        shuffle();
+        reloadDeck();
+    }
+
+    public void burnAll() {
+        for(int c = 0; c < mNumCards; c++) {
+            mBurnt[c] = c;
+            mCards[c].burn();
+
+            mInDeck[c] = -1;
+            mOnTable[c] = -1;
+        }
+
+        mNumBurnt = mNumCards;
+        mNumInDeck = 0;
+        mNumOnTable = 0;
     }
 
     private void shuffle() {
@@ -215,6 +305,7 @@ public class Deck {
 
         for(int c = 0; c < mNumBurnt; c++) {
             mInDeck[c] = mBurnt[c];
+            mBurnt[c] = -1;
         }
 
         mNumInDeck = mNumInDeck + mNumBurnt;
@@ -222,6 +313,27 @@ public class Deck {
 
         for(int c = 0; c < mNumInDeck; c++) {
             mCards[ mInDeck[c] ].load(c);
+        }
+    }
+
+    public void burnTable() {
+        if(mNumOnTable != 0) {
+            Log.v("Burn Table", "mNumOnTable: " + mNumOnTable);
+            for(int c = 0; c < mNumOnTable; c++) {
+                Log.v("Burn", String.valueOf(mOnTable[c]));
+
+                // make sure it hasn't already been burnt
+                // for some reason
+                if(mOnTable[c] != -1) {
+
+                    mCards[mOnTable[c]].burn();
+                    mBurnt[mNumBurnt] = mOnTable[c];
+                    mNumBurnt++;
+                    mOnTable[c] = -1;
+                }
+            }
+
+            mNumOnTable = 0;
         }
     }
 

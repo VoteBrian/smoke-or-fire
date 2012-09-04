@@ -15,6 +15,13 @@ class GLESRenderer implements GLSurfaceView.Renderer {
     Global gbl;
     Context mCtx;
 
+    private ByteBuffer mLbb;
+    private FloatBuffer mLinesBuffer;
+    private int mNumLines = 0;
+    private int POINTS_PER_LINE = 3;
+    private int BYTES_PER_POINT = 4;
+    private float[] mLineVert = new float[24];
+
     private int mViewW = 0;
     private int mViewH = 0;
     private float mViewAngle = 10f;
@@ -49,10 +56,11 @@ class GLESRenderer implements GLSurfaceView.Renderer {
         gl.glEnableClientState(GL10.GL_VERTEX_ARRAY);
         gl.glLoadIdentity();
 
-        // rotate
-        gl.glRotatef(-10f, 1f, 0f, 0f);
-        gl.glRotatef( 10f, 0f, 0f, 1f);
-        gl.glTranslatef(2f, 1f, 0f);
+        // rotate card table
+        gl.glRotatef(-20f, 1f, 0f, 0f);
+        gl.glRotatef(5, 0f, 1f, 0f);
+        gl.glRotatef( -10f, 0f, 0f, 1f);
+        gl.glTranslatef(1f, 3f, 0f);
 
         gbl.draw(gl);
     }

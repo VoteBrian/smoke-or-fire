@@ -25,8 +25,8 @@ public class Card {
 
     private Random mRandom;
 
-    private int mValue = 0;
-    private int mSuit = 0;
+    public int mValue = 0;
+    public int mSuit = 0;
 
     private float mCentX;
     private float mCentY;
@@ -104,58 +104,60 @@ public class Card {
     }
 
     public void draw(GL10 gl) {
-        gl.glPushMatrix();
+        if(mState != 3) {       // IF NOT BURNT
+            gl.glPushMatrix();
 
-        // TEXTURE 0
-        gl.glClientActiveTexture(GL10.GL_TEXTURE0);
-        gl.glActiveTexture(GL10.GL_TEXTURE0);
-        gl.glEnableClientState(GL10.GL_TEXTURE_COORD_ARRAY);
-        gl.glBindTexture(GL10.GL_TEXTURE_2D, mTextures[mSuit]);
-        gl.glTexEnvf(GL10.GL_TEXTURE_ENV, GL10.GL_TEXTURE_ENV_MODE, GL10.GL_REPLACE);
-        gl.glTexCoordPointer(2, GL10.GL_FLOAT, 0, mTextureSuitBuffer);
-        gl.glEnable(GL10.GL_TEXTURE_2D);
+            // TEXTURE 0
+            gl.glClientActiveTexture(GL10.GL_TEXTURE0);
+            gl.glActiveTexture(GL10.GL_TEXTURE0);
+            gl.glEnableClientState(GL10.GL_TEXTURE_COORD_ARRAY);
+            gl.glBindTexture(GL10.GL_TEXTURE_2D, mTextures[mSuit]);
+            gl.glTexEnvf(GL10.GL_TEXTURE_ENV, GL10.GL_TEXTURE_ENV_MODE, GL10.GL_REPLACE);
+            gl.glTexCoordPointer(2, GL10.GL_FLOAT, 0, mTextureSuitBuffer);
+            gl.glEnable(GL10.GL_TEXTURE_2D);
 
-        // TEXTURE 1
-        gl.glClientActiveTexture(GL10.GL_TEXTURE1);
-        gl.glActiveTexture(GL10.GL_TEXTURE1);
-        gl.glEnableClientState(GL10.GL_TEXTURE_COORD_ARRAY);
-        gl.glBindTexture(GL10.GL_TEXTURE_2D, mTextures[4]);
-        gl.glTexEnvf(GL10.GL_TEXTURE_ENV, GL10.GL_TEXTURE_ENV_MODE, GL10.GL_DECAL);
-        gl.glTexCoordPointer(2, GL10.GL_FLOAT, 0, mTextureValueBuffer);
-        gl.glEnable(GL10.GL_TEXTURE_2D);
-
-
-        // NORMALS
-        // gl.glNormalPointer(GL10.GL_FLOAT, 0, mNormalBuffer);
-        // gl.glEnableClientState(GL10.GL_NORMAL_ARRAY);
+            // TEXTURE 1
+            gl.glClientActiveTexture(GL10.GL_TEXTURE1);
+            gl.glActiveTexture(GL10.GL_TEXTURE1);
+            gl.glEnableClientState(GL10.GL_TEXTURE_COORD_ARRAY);
+            gl.glBindTexture(GL10.GL_TEXTURE_2D, mTextures[4]);
+            gl.glTexEnvf(GL10.GL_TEXTURE_ENV, GL10.GL_TEXTURE_ENV_MODE, GL10.GL_DECAL);
+            gl.glTexCoordPointer(2, GL10.GL_FLOAT, 0, mTextureValueBuffer);
+            gl.glEnable(GL10.GL_TEXTURE_2D);
 
 
-        // VERTICES
-        gl.glVertexPointer(3, GL10.GL_FLOAT, 0, mVertexBuffer);
-        gl.glEnableClientState(GL10.GL_VERTEX_ARRAY);
+            // NORMALS
+            // gl.glNormalPointer(GL10.GL_FLOAT, 0, mNormalBuffer);
+            // gl.glEnableClientState(GL10.GL_NORMAL_ARRAY);
 
-        switch(mState) {
-            case 0:  // In Deck
-                gl.glTranslatef(-5f, mCentY, mCentZ);
-                gl.glRotatef(180, 0f, 1f, 0f);
-                break;
-            case 1:  // On Table
-                gl.glTranslatef(0f + mXSkew, mCentY + mYSkew, mCentZ);
-                gl.glRotatef(0, 0f, 1f, 0f);
-                gl.glRotatef(mAngleSkew, 0f, 0f, 1f);
+
+            // VERTICES
+            gl.glVertexPointer(3, GL10.GL_FLOAT, 0, mVertexBuffer);
+            gl.glEnableClientState(GL10.GL_VERTEX_ARRAY);
+
+            switch(mState) {
+                case 0:  // In Deck
+                    gl.glTranslatef(-4f, mCentY, mCentZ);
+                    gl.glRotatef(180, 0f, 1f, 0f);
+                    break;
+                case 1:  // On Table
+                    gl.glTranslatef(0f + mXSkew, mCentY + mYSkew, mCentZ);
+                    gl.glRotatef(0, 0f, 1f, 0f);
+                    gl.glRotatef(mAngleSkew, 0f, 0f, 1f);
+            }
+            // TRANSLATION/ROTATION
+            // gl.glTranslatef(mCentX, mCentY, mCentZ);
+
+            // gl.glRotatef(mXAngle, 0f, 1f, 0f);
+            // gl.glRotatef(mYAngle, 1f, 0f, 0f);
+
+
+            // DRAW
+            gl.glDrawArrays(GL10.GL_TRIANGLES, 0, mNumVertices);
+            // gl.glDrawElements(GL10.GL_TRIANGLES, mNumIndices, GL10.GL_UNSIGNED_SHORT, mIndexBuffer);
+
+            gl.glPopMatrix();
         }
-        // TRANSLATION/ROTATION
-        // gl.glTranslatef(mCentX, mCentY, mCentZ);
-
-        // gl.glRotatef(mXAngle, 0f, 1f, 0f);
-        // gl.glRotatef(mYAngle, 1f, 0f, 0f);
-
-
-        // DRAW
-        gl.glDrawArrays(GL10.GL_TRIANGLES, 0, mNumVertices);
-        // gl.glDrawElements(GL10.GL_TRIANGLES, mNumIndices, GL10.GL_UNSIGNED_SHORT, mIndexBuffer);
-
-        gl.glPopMatrix();
     }
 
     public void setXAngle(float angle) {
@@ -182,5 +184,9 @@ public class Card {
     public void load(int place) {
         mState = 0;
         mCentZ = (float) (mZBase + (0.016 * place) );
+    }
+
+    public void burn() {
+        mState = 3;
     }
 }

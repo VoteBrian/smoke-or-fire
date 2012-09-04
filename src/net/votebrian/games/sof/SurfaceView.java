@@ -46,7 +46,7 @@ public class SurfaceView extends GLSurfaceView {
                 mStartX = 0;
                 mStartY = 0;
                 */
-                gbl.deal();
+                gbl.burnTable();
                 break;
             case MotionEvent.ACTION_MOVE:
                 /*

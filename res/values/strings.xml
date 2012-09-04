@@ -2,4 +2,8 @@
 <resources>
     <string name="menu_reset">Reset</string>
     <string name="app_name">Smoke Or Fire</string>
+    <string name="btn_higher">Higher</string>
+    <string name="btn_lower">Lower</string>
+    <string name="btn_smoke">Smoke</string>
+    <string name="btn_fire">Fire</string>
 </resources>
