@@ -1,6 +1,8 @@
 package net.votebrian.games.sof;
 
 import android.app.Activity;
+import android.content.SharedPreferences;
+import android.content.SharedPreferences.Editor;
 import android.os.Bundle;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemSelectedListener;
@@ -15,9 +17,13 @@ import android.view.View;
 
 import android.util.Log;
 
-public class SoFActivity extends Activity
-{
+public class SoFActivity extends Activity {
     private Global gbl;
+
+    public static final String PREFS_NAME = "MyPrefs";
+    public SharedPreferences        mSettings;
+    public SharedPreferences.Editor mEditor;
+
     private Button mBtnSmoke;
     private Button mBtnFire;
     private Button mBtnHigher;
@@ -34,6 +40,9 @@ public class SoFActivity extends Activity
     {
         super.onCreate(savedInstanceState);
         gbl = (Global) getApplication();
+
+        mSettings = getSharedPreferences(PREFS_NAME, 0);
+        mEditor = mSettings.edit();
 
         setContentView(R.layout.main);
 
@@ -55,7 +64,6 @@ public class SoFActivity extends Activity
                 }
 
                 mResult = gbl.deal(gbl.SMOKE);
-                Log.v("mResult", String.valueOf(mResult));
 
                 if(mResult == Global.GOOD) {
                     mCounter++;
@@ -88,7 +96,6 @@ public class SoFActivity extends Activity
                 }
 
                 mResult = gbl.deal(gbl.FIRE);
-                Log.v("mResult", String.valueOf(mResult));
 
                 if(mResult == Global.GOOD) {
                     mCounter++;
@@ -121,7 +128,6 @@ public class SoFActivity extends Activity
                 }
 
                 mResult = gbl.deal(gbl.HIGHER);
-                Log.v("mResult", String.valueOf(mResult));
 
                 if(mResult == Global.GOOD || mResult == Global.SOCIAL) {
                     mCounter++;
@@ -142,7 +148,6 @@ public class SoFActivity extends Activity
                     mBtnHigher.setVisibility(View.INVISIBLE);
                     mBtnLower.setVisibility(View.INVISIBLE);
                 } else {
-                    Log.v("Result", String.valueOf(mResult));
                 }
             }
         });
@@ -156,7 +161,6 @@ public class SoFActivity extends Activity
                 }
 
                 mResult = gbl.deal(gbl.LOWER);
-                Log.v("mResult", String.valueOf(mResult));
 
                 if(mResult == Global.GOOD || mResult == Global.SOCIAL) {
                     mCounter++;
@@ -177,7 +181,6 @@ public class SoFActivity extends Activity
                     mBtnHigher.setVisibility(View.INVISIBLE);
                     mBtnLower.setVisibility(View.INVISIBLE);
                 } else {
-                    Log.v("Result", String.valueOf(mResult));
                 }
             }
         });

@@ -207,17 +207,12 @@ public class Deck {
         if(mNumOnTable == 0) {      // first selection
             selSuit = mCards[mInDeck[mNumInDeck-1]].mSuit;
             selValue = mCards[mInDeck[mNumInDeck-1]].mValue;
-
-            Log.v("Deal", "Suit: " + selSuit + ", Value: " + selValue);
         } else {                    // card already on table
             prevSuit = mCards[mOnTable[mNumOnTable-1]].mSuit;
             prevValue = mCards[mOnTable[mNumOnTable-1]].mValue;
 
             selSuit = mCards[mInDeck[mNumInDeck-1]].mSuit;
             selValue = mCards[mInDeck[mNumInDeck-1]].mValue;
-
-            Log.v("Deal Prev", "Suit: " + prevSuit + ", Value: " + prevValue);
-            Log.v("Deal Curr", "Suit: " + selSuit + ", Value: " + selValue);
         }
 
         // Transfer card from top of deck to table

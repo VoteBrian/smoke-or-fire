@@ -107,12 +107,14 @@ public class Card {
         if(mState != 3) {       // IF NOT BURNT
             gl.glPushMatrix();
 
+            gl.glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
+
             // TEXTURE 0
             gl.glClientActiveTexture(GL10.GL_TEXTURE0);
             gl.glActiveTexture(GL10.GL_TEXTURE0);
             gl.glEnableClientState(GL10.GL_TEXTURE_COORD_ARRAY);
             gl.glBindTexture(GL10.GL_TEXTURE_2D, mTextures[mSuit]);
-            gl.glTexEnvf(GL10.GL_TEXTURE_ENV, GL10.GL_TEXTURE_ENV_MODE, GL10.GL_REPLACE);
+            gl.glTexEnvf(GL10.GL_TEXTURE_ENV, GL10.GL_TEXTURE_ENV_MODE, GL10.GL_MODULATE);
             gl.glTexCoordPointer(2, GL10.GL_FLOAT, 0, mTextureSuitBuffer);
             gl.glEnable(GL10.GL_TEXTURE_2D);
 
@@ -124,7 +126,6 @@ public class Card {
             gl.glTexEnvf(GL10.GL_TEXTURE_ENV, GL10.GL_TEXTURE_ENV_MODE, GL10.GL_DECAL);
             gl.glTexCoordPointer(2, GL10.GL_FLOAT, 0, mTextureValueBuffer);
             gl.glEnable(GL10.GL_TEXTURE_2D);
-
 
             // NORMALS
             // gl.glNormalPointer(GL10.GL_FLOAT, 0, mNormalBuffer);
@@ -154,7 +155,6 @@ public class Card {
 
             // DRAW
             gl.glDrawArrays(GL10.GL_TRIANGLES, 0, mNumVertices);
-            // gl.glDrawElements(GL10.GL_TRIANGLES, mNumIndices, GL10.GL_UNSIGNED_SHORT, mIndexBuffer);
 
             gl.glPopMatrix();
         }
