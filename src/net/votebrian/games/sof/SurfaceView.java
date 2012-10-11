@@ -9,13 +9,16 @@ public class SurfaceView extends GLSurfaceView {
 
     Global gbl;
 
+    private GLESRenderer renderer;
+
     float mStartX = 0;
     float mStartY = 0;
 
     public SurfaceView(Context context, AttributeSet atr) {
         super(context, atr);
+        renderer = new GLESRenderer(context);
 
-        setRenderer(new GLESRenderer(context));
+        setRenderer(renderer);
 
         gbl = (Global) context.getApplicationContext();
     }
@@ -46,6 +49,8 @@ public class SurfaceView extends GLSurfaceView {
                 mStartX = 0;
                 mStartY = 0;
                 */
+                renderer.handleTouch(x, y);
+
                 gbl.burnTable();
                 break;
             case MotionEvent.ACTION_MOVE:

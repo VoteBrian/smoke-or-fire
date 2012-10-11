@@ -17,10 +17,7 @@ class GLESRenderer implements GLSurfaceView.Renderer {
     Global gbl;
     Context mCtx;
 
-    private Model mBtnHigher;
-    private Model mBtnLower;
-    private Model mBtnSmoke;
-    private Model mBtnFire;
+    private Buttons mOverlayBtns;
 
     private ByteBuffer mLbb;
     private FloatBuffer mLinesBuffer;
@@ -44,26 +41,13 @@ class GLESRenderer implements GLSurfaceView.Renderer {
     private float mXAngle = 0;
     private float mYAngle = 0;
 
-    private float mBtnBaseZ = 8f;
-    private float[] mBtn;
-
     public final int SS_SUNLIGHT = GL10.GL_LIGHT0;
 
     public GLESRenderer(Context context) {
         mCtx = context;
         gbl = (Global) context.getApplicationContext();
 
-        mBtnHigher = new Model();
-        mBtnHigher.setColor(1.0f, 1.0f, 1.0f, 0.1f);
-
-        mBtnLower = new Model();
-        mBtnLower.setColor(1.0f, 1.0f, 1.0f, 0.1f);
-
-        mBtnSmoke = new Model();
-        mBtnSmoke.setColor(1.0f, 1.0f, 1.0f, 0.1f);
-
-        mBtnFire = new Model();
-        mBtnFire.setColor(1.0f, 1.0f, 1.0f, 0.1f);
+        mOverlayBtns = new Buttons();
     }
 
     public void onSurfaceCreated(GL10 gl, EGLConfig config) {
@@ -93,10 +77,7 @@ class GLESRenderer implements GLSurfaceView.Renderer {
         gl.glRotatef(-5f, 0f, 1f, 0f);
         gl.glRotatef(20f, 1f, 0f, 0f);
 
-        mBtnHigher.draw(gl);
-        mBtnLower.draw(gl);
-        mBtnSmoke.draw(gl);
-        mBtnFire.draw(gl);
+        mOverlayBtns.draw(gl);
     }
 
     public void onSurfaceChanged(GL10 gl, int width, int height) {
@@ -106,7 +87,7 @@ class GLESRenderer implements GLSurfaceView.Renderer {
         setDisplayProperties(gl);
         setProjection(gl);
 
-        setBtnVertices();
+        mOverlayBtns.setVertices(mViewW, mViewH, mViewAngle);
     }
 
     private void setProjection(GL10 gl) {
@@ -165,7 +146,7 @@ class GLESRenderer implements GLSurfaceView.Renderer {
         gl.glLightfv(SS_SUNLIGHT, GL10.GL_POSITION, mPositionBuffer);
         gl.glLightfv(SS_SUNLIGHT, GL10.GL_DIFFUSE, mDiffuseBuffer);
         gl.glShadeModel(GL10.GL_SMOOTH);
-        // gl.glEnable(GL10.GL_LIGHTING);
+        gl.glEnable(GL10.GL_LIGHTING);
         gl.glDisable(GL10.GL_LIGHTING);
         gl.glEnable(SS_SUNLIGHT);
     }
@@ -175,72 +156,8 @@ class GLESRenderer implements GLSurfaceView.Renderer {
         mYAngle = gbl.getYAngle();
     }
 
-    private void setBtnVertices() {
-        float ratio = (float) mViewW / (float) mViewH;
-
-        float h = (float) (mBtnBaseZ * (Math.tan(Math.toRadians(mViewAngle))));
-        float w = h * ratio;
-
-        mBtn = new float[9];
-
-        // HIGHER
-        mBtn[0] = -w;
-        mBtn[1] =  h;
-        mBtn[2] = -mBtnBaseZ;
-
-        mBtn[3] =  0;
-        mBtn[4] =  h/10;
-        mBtn[5] = -mBtnBaseZ;
-
-        mBtn[6] =  w;
-        mBtn[7] =  h;
-        mBtn[8] = -mBtnBaseZ;
-
-        mBtnHigher.setVertices(mBtn);
-
-        // LOWER
-        mBtn[0] = -w;
-        mBtn[1] = -h;
-        mBtn[2] = -mBtnBaseZ;
-
-        mBtn[3] =  w;
-        mBtn[4] = -h;
-        mBtn[5] = -mBtnBaseZ;
-
-        mBtn[6] =  0;
-        mBtn[7] = -h/10;
-        mBtn[8] = -mBtnBaseZ;
-
-        mBtnLower.setVertices(mBtn);
-
-        // SMOKE
-        mBtn[0] = -w;
-        mBtn[1] =  h;
-        mBtn[2] = -mBtnBaseZ;
-
-        mBtn[3] = -w;
-        mBtn[4] = -h;
-        mBtn[5] = -mBtnBaseZ;
-
-        mBtn[6] = -w/10;
-        mBtn[7] =  0;
-        mBtn[8] = -mBtnBaseZ;
-
-        mBtnSmoke.setVertices(mBtn);
-
-        // FIRE
-        mBtn[0] =  w;
-        mBtn[1] =  h;
-        mBtn[2] = -mBtnBaseZ;
-
-        mBtn[3] =  w/10;
-        mBtn[4] =  0;
-        mBtn[5] = -mBtnBaseZ;
-
-        mBtn[6] =  w;
-        mBtn[7] = -h;
-        mBtn[8] = -mBtnBaseZ;
-
-        mBtnFire.setVertices(mBtn);
+    public void handleTouch(float x, float y) {
+        float slope = mViewH/mViewW;
+        // stuff
     }
 }

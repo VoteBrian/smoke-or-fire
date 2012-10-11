@@ -55,6 +55,8 @@ public class Model{
             gl.glTexCoordPointer(2, GL10.GL_FLOAT, 0, mTextureSuitBuffer);
             gl.glEnable(GL10.GL_TEXTURE_2D);
             */
+        } else {
+            // stuff
         }
 
         // Color
