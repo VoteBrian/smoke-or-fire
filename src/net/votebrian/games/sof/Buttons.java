@@ -15,21 +15,54 @@ public class Buttons {
 
     public Buttons() {
         mBtnHigher = new Model();
+        mBtnFire = new Model();
         mBtnLower = new Model();
         mBtnSmoke = new Model();
-        mBtnFire = new Model();
 
-        mBtnHigher.setColor(1.0f, 1.0f, 1.0f, 0.1f);
-        mBtnLower.setColor(1.0f, 1.0f, 1.0f, 0.1f);
-        mBtnSmoke.setColor(1.0f, 1.0f, 1.0f, 0.1f);
-        mBtnFire.setColor(1.0f, 1.0f, 1.0f, 0.1f);
+        mBtnHigher.setColor(1.0f, 1.0f, 1.0f, 0.00f);
+        mBtnFire.setColor(1.0f, 1.0f, 1.0f, 0.00f);
+        mBtnLower.setColor(1.0f, 1.0f, 1.0f, 0.00f);
+        mBtnSmoke.setColor(1.0f, 1.0f, 1.0f, 0.00f);
     }
 
     public void draw(GL10 gl) {
         mBtnHigher.draw(gl);
+        mBtnFire.draw(gl);
         mBtnLower.draw(gl);
         mBtnSmoke.draw(gl);
-        mBtnFire.draw(gl);
+    }
+
+    public void highlightBtn(int btn) {
+
+        mBtnHigher.setColor(1.0f, 1.0f, 1.0f, 0.00f);
+        mBtnFire.setColor(1.0f, 1.0f, 1.0f, 0.00f);
+        mBtnLower.setColor(1.0f, 1.0f, 1.0f, 0.00f);
+        mBtnSmoke.setColor(1.0f, 1.0f, 1.0f, 0.00f);
+
+        switch (btn) {
+            case Global.SMOKE:
+                mBtnSmoke.setColor(1.0f, 1.0f, 1.0f, 0.1f);
+                break;
+            case Global.FIRE:
+                mBtnFire.setColor(1.0f, 1.0f, 1.0f, 0.1f);
+                break;
+            case Global.HIGHER:
+                mBtnHigher.setColor(1.0f, 1.0f, 1.0f, 0.1f);
+                break;
+            case Global.LOWER:
+                mBtnLower.setColor(1.0f, 1.0f, 1.0f, 0.1f);
+                break;
+            default:
+                break;
+        }
+    }
+
+    public void settle() {
+
+        mBtnHigher.setColor(1.0f, 1.0f, 1.0f, 0.00f);
+        mBtnFire.setColor(1.0f, 1.0f, 1.0f, 0.00f);
+        mBtnLower.setColor(1.0f, 1.0f, 1.0f, 0.00f);
+        mBtnSmoke.setColor(1.0f, 1.0f, 1.0f, 0.00f);
     }
 
     public void setVertices(float viewW, float viewH, float viewAngle) {

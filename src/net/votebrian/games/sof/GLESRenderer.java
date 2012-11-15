@@ -11,13 +11,22 @@ import android.content.Context;
 import android.opengl.GLSurfaceView;
 import android.opengl.GLSurfaceView.Renderer;
 
+import android.os.Handler;
+
 import android.util.Log;
 
 class GLESRenderer implements GLSurfaceView.Renderer {
     Global gbl;
     Context mCtx;
 
+    private Handler handler;
+
     private Buttons mOverlayBtns;
+    private Btn btn;
+
+    private int EVENT_DOWN = 0;
+    private int EVENT_MOVE = 1;
+    private int EVENT_UP   = 2;
 
     private ByteBuffer mLbb;
     private FloatBuffer mLinesBuffer;
@@ -43,9 +52,17 @@ class GLESRenderer implements GLSurfaceView.Renderer {
 
     public final int SS_SUNLIGHT = GL10.GL_LIGHT0;
 
+    private boolean relBtnsEnabled = false;
+
+    private int mSelectionFail = 0;
+    // 0:  Ready for selection
+    // 1:  Selection Failed. Deal disabled until cards cleared.
+    // 2:  Cards cleared.  Reset counter
+
     public GLESRenderer(Context context) {
         mCtx = context;
         gbl = (Global) context.getApplicationContext();
+        handler = new Handler();
 
         mOverlayBtns = new Buttons();
     }
@@ -151,13 +168,102 @@ class GLESRenderer implements GLSurfaceView.Renderer {
         gl.glEnable(SS_SUNLIGHT);
     }
 
+    /*
     private void getRotation() {
         mXAngle = gbl.getXAngle();
         mYAngle = gbl.getYAngle();
     }
+    */
 
-    public void handleTouch(float x, float y) {
-        float slope = mViewH/mViewW;
-        // stuff
+    public void buttonEvent(float x, float y, int event) {
+        // determine region of button event
+        int region = regionCalc(x, y);
+
+        if(mSelectionFail == 1) {
+            Log.v("RENDERER", "mSelectionFail: " + mSelectionFail);
+
+            // getting rid of Clearable, but burnTable won't work without it right now
+            gbl.setClearable(1);
+            gbl.burnTable();
+            gbl.setClearable(0);
+
+            mSelectionFail = 2;
+
+            handler.postDelayed( new Runnable() {
+                    public void run() {
+                        Log.v("RENDERER", "Runnable");
+                        mSelectionFail = 0;
+                    }
+                }, 500);
+
+        } else if(mSelectionFail == 0) {
+            if( event == EVENT_DOWN ) {
+                // highlight button pressed
+                if( (region < 2)  || relBtnsEnabled ) {
+                    mOverlayBtns.highlightBtn(region);
+                }
+            } else if( event == EVENT_UP ) {
+                // remove highlight
+                if( (region < 2)  || relBtnsEnabled ) {
+                    // remove highlight after a slight delay
+                    handler.postDelayed( new Runnable() {
+                        public void run() {
+                            mOverlayBtns.settle();
+                        }
+                    }, 50);
+
+                    // deal card and determine outcome
+                    int result = gbl.deal(region);
+                    Log.v("RENDERER", "result: " + result);
+
+                    switch(result) {
+                        case Global.BAD:
+                            // expand drink counter
+                            // show fail splash image
+
+                            // show cards on table
+
+                            // disable all selections until cleared
+                            mSelectionFail = 1;
+
+                            // disable higher/lower selections
+                            relBtnsEnabled = false;
+                            break;
+                        case Global.GOOD:
+                            // highlight drink counter increment
+
+                            // enable higher/lower selections
+                            relBtnsEnabled = true;
+                            break;
+                        case Global.SOCIAL:
+                            // highlight drink counter increment
+                            // show social splash image
+                            // show matching cards
+                            //stuff
+                            break;
+                    }
+                }
+            }
+        }
+    }
+
+    private int regionCalc(float x, float y) {
+        float slope = (float) mViewH / (float) mViewW;
+        float upslope = -1 * slope * (float) x + mViewH;
+        float downslope = slope * x;
+
+        if( y > upslope ) {
+            if( y > downslope ) {
+                return Global.LOWER;
+            } else {
+                return Global.FIRE;
+            }
+        } else {
+            if( y > downslope ) {
+                return Global.SMOKE;
+            } else {
+                return Global.HIGHER;
+            }
+        }
     }
 }

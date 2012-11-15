@@ -9,6 +9,10 @@ public class SurfaceView extends GLSurfaceView {
 
     Global gbl;
 
+    int EVENT_DOWN = 0;
+    int EVENT_MOVE = 1;
+    int EVENT_UP   = 2;
+
     private GLESRenderer renderer;
 
     float mStartX = 0;
@@ -33,6 +37,10 @@ public class SurfaceView extends GLSurfaceView {
             case MotionEvent.ACTION_DOWN:
                 // mStartX = x;
                 // mStartY = y;
+
+                // Highlight button pressed
+                // renderer.highlight(x, y);
+                renderer.buttonEvent(x, y, EVENT_DOWN);
                 break;
             case MotionEvent.ACTION_UP:
                 /*
@@ -49,7 +57,12 @@ public class SurfaceView extends GLSurfaceView {
                 mStartX = 0;
                 mStartY = 0;
                 */
-                renderer.handleTouch(x, y);
+
+                // deal
+
+                // Undo button highlight
+                // renderer.settle();
+                renderer.buttonEvent(x, y, EVENT_UP);
 
                 gbl.burnTable();
                 break;

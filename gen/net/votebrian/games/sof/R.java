@@ -24,12 +24,8 @@ public final class R {
         public static final int test=0x7f02000a;
     }
     public static final class id {
-        public static final int btn_fire=0x7f050003;
-        public static final int btn_higher=0x7f050004;
-        public static final int btn_lower=0x7f050005;
-        public static final int btn_smoke=0x7f050002;
         public static final int canvas=0x7f050000;
-        public static final int menu_reset=0x7f050006;
+        public static final int menu_reset=0x7f050002;
         public static final int txt_num_drinks=0x7f050001;
     }
     public static final class layout {

@@ -24,10 +24,6 @@ public class SoFActivity extends Activity {
     public SharedPreferences        mSettings;
     public SharedPreferences.Editor mEditor;
 
-    private Button mBtnSmoke;
-    private Button mBtnFire;
-    private Button mBtnHigher;
-    private Button mBtnLower;
     private TextView mTxtNumDrinks;
 
     private int mResult = 0;
@@ -46,15 +42,10 @@ public class SoFActivity extends Activity {
 
         setContentView(R.layout.main);
 
-        // get handles to buttons
-        mBtnSmoke = (Button) findViewById(R.id.btn_smoke);
-        mBtnFire = (Button) findViewById(R.id.btn_fire);
-        mBtnHigher = (Button) findViewById(R.id.btn_higher);
-        mBtnLower = (Button) findViewById(R.id.btn_lower);
-
         mTxtNumDrinks = (TextView) findViewById(R.id.txt_num_drinks);
 
         // create onClickListeners
+        /*
         mBtnSmoke.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 // clear table if not already cleared
@@ -184,6 +175,7 @@ public class SoFActivity extends Activity {
                 }
             }
         });
+        */
     }
 
     @Override
@@ -221,8 +213,8 @@ public class SoFActivity extends Activity {
         updateCounter();
 
         // make the smoke and fire buttons visible
-        mBtnSmoke.setVisibility(View.VISIBLE);
-        mBtnFire.setVisibility(View.VISIBLE);
+        // mBtnSmoke.setVisibility(View.VISIBLE);
+        // mBtnFire.setVisibility(View.VISIBLE);
     }
 }
 

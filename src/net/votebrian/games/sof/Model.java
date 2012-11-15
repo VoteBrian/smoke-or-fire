@@ -23,9 +23,9 @@ public class Model{
     private boolean mTexSet = false;
 
     private float[] mVertices = {
-         0f, 1f, -5f,
-        -1f, 0f, -5f,
-         1f, 0f, -5f
+         0f, 1f, -8f,
+        -1f, 0f, -8f,
+         1f, 0f, -8f
     };
     private int mLengthVertices = mVertices.length;
     private FloatBuffer mVertexBuffer;
@@ -85,6 +85,10 @@ public class Model{
         mColorBuffer = makeFloatBuffer(mColor);
     }
 
+    private void buildColorBuffer() {
+        mColorBuffer = makeFloatBuffer(mColor);
+    }
+
     private FloatBuffer makeFloatBuffer(float[] array) {
         ByteBuffer bb = ByteBuffer.allocateDirect(array.length * 4);
         bb.order(ByteOrder.nativeOrder());
@@ -96,8 +100,7 @@ public class Model{
     }
 
     public void setVertices(float[] array) {
-        mLengthVertices = array.length;
-        mVertices = new float[mLengthVertices];
+        mVertices = new float[array.length];
 
         mVertices = array;
 
@@ -142,6 +145,10 @@ public class Model{
         mRotZ = z;
     }
 
+    public void setAlpha(float a) {
+        mAlpha = a;
+    }
+
     public void setColor(float r, float g, float b, float a) {
         int numVertices = mLengthVertices/3;
 
@@ -154,10 +161,6 @@ public class Model{
             mColor[c*4 + 3] = a;
         }
 
-        buildBuffers();
-    }
-
-    public void setAlpha(float a) {
-        mAlpha = a;
+        buildColorBuffer();
     }
 }

@@ -235,7 +235,7 @@ public class Deck {
                 }
                 break;
             case Global.FIRE:
-                if(selSuit < 1) {
+                if(selSuit < 2) {
                     mResult = Global.GOOD;
                 } else {
                     mResult = Global.BAD;
