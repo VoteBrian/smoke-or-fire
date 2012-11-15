@@ -8,6 +8,11 @@ import java.nio.ByteOrder;
 import java.nio.FloatBuffer;
 
 import android.content.Context;
+import android.content.res.Resources;
+import android.content.SharedPreferences;
+import android.content.SharedPreferences.Editor;
+import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
+
 import android.opengl.GLSurfaceView;
 import android.opengl.GLSurfaceView.Renderer;
 
@@ -15,11 +20,17 @@ import android.os.Handler;
 
 import android.util.Log;
 
-class GLESRenderer implements GLSurfaceView.Renderer {
+class GLESRenderer
+        implements GLSurfaceView.Renderer {
     Global gbl;
     Context mCtx;
 
     private Handler handler;
+
+    private Resources mRes;
+
+    public SharedPreferences         mSettings;
+    public SharedPreferences.Editor mEditor;
 
     private Buttons mOverlayBtns;
     private Btn btn;
@@ -63,6 +74,18 @@ class GLESRenderer implements GLSurfaceView.Renderer {
         mCtx = context;
         gbl = (Global) context.getApplicationContext();
         handler = new Handler();
+
+
+        // Shared Preferences Setup
+        mRes = context.getResources();
+
+        mSettings = mCtx.getSharedPreferences( mRes.getString(R.string.prefs), Context.MODE_PRIVATE);
+        mEditor = mSettings.edit();
+
+        mEditor.putInt( mRes.getString(R.string.counter_pref), 0);
+        mEditor.commit();
+
+
 
         mOverlayBtns = new Buttons();
     }
@@ -176,12 +199,12 @@ class GLESRenderer implements GLSurfaceView.Renderer {
     */
 
     public void buttonEvent(float x, float y, int event) {
+        int temp_count = 0;
+
         // determine region of button event
         int region = regionCalc(x, y);
 
         if(mSelectionFail == 1) {
-            Log.v("RENDERER", "mSelectionFail: " + mSelectionFail);
-
             // getting rid of Clearable, but burnTable won't work without it right now
             gbl.setClearable(1);
             gbl.burnTable();
@@ -195,6 +218,9 @@ class GLESRenderer implements GLSurfaceView.Renderer {
                         mSelectionFail = 0;
                     }
                 }, 500);
+
+            mEditor.putInt(mRes.getString(R.string.counter_pref), 0);
+            mEditor.commit();
 
         } else if(mSelectionFail == 0) {
             if( event == EVENT_DOWN ) {
@@ -230,13 +256,22 @@ class GLESRenderer implements GLSurfaceView.Renderer {
                             relBtnsEnabled = false;
                             break;
                         case Global.GOOD:
-                            // highlight drink counter increment
+                            // increment drink counter
+                            temp_count = mSettings.getInt( mRes.getString(R.string.counter_pref), -1);
+                            temp_count = temp_count + 1;
+                            mEditor.putInt( mRes.getString(R.string.counter_pref), temp_count);
+                            mEditor.commit();
 
                             // enable higher/lower selections
                             relBtnsEnabled = true;
                             break;
                         case Global.SOCIAL:
                             // highlight drink counter increment
+                            temp_count = mSettings.getInt( mRes.getString(R.string.counter_pref), -1);
+                            temp_count = temp_count + 1;
+                            mEditor.putInt( mRes.getString(R.string.counter_pref), temp_count);
+                            mEditor.commit();
+
                             // show social splash image
                             // show matching cards
                             //stuff

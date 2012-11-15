@@ -1,8 +1,11 @@
 package net.votebrian.games.sof;
 
 import android.app.Activity;
+import android.content.Context;
+import android.content.res.Resources;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
+import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
 import android.os.Bundle;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemSelectedListener;
@@ -17,12 +20,14 @@ import android.view.View;
 
 import android.util.Log;
 
-public class SoFActivity extends Activity {
+public class SoFActivity extends Activity
+        implements SharedPreferences.OnSharedPreferenceChangeListener {
     private Global gbl;
 
-    public static final String PREFS_NAME = "MyPrefs";
     public SharedPreferences        mSettings;
     public SharedPreferences.Editor mEditor;
+
+    private Resources mRes;
 
     private TextView mTxtNumDrinks;
 
@@ -37,12 +42,16 @@ public class SoFActivity extends Activity {
         super.onCreate(savedInstanceState);
         gbl = (Global) getApplication();
 
-        mSettings = getSharedPreferences(PREFS_NAME, 0);
-        mEditor = mSettings.edit();
-
         setContentView(R.layout.main);
 
         mTxtNumDrinks = (TextView) findViewById(R.id.txt_num_drinks);
+
+        // need a handle to resources
+        mRes = getResources();
+
+        mSettings = getSharedPreferences(mRes.getString(R.string.prefs), Context.MODE_PRIVATE);
+        mSettings.registerOnSharedPreferenceChangeListener(this);
+        onSharedPreferenceChanged(mSettings, null);
 
         // create onClickListeners
         /*
@@ -202,6 +211,12 @@ public class SoFActivity extends Activity {
         }
 
         return true;
+    }
+
+    public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
+        Log.v("ACTIVITY", "Shared Preference Changed");
+        mCounter = sharedPreferences.getInt( getString(R.string.counter_pref), -1);
+        updateCounter();
     }
 
     private void updateCounter() {

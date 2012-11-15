@@ -33,11 +33,13 @@ public final class R {
         public static final int menu_activity=0x7f030001;
     }
     public static final class string {
-        public static final int app_name=0x7f040001;
-        public static final int btn_fire=0x7f040005;
-        public static final int btn_higher=0x7f040002;
-        public static final int btn_lower=0x7f040003;
-        public static final int btn_smoke=0x7f040004;
-        public static final int menu_reset=0x7f040000;
+        public static final int app_name=0x7f040003;
+        public static final int btn_fire=0x7f040007;
+        public static final int btn_higher=0x7f040004;
+        public static final int btn_lower=0x7f040005;
+        public static final int btn_smoke=0x7f040006;
+        public static final int counter_pref=0x7f040001;
+        public static final int menu_reset=0x7f040002;
+        public static final int prefs=0x7f040000;
     }
 }
