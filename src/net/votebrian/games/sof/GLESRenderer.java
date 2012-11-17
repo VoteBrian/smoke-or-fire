@@ -82,8 +82,9 @@ class GLESRenderer
         mSettings = mCtx.getSharedPreferences( mRes.getString(R.string.prefs), Context.MODE_PRIVATE);
         mEditor = mSettings.edit();
 
-        mEditor.putInt( mRes.getString(R.string.counter_pref), 0);
-        mEditor.commit();
+        // Default Preferences
+        zeroCounter();
+        resetFailed();
 
 
 
@@ -219,8 +220,11 @@ class GLESRenderer
                     }
                 }, 500);
 
-            mEditor.putInt(mRes.getString(R.string.counter_pref), 0);
-            mEditor.commit();
+            // Set counter to zero
+            zeroCounter();
+
+            // reset fail indicator
+            resetFailed();
 
         } else if(mSelectionFail == 0) {
             if( event == EVENT_DOWN ) {
@@ -245,6 +249,13 @@ class GLESRenderer
                     switch(result) {
                         case Global.BAD:
                             // expand drink counter
+
+                            // increment drink counter
+                            incrementCounter();
+
+                            // indicate fail preference
+                            flagFailed();
+
                             // show fail splash image
 
                             // show cards on table
@@ -257,20 +268,14 @@ class GLESRenderer
                             break;
                         case Global.GOOD:
                             // increment drink counter
-                            temp_count = mSettings.getInt( mRes.getString(R.string.counter_pref), -1);
-                            temp_count = temp_count + 1;
-                            mEditor.putInt( mRes.getString(R.string.counter_pref), temp_count);
-                            mEditor.commit();
+                            incrementCounter();
 
                             // enable higher/lower selections
                             relBtnsEnabled = true;
                             break;
                         case Global.SOCIAL:
                             // highlight drink counter increment
-                            temp_count = mSettings.getInt( mRes.getString(R.string.counter_pref), -1);
-                            temp_count = temp_count + 1;
-                            mEditor.putInt( mRes.getString(R.string.counter_pref), temp_count);
-                            mEditor.commit();
+                            incrementCounter();
 
                             // show social splash image
                             // show matching cards
@@ -280,6 +285,28 @@ class GLESRenderer
                 }
             }
         }
+    }
+
+    private void incrementCounter() {
+        int temp_count = mSettings.getInt( mRes.getString(R.string.counter_pref), -1);
+        temp_count = temp_count + 1;
+        mEditor.putInt( mRes.getString(R.string.counter_pref), temp_count);
+        mEditor.commit();
+    }
+
+    private void zeroCounter() {
+        mEditor.putInt( mRes.getString(R.string.counter_pref), 0);
+        mEditor.commit();
+    }
+
+    private void flagFailed() {
+        mEditor.putBoolean( mRes.getString(R.string.fail_pref), true);
+        mEditor.commit();
+    }
+
+    private void resetFailed() {
+        mEditor.putBoolean( mRes.getString(R.string.fail_pref), false);
+        mEditor.commit();
     }
 
     private int regionCalc(float x, float y) {

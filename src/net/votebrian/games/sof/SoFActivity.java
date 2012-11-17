@@ -7,12 +7,15 @@ import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
 import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
 import android.os.Bundle;
+
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
+
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -30,9 +33,10 @@ public class SoFActivity extends Activity
     private Resources mRes;
 
     private TextView mTxtNumDrinks;
+    private LinearLayout mFailBorder;
 
     private int mResult = 0;
-
+    private Boolean mFail = false;
     private int mCounter = 0;
 
 
@@ -44,147 +48,17 @@ public class SoFActivity extends Activity
 
         setContentView(R.layout.main);
 
+        // View Handles
         mTxtNumDrinks = (TextView) findViewById(R.id.txt_num_drinks);
+        mFailBorder = (LinearLayout) findViewById(R.id.fail_border);
 
-        // need a handle to resources
+        // Resource Handle
         mRes = getResources();
 
+        // Register for Shared Preferences
         mSettings = getSharedPreferences(mRes.getString(R.string.prefs), Context.MODE_PRIVATE);
         mSettings.registerOnSharedPreferenceChangeListener(this);
         onSharedPreferenceChanged(mSettings, null);
-
-        // create onClickListeners
-        /*
-        mBtnSmoke.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                // clear table if not already cleared
-                if(gbl.getClearable() == 1) {
-                    gbl.burnTable();
-                    gbl.setClearable(0);
-                }
-
-                mResult = gbl.deal(gbl.SMOKE);
-
-                if(mResult == Global.GOOD) {
-                    mCounter++;
-                    updateCounter();
-                    if(mCounter == 1) {     // first correct pick
-                        // make higher and lower buttons visible
-                        mBtnHigher.setVisibility(View.VISIBLE);
-                        mBtnLower.setVisibility(View.VISIBLE);
-                    }
-                } else {
-                    mCounter = 0;
-                    updateCounter();
-                    gbl.setClearable(1);
-
-                    // make all buttons invisible
-                    // mBtnSmoke.setVisibility(View.INVISIBLE);
-                    // mBtnFire.setVisibility(View.INVISIBLE);
-                    mBtnHigher.setVisibility(View.INVISIBLE);
-                    mBtnLower.setVisibility(View.INVISIBLE);
-                }
-            }
-        });
-
-        mBtnFire.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                // clear table if not already cleared
-                if(gbl.getClearable() == 1) {
-                    gbl.burnTable();
-                    gbl.setClearable(0);
-                }
-
-                mResult = gbl.deal(gbl.FIRE);
-
-                if(mResult == Global.GOOD) {
-                    mCounter++;
-                    updateCounter();
-                    if(mCounter == 1) {     // first correct pick
-                        // make higher and lower buttons visible
-                        mBtnHigher.setVisibility(View.VISIBLE);
-                        mBtnLower.setVisibility(View.VISIBLE);
-                    }
-                } else {
-                    mCounter = 0;
-                    updateCounter();
-                    gbl.setClearable(1);
-
-                    // make all buttons invisible
-                    // mBtnSmoke.setVisibility(View.INVISIBLE);
-                    // mBtnFire.setVisibility(View.INVISIBLE);
-                    mBtnHigher.setVisibility(View.INVISIBLE);
-                    mBtnLower.setVisibility(View.INVISIBLE);
-                }
-            }
-        });
-
-        mBtnHigher.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                // clear table if not already cleared
-                if(gbl.getClearable() == 1) {
-                    gbl.burnTable();
-                    gbl.setClearable(0);
-                }
-
-                mResult = gbl.deal(gbl.HIGHER);
-
-                if(mResult == Global.GOOD || mResult == Global.SOCIAL) {
-                    mCounter++;
-                    updateCounter();
-                    if(mCounter == 1) {     // first correct pick
-                        // make higher and lower buttons visible
-                        mBtnHigher.setVisibility(View.VISIBLE);
-                        mBtnLower.setVisibility(View.VISIBLE);
-                    }
-                } else if(mResult == Global.BAD) {
-                    mCounter = 0;
-                    updateCounter();
-                    gbl.setClearable(1);
-
-                    // make all buttons invisible
-                    // mBtnSmoke.setVisibility(View.INVISIBLE);
-                    // mBtnFire.setVisibility(View.INVISIBLE);
-                    mBtnHigher.setVisibility(View.INVISIBLE);
-                    mBtnLower.setVisibility(View.INVISIBLE);
-                } else {
-                }
-            }
-        });
-
-        mBtnLower.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                // clear table if not already cleared
-                if(gbl.getClearable() == 1) {
-                    gbl.burnTable();
-                    gbl.setClearable(0);
-                }
-
-                mResult = gbl.deal(gbl.LOWER);
-
-                if(mResult == Global.GOOD || mResult == Global.SOCIAL) {
-                    mCounter++;
-                    updateCounter();
-                    if(mCounter == 1) {     // first correct pick
-                        // make higher and lower buttons visible
-                        mBtnHigher.setVisibility(View.VISIBLE);
-                        mBtnLower.setVisibility(View.VISIBLE);
-                    }
-                } else if(mResult == Global.BAD) {
-                    mCounter = 0;
-                    updateCounter();
-                    gbl.setClearable(1);
-
-                    // make all buttons invisible
-                    // mBtnSmoke.setVisibility(View.INVISIBLE);
-                    // mBtnFire.setVisibility(View.INVISIBLE);
-                    mBtnHigher.setVisibility(View.INVISIBLE);
-                    mBtnLower.setVisibility(View.INVISIBLE);
-                } else {
-                }
-            }
-        });
-        */
     }
 
     @Override
@@ -214,22 +88,30 @@ public class SoFActivity extends Activity
     }
 
     public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
-        Log.v("ACTIVITY", "Shared Preference Changed");
+        // Check Fail Condition
+        mFail = sharedPreferences.getBoolean( getString(R.string.fail_pref), false);
+        if(mFail) {
+            mFailBorder.setVisibility(LinearLayout.VISIBLE);
+        } else {
+            mFailBorder.setVisibility(LinearLayout.GONE);
+        }
+
+        // Update Drink Counter
         mCounter = sharedPreferences.getInt( getString(R.string.counter_pref), -1);
         updateCounter();
     }
 
     private void updateCounter() {
-        mTxtNumDrinks.setText(String.valueOf(mCounter));
+        if(mFail) {
+            mTxtNumDrinks.setText("Drink " + String.valueOf(mCounter));
+        } else {
+            mTxtNumDrinks.setText(String.valueOf(mCounter));
+        }
     }
 
     private void resetCounters() {
         mCounter = 0;
         updateCounter();
-
-        // make the smoke and fire buttons visible
-        // mBtnSmoke.setVisibility(View.VISIBLE);
-        // mBtnFire.setVisibility(View.VISIBLE);
     }
 }
 

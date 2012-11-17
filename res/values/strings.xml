@@ -2,6 +2,8 @@
 <resources>
     <string name="prefs">net.votebrian.games.sof.shared_prefs</string>
     <string name="counter_pref">net.votebrian.games.sof.counterPref</string>
+    <string name="fail_pref">net.votebrian.games.sof.failPref</string>
+
     <string name="menu_reset">Reset</string>
     <string name="app_name">Smoke Or Fire</string>
     <string name="btn_higher">Higher</string>
