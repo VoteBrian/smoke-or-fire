@@ -381,7 +381,6 @@ public class Model {
     }
 
     public void setOutlineColor(float[] array) {
-        mOutlineColor = new float[array.length];
         mOutlineColor = array;
 
         mOutlineColorBuffer = buildColorBuffer(mOutlineColor, mNumOutlineVertices);

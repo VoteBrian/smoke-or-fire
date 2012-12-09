@@ -199,6 +199,8 @@ class GLESRenderer
         if(mSelectionFail == 1) {
             // clear cards from table
             mDeck.burnTable();
+            mOverlayBtns.enableAll();
+            mOverlayBtns.disableRelative();
 
             mSelectionFail = 2;
 
@@ -254,6 +256,7 @@ class GLESRenderer
 
                             // disable higher/lower selections
                             relBtnsEnabled = false;
+                            mOverlayBtns.disableAll();
                             break;
                         case Global.GOOD:
                             // increment drink counter
@@ -261,6 +264,7 @@ class GLESRenderer
 
                             // enable higher/lower selections
                             relBtnsEnabled = true;
+                            mOverlayBtns.enableRelative();
                             break;
                         case Global.SOCIAL:
                             // highlight drink counter increment

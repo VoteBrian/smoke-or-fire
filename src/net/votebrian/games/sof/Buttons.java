@@ -18,6 +18,7 @@ public class Buttons {
 
     private float[] mSettle = {1.0f, 1.0f, 1.0f, 0.05f};
     private float[] mHighlight = {1.0f, 1.0f, 1.0f, 0.3f};
+    private float[] mOff = {0.0f, 0.0f, 0.0f, 0.0f};
 
     public Buttons(Context context, GL10 gl) {
         mCtx = context;
@@ -38,6 +39,9 @@ public class Buttons {
         mBtnFire = new Model(mCtx, gl);
         mBtnFire.setModelColor(mSettle);
         mBtnFire.enableOutline();
+
+        enableAll();
+        disableRelative();
     }
 
     public void draw(GL10 gl) {
@@ -71,6 +75,51 @@ public class Buttons {
                 break;
         }
     }
+
+    public void disableAll() {
+        mBtnHigher.setModelColor(mOff);
+        mBtnHigher.setOutlineColor(mOff);
+
+        mBtnLower.setModelColor(mOff);
+        mBtnLower.setOutlineColor(mOff);
+
+        mBtnSmoke.setModelColor(mOff);
+        mBtnSmoke.setOutlineColor(mOff);
+
+        mBtnFire.setModelColor(mOff);
+        mBtnFire.setOutlineColor(mOff);
+    }
+
+    public void disableRelative() {
+        mBtnHigher.setModelColor(mOff);
+        mBtnHigher.setOutlineColor(mOff);
+
+        mBtnLower.setModelColor(mOff);
+        mBtnLower.setOutlineColor(mOff);
+    }
+
+    public void enableAll() {
+        mBtnHigher.setModelColor(mSettle);
+        mBtnHigher.setOutlineColor(mHighlight);
+
+        mBtnLower.setModelColor(mSettle);
+        mBtnLower.setOutlineColor(mHighlight);
+
+        mBtnSmoke.setModelColor(mSettle);
+        mBtnSmoke.setOutlineColor(mHighlight);
+
+        mBtnFire.setModelColor(mSettle);
+        mBtnFire.setOutlineColor(mHighlight);
+    }
+
+    public void enableRelative() {
+        mBtnHigher.setModelColor(mSettle);
+        mBtnHigher.setOutlineColor(mHighlight);
+
+        mBtnLower.setModelColor(mSettle);
+        mBtnLower.setOutlineColor(mHighlight);
+    }
+
 
     public void settle() {
 
@@ -160,19 +209,15 @@ public class Buttons {
 
 
         mBtnHigher.setOutlineIndices(new int[] {0, 1, 1, 2});
-        mBtnHigher.setOutlineColor(mHighlight);
         mBtnHigher.enableOutline();
 
         mBtnLower.setOutlineIndices(new int[] {0, 2, 1, 2});
-        mBtnLower.setOutlineColor(mHighlight);
         mBtnLower.enableOutline();
 
         mBtnSmoke.setOutlineIndices(new int[] {0, 2, 1, 2});
-        mBtnSmoke.setOutlineColor(mHighlight);
         mBtnSmoke.enableOutline();
 
         mBtnFire.setOutlineIndices(new int[] {0, 1, 2, 1});
-        mBtnFire.setOutlineColor(mHighlight);
         mBtnFire.enableOutline();
     }
 }

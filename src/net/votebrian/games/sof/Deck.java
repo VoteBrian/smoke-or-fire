@@ -20,64 +20,42 @@ public class Deck {
     private Context mCtx;
     private Global gbl;
 
-    private Card card;
+    private static int BYTES_PER_VERTEX = 4;
+
+    private float mZBase = -10.0f;
 
     // Cards
     private int mNumCards = 52;
     private Card[] mCards = new Card[mNumCards];
 
-    private float zBase = -8.0f;
-
     // Card State Arrays
-    private int[] mInDeck = new int[mNumCards];
+    private int[] mDeckStack = new int[mNumCards];
     private int mNumInDeck = 0;
-    private float[] mDeckPos = {-4.0f, 0.0f, zBase};
+    private float[] mDeckPos = {-4.0f, 0.0f, mZBase};
 
-    private int[] mOnTable = new int[mNumCards];
+    private int[] mTableStack = new int[mNumCards];
     private int mNumOnTable = 0;
-    private float[] mTablePos = {0.0f, 0.0f, zBase};
+    private float[] mTablePos = {0.0f, 0.0f, mZBase};
 
-
-    private int[] mBurnt = new int[mNumCards];
+    private int[] mBurntStack = new int[mNumCards];
     private int mNumBurnt = 0;
     private float[] mBurntPos = {0.0f, 0.0f, 0.0f};
 
-
-    private int mResult = Global.GOOD;
-
-    private int mCurrent = 0;
-
-    private int mZBase = -10;
-
+    // BITMAP HANDLES
     private Bitmap mHeartBitmap;
     private Bitmap mDiamondBitmap;
     private Bitmap mClubBitmap;
     private Bitmap mSpadeBitmap;
-    private Bitmap[] mSuitBitmap;
-
     private Bitmap mValueBitmap;
 
-    private ByteBuffer mTbb1;
-
+    // FLOAT BUFFERS
     private FloatBuffer mVertexBuffer;
-    private FloatBuffer mNormalBuffer;
+
+    // TEXTURE COORDINATE BUFFERS
     private FloatBuffer mSuitBuffer;
-    private FloatBuffer mTextureValue2Buffer;
-    private FloatBuffer mTextureValue3Buffer;
-    private FloatBuffer mTextureValue4Buffer;
-    private FloatBuffer mTextureValue5Buffer;
-    private FloatBuffer mTextureValue6Buffer;
-    private FloatBuffer mTextureValue7Buffer;
-    private FloatBuffer mTextureValue8Buffer;
-    private FloatBuffer mTextureValue9Buffer;
-    private FloatBuffer mTextureValue10Buffer;
-    private FloatBuffer mTextureValueJBuffer;
-    private FloatBuffer mTextureValueQBuffer;
-    private FloatBuffer mTextureValueKBuffer;
-    private FloatBuffer mTextureValueABuffer;
+    private FloatBuffer[] mValueTexCoordBuffer = new FloatBuffer[13];
 
-    private static int BYTES_PER_VERTEX = 4;
-
+    // TEXTURE ARRAY
     public int[] mTextures = new int[5];
 
 
@@ -97,14 +75,6 @@ public class Deck {
         loadTexture(gl);
         buildBuffers();
 
-        card = new Card(mCtx, gl, 0, 2);
-        card.setPosition(0,0,mZBase);
-        card.setVertexBuffer(mVertexBuffer, mVertices.length/3);
-        card.setTexture(mTextures[0], mTextures[4]);
-        card.setTextureBuffer(mSuitBuffer, mTextureValue2Buffer);
-
-        card.setState(gbl.IN_DECK);
-
         // generate the 52 cards
         for (int counter = 0; counter < mNumCards; counter++) {
             x = 0f;
@@ -118,47 +88,7 @@ public class Deck {
             mCards[counter].setPosition(x, y, z);
             mCards[counter].setVertexBuffer(mVertexBuffer, mVertices.length/3);
             mCards[counter].setTexture(mTextures[suit], mTextures[4]);
-            switch(value) {
-                case 0:  // TWO
-                    mCards[counter].setTextureBuffer(mSuitBuffer, mTextureValue2Buffer);
-                    break;
-                case 1:  // THREE
-                    mCards[counter].setTextureBuffer(mSuitBuffer, mTextureValue3Buffer);
-                    break;
-                case 2:  // FOUR
-                    mCards[counter].setTextureBuffer(mSuitBuffer, mTextureValue4Buffer);
-                    break;
-                case 3:  // FIVE
-                    mCards[counter].setTextureBuffer(mSuitBuffer, mTextureValue5Buffer);
-                    break;
-                case 4:  // SIX
-                    mCards[counter].setTextureBuffer(mSuitBuffer, mTextureValue6Buffer);
-                    break;
-                case 5:  // SEVEN
-                    mCards[counter].setTextureBuffer(mSuitBuffer, mTextureValue7Buffer);
-                    break;
-                case 6:  // EIGHT
-                    mCards[counter].setTextureBuffer(mSuitBuffer, mTextureValue8Buffer);
-                    break;
-                case 7:  // NINE
-                    mCards[counter].setTextureBuffer(mSuitBuffer, mTextureValue9Buffer);
-                    break;
-                case 8:  // TEN
-                    mCards[counter].setTextureBuffer(mSuitBuffer, mTextureValue10Buffer);
-                    break;
-                case 9:  // JACK
-                    mCards[counter].setTextureBuffer(mSuitBuffer, mTextureValueJBuffer);
-                    break;
-                case 10:  // QUEEN
-                    mCards[counter].setTextureBuffer(mSuitBuffer, mTextureValueQBuffer);
-                    break;
-                case 11:  // KING
-                    mCards[counter].setTextureBuffer(mSuitBuffer, mTextureValueKBuffer);
-                    break;
-                case 12:  // ACE
-                    mCards[counter].setTextureBuffer(mSuitBuffer, mTextureValueABuffer);
-                    break;
-            }
+            mCards[counter].setTextureBuffer(mSuitBuffer, mValueTexCoordBuffer[value]);
         }
 
         reset();
@@ -168,82 +98,32 @@ public class Deck {
         for(int counter = 0; counter < mNumCards; counter++) {
             mCards[counter].draw(gl);
         }
-        // card.draw(gl);
     }
 
+    // Deals a card from the top of the deck
+    // Returns index of the dealt card
     public int deal(int pick) {
         // first check to make sure we have a card in deck to deal
         if(mNumInDeck == 0) {
-            return -1;
+            shuffle();
+            reloadDeck();
         }
 
-        int selSuit = 0;
-        int selValue = 0;
-
-        int prevSuit = 0;
-        int prevValue = 0;
-
-        if(mNumOnTable == 0) {      // first selection
-            selSuit = mCards[mInDeck[mNumInDeck-1]].mSuit;
-            selValue = mCards[mInDeck[mNumInDeck-1]].mValue;
-        } else {                    // card already on table
-            prevSuit = mCards[mOnTable[mNumOnTable-1]].mSuit;
-            prevValue = mCards[mOnTable[mNumOnTable-1]].mValue;
-
-            selSuit = mCards[mInDeck[mNumInDeck-1]].mSuit;
-            selValue = mCards[mInDeck[mNumInDeck-1]].mValue;
-        }
-
-        // Transfer card from top of deck to table
-        // change card state and animation
-        // mCards[ mInDeck[mNumInDeck-1] ].deal(mNumOnTable);
-        mCards[ mInDeck[mNumInDeck-1] ].setState(gbl.ON_TABLE);
+        // Update state, position, and rotation of card on top of deck
+        mCards[ mDeckStack[mNumInDeck-1] ].setState(gbl.ON_TABLE);
         float offsetH = mNumOnTable * 0.016f;
-        mCards[ mInDeck[mNumInDeck-1] ].setPosition(mTablePos[0], mTablePos[1], mTablePos[2] + offsetH);
-        mCards[ mInDeck[mNumInDeck-1] ].setRotation(0f, 0f, 0f);
+        mCards[ mDeckStack[mNumInDeck-1] ].setPosition(mTablePos[0], mTablePos[1], mTablePos[2] + offsetH);
+        mCards[ mDeckStack[mNumInDeck-1] ].setRotation(0f, 0f, 0f);
 
+        // Update deck and table arrays
+        mTableStack[mNumOnTable] = mDeckStack[mNumInDeck-1];
         mNumOnTable++;
-        mOnTable[mNumOnTable-1] = mInDeck[mNumInDeck-1];
-        mInDeck[mNumInDeck-1] = -1;
+        mDeckStack[mNumInDeck-1] = -1;
         mNumInDeck--;
 
-
-        // Check against selection
-        switch(pick) {
-            case Global.SMOKE:
-                if(selSuit > 1) {
-                    mResult = Global.GOOD;
-                } else {
-                    mResult = Global.BAD;
-                }
-                break;
-            case Global.FIRE:
-                if(selSuit < 2) {
-                    mResult = Global.GOOD;
-                } else {
-                    mResult = Global.BAD;
-                }
-                break;
-            case Global.HIGHER:
-                if(selValue > prevValue) {
-                    mResult = Global.GOOD;
-                } else if(selValue < prevValue) {
-                    mResult = Global.BAD;
-                } else {
-                    mResult = Global.SOCIAL;
-                }
-                break;
-            case Global.LOWER:
-                if(selValue < prevValue) {
-                    mResult = Global.GOOD;
-                } else if(selValue > prevValue) {
-                    mResult = Global.BAD;
-                } else {
-                    mResult = Global.SOCIAL;
-                }
-                break;
-        }
-        return mResult;
+        // Return the index of the card on top of table stack
+        // return mTableStack[ mNumOnTable -1 ];
+        return 1;
     }
 
     public void reset() {
@@ -254,12 +134,12 @@ public class Deck {
 
     public void burnAll() {
         for(int c = 0; c < mNumCards; c++) {
-            mBurnt[c] = c;
+            mBurntStack[c] = c;
             mCards[c].setState(gbl.BURNT);
             mCards[c].setPosition(mBurntPos[0], mBurntPos[1], mBurntPos[2]);
 
-            mInDeck[c] = -1;
-            mOnTable[c] = -1;
+            mDeckStack[c] = -1;
+            mTableStack[c] = -1;
         }
 
         mNumBurnt = mNumCards;
@@ -272,16 +152,16 @@ public class Deck {
 
         for(int c = 0; c < mNumBurnt; c++) {
             int intRand = random.nextInt(mNumBurnt-1);
-            int temp = mBurnt[c];
-            mBurnt[c] = mBurnt[intRand];
-            mBurnt[intRand] = temp;
+            int temp = mBurntStack[c];
+            mBurntStack[c] = mBurntStack[intRand];
+            mBurntStack[intRand] = temp;
         }
     }
 
     private void reloadDeck() {
         // push up the cards already in the deck
         for(int c = 0; c < mNumInDeck; c++) {
-            mInDeck[c] = mInDeck[c+mNumBurnt];
+            mDeckStack[c] = mDeckStack[c+mNumBurnt];
 
             float offsetH = 0.016f * (c + mNumBurnt);
             mCards[c].setPosition(mDeckPos[0], mDeckPos[1], mDeckPos[2] + offsetH);
@@ -289,18 +169,18 @@ public class Deck {
         }
 
         for(int c = 0; c < mNumBurnt; c++) {
-            mInDeck[c] = mBurnt[c];
-            mBurnt[c] = -1;
+            mDeckStack[c] = mBurntStack[c];
+            mBurntStack[c] = -1;
         }
 
         mNumInDeck = mNumInDeck + mNumBurnt;
         mNumBurnt = 0;
 
         for(int c = 0; c < mNumInDeck; c++) {
-            mCards[ mInDeck[c] ].setState(gbl.IN_DECK);
+            mCards[ mDeckStack[c] ].setState(gbl.IN_DECK);
             float offsetH = 0.016f * c;
-            mCards[ mInDeck[c] ].setPosition(mDeckPos[0], mDeckPos[1], mDeckPos[2] + offsetH);
-            mCards[mInDeck[c]].setRotation(0f, 180f, 0f);
+            mCards[ mDeckStack[c] ].setPosition(mDeckPos[0], mDeckPos[1], mDeckPos[2] + offsetH);
+            mCards[ mDeckStack[c] ].setRotation(0f, 180f, 0f);
         }
     }
 
@@ -308,16 +188,16 @@ public class Deck {
         if(mNumOnTable != 0) {
             Log.v("Burn Table", "mNumOnTable: " + mNumOnTable);
             for(int c = 0; c < mNumOnTable; c++) {
-                Log.v("Burn", String.valueOf(mOnTable[c]));
+                Log.v("Burn", String.valueOf(mTableStack[c]));
 
                 // make sure it hasn't already been burnt
                 // for some reason
-                if(mOnTable[c] != -1) {
+                if(mTableStack[c] != -1) {
 
-                    mCards[mOnTable[c]].setState(gbl.BURNT);
-                    mBurnt[mNumBurnt] = mOnTable[c];
+                    mCards[mTableStack[c]].setState(gbl.BURNT);
+                    mBurntStack[mNumBurnt] = mTableStack[c];
                     mNumBurnt++;
-                    mOnTable[c] = -1;
+                    mTableStack[c] = -1;
                 }
             }
 
@@ -328,11 +208,13 @@ public class Deck {
     // Load texture bitmaps
     public void loadTexture(GL10 gl) {
         // Load Suit Bitmaps
-        mHeartBitmap = loadBitmap(R.drawable.cardbaseheart);
+        mHeartBitmap   = loadBitmap(R.drawable.cardbaseheart);
         mDiamondBitmap = loadBitmap(R.drawable.cardbasediamond);
-        mClubBitmap = loadBitmap(R.drawable.cardbaseclub);
-        mSpadeBitmap = loadBitmap(R.drawable.cardbasespade);
-        mValueBitmap = loadBitmap(R.drawable.cardvalue);
+        mClubBitmap    = loadBitmap(R.drawable.cardbaseclub);
+        mSpadeBitmap   = loadBitmap(R.drawable.cardbasespade);
+
+        // Load Value Bitmap
+        mValueBitmap   = loadBitmap(R.drawable.cardvalue);
 
 
         // Generate Texture Buffers
@@ -363,7 +245,6 @@ public class Deck {
         gl.glTexParameterf(GL10.GL_TEXTURE_2D, GL10.GL_TEXTURE_MAG_FILTER, GL10.GL_LINEAR);
         gl.glTexParameterf(GL10.GL_TEXTURE_2D, GL10.GL_TEXTURE_MIN_FILTER, GL10.GL_LINEAR);
 
-
         // Value Texture
         gl.glBindTexture(GL10.GL_TEXTURE_2D, mTextures[4]);
         GLUtils.texImage2D(GL10.GL_TEXTURE_2D, 0, mValueBitmap, 0);
@@ -372,7 +253,7 @@ public class Deck {
         gl.glTexParameterf(GL10.GL_TEXTURE_2D, GL10.GL_TEXTURE_MIN_FILTER, GL10.GL_LINEAR);
 
 
-        // Recycle
+        // Recycle Bitmaps
         mHeartBitmap.recycle();
         mDiamondBitmap.recycle();
         mClubBitmap.recycle();
@@ -388,44 +269,10 @@ public class Deck {
         mSuitBuffer = makeFloatBuffer(mTexCoordinatesA);
 
         // Value Coordinates
-        mTextureValue2Buffer = makeFloatBuffer(mTexCoordinatesB);
-
-        newTexCoords(3);
-        mTextureValue3Buffer = makeFloatBuffer(mTexCoordinatesB);
-
-        newTexCoords(4);
-        mTextureValue4Buffer = makeFloatBuffer(mTexCoordinatesB);
-
-        newTexCoords(5);
-        mTextureValue5Buffer = makeFloatBuffer(mTexCoordinatesB);
-
-        newTexCoords(6);
-        mTextureValue6Buffer = makeFloatBuffer(mTexCoordinatesB);
-
-        newTexCoords(7);
-        mTextureValue7Buffer = makeFloatBuffer(mTexCoordinatesB);
-
-        newTexCoords(8);
-        mTextureValue8Buffer = makeFloatBuffer(mTexCoordinatesB);
-
-        newTexCoords(9);
-        mTextureValue9Buffer = makeFloatBuffer(mTexCoordinatesB);
-
-        newTexCoords(10);
-        mTextureValue10Buffer = makeFloatBuffer(mTexCoordinatesB);
-
-        newTexCoords(11);
-        mTextureValueJBuffer = makeFloatBuffer(mTexCoordinatesB);
-
-        newTexCoords(12);
-        mTextureValueQBuffer = makeFloatBuffer(mTexCoordinatesB);
-
-        newTexCoords(13);
-        mTextureValueKBuffer = makeFloatBuffer(mTexCoordinatesB);
-
-        newTexCoords(14);
-        mTextureValueABuffer = makeFloatBuffer(mTexCoordinatesB);
-
+        for(int c = 0; c < 13; c++) {
+            newTexCoords(c);
+            mValueTexCoordBuffer[c] = makeFloatBuffer(mTexCoordinatesB);
+        }
     }
 
     private FloatBuffer makeFloatBuffer(float[] array) {
@@ -453,10 +300,11 @@ public class Deck {
         }
     }
 
+    // updates mTexCoordinatesB to crop out the value passed as count.
     private void newTexCoords(int count) {
         // TOP LEFT
         // X Coordinates
-        mTexCoordinatesB[48] = Math.round( (count-2)/4 ) * 0.25f;
+        mTexCoordinatesB[48] = Math.round( (count)/4 ) * 0.25f;
         mTexCoordinatesB[50] = mTexCoordinatesB[48];
         mTexCoordinatesB[52] = mTexCoordinatesB[48] + 0.25f;
 
@@ -465,7 +313,7 @@ public class Deck {
         mTexCoordinatesB[58] = mTexCoordinatesB[52];
 
         // Y Coordinates
-        mTexCoordinatesB[49] = (float) 0.75 - (( (count-2) % 4) * 0.25f);
+        mTexCoordinatesB[49] = (float) 0.75 - (( (count) % 4) * 0.25f);
         mTexCoordinatesB[51] = (float) mTexCoordinatesB[49] + 0.25f;
         mTexCoordinatesB[53] = mTexCoordinatesB[51];
 
