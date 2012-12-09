@@ -24,6 +24,7 @@ class GLESRenderer
         implements GLSurfaceView.Renderer {
     Global gbl;
     Context mCtx;
+    Deck mDeck;
 
     private Handler handler;
 
@@ -33,7 +34,6 @@ class GLESRenderer
     public SharedPreferences.Editor mEditor;
 
     private Buttons mOverlayBtns;
-    private Btn btn;
 
     private int EVENT_DOWN = 0;
     private int EVENT_MOVE = 1;
@@ -85,16 +85,14 @@ class GLESRenderer
         // Default Preferences
         zeroCounter();
         resetFailed();
-
-
-
-        mOverlayBtns = new Buttons();
     }
 
     public void onSurfaceCreated(GL10 gl, EGLConfig config) {
         setDisplayProperties(gl);
         initLighting(gl);
-        gbl.createDeck(gl);
+
+        mDeck = new Deck(mCtx, gl);
+        mOverlayBtns = new Buttons(mCtx, gl);
     }
 
     public void onDrawFrame(GL10 gl) {
@@ -109,7 +107,7 @@ class GLESRenderer
         gl.glRotatef( -10f, 0f, 0f, 1f);
         gl.glTranslatef(1f, 3f, 0f);
 
-        gbl.draw(gl);
+        mDeck.draw(gl);
 
 
         // undo rotate for buttons/overlays
@@ -186,18 +184,11 @@ class GLESRenderer
 
         gl.glLightfv(SS_SUNLIGHT, GL10.GL_POSITION, mPositionBuffer);
         gl.glLightfv(SS_SUNLIGHT, GL10.GL_DIFFUSE, mDiffuseBuffer);
-        gl.glShadeModel(GL10.GL_SMOOTH);
-        gl.glEnable(GL10.GL_LIGHTING);
+        // gl.glShadeModel(GL10.GL_SMOOTH);
+        // gl.glEnable(GL10.GL_LIGHTING);
         gl.glDisable(GL10.GL_LIGHTING);
-        gl.glEnable(SS_SUNLIGHT);
+        // gl.glEnable(SS_SUNLIGHT);
     }
-
-    /*
-    private void getRotation() {
-        mXAngle = gbl.getXAngle();
-        mYAngle = gbl.getYAngle();
-    }
-    */
 
     public void buttonEvent(float x, float y, int event) {
         int temp_count = 0;
@@ -206,10 +197,8 @@ class GLESRenderer
         int region = regionCalc(x, y);
 
         if(mSelectionFail == 1) {
-            // getting rid of Clearable, but burnTable won't work without it right now
-            gbl.setClearable(1);
-            gbl.burnTable();
-            gbl.setClearable(0);
+            // clear cards from table
+            mDeck.burnTable();
 
             mSelectionFail = 2;
 
@@ -243,7 +232,7 @@ class GLESRenderer
                     }, 50);
 
                     // deal card and determine outcome
-                    int result = gbl.deal(region);
+                    int result = mDeck.deal(region);
                     Log.v("RENDERER", "result: " + result);
 
                     switch(result) {
@@ -279,7 +268,6 @@ class GLESRenderer
 
                             // show social splash image
                             // show matching cards
-                            //stuff
                             break;
                     }
                 }

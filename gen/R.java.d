@@ -6,6 +6,8 @@
 /Users/brianflores/Documents/android/SmokeOrFire/res/drawable/cardbasespade.png \
 /Users/brianflores/Documents/android/SmokeOrFire/res/drawable/cardsuit.png \
 /Users/brianflores/Documents/android/SmokeOrFire/res/drawable/cardvalue.png \
+/Users/brianflores/Documents/android/SmokeOrFire/res/drawable/default1.png \
+/Users/brianflores/Documents/android/SmokeOrFire/res/drawable/default2.png \
 /Users/brianflores/Documents/android/SmokeOrFire/res/drawable/fail_border.xml \
 /Users/brianflores/Documents/android/SmokeOrFire/res/drawable/overlay.png \
 /Users/brianflores/Documents/android/SmokeOrFire/res/drawable/squares.png \
@@ -24,6 +26,8 @@
 /Users/brianflores/Documents/android/SmokeOrFire/bin/res/drawable/cardbasespade.png \
 /Users/brianflores/Documents/android/SmokeOrFire/bin/res/drawable/cardsuit.png \
 /Users/brianflores/Documents/android/SmokeOrFire/bin/res/drawable/cardvalue.png \
+/Users/brianflores/Documents/android/SmokeOrFire/bin/res/drawable/default1.png \
+/Users/brianflores/Documents/android/SmokeOrFire/bin/res/drawable/default2.png \
 /Users/brianflores/Documents/android/SmokeOrFire/bin/res/drawable/overlay.png \
 /Users/brianflores/Documents/android/SmokeOrFire/bin/res/drawable/squares.png \
 /Users/brianflores/Documents/android/SmokeOrFire/bin/res/drawable/test.png \

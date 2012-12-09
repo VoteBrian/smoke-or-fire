@@ -35,6 +35,10 @@ public class Global extends Application {
     public static final int GOOD   = 1;
     public static final int SOCIAL = 2;
 
+    public static final int IN_DECK  = 0;
+    public static final int ON_TABLE = 1;
+    public static final int BURNT    = 3;
+
     public enum Suit {
         HEARTS, DIAMONDS, CLUBS, SPADES;
     }
@@ -57,16 +61,6 @@ public class Global extends Application {
 
     public void draw(GL10 gl) {
         mDeck.draw(gl);
-    }
-
-    public void setXAngle(float angle) {
-        mDeck.setXAngle(angle);
-        // mXAngle += angle;
-    }
-
-    public void setYAngle(float angle) {
-        mDeck.setYAngle(angle);
-        // mYAngle += angle;
     }
 
     public void loadTexture(GL10 gl) {

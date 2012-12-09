@@ -20,17 +20,28 @@ public class Deck {
     private Context mCtx;
     private Global gbl;
 
-    private Random random;
+    private Card card;
 
+    // Cards
     private int mNumCards = 52;
     private Card[] mCards = new Card[mNumCards];
 
-    private int[] mInDeck = new int[52];
+    private float zBase = -8.0f;
+
+    // Card State Arrays
+    private int[] mInDeck = new int[mNumCards];
     private int mNumInDeck = 0;
-    private int[] mOnTable = new int[52];
+    private float[] mDeckPos = {-4.0f, 0.0f, zBase};
+
+    private int[] mOnTable = new int[mNumCards];
     private int mNumOnTable = 0;
-    private int[] mBurnt = new int[52];
+    private float[] mTablePos = {0.0f, 0.0f, zBase};
+
+
+    private int[] mBurnt = new int[mNumCards];
     private int mNumBurnt = 0;
+    private float[] mBurntPos = {0.0f, 0.0f, 0.0f};
+
 
     private int mResult = Global.GOOD;
 
@@ -46,22 +57,7 @@ public class Deck {
 
     private Bitmap mValueBitmap;
 
-    private ByteBuffer mVbb;    // Vertices
-    private ByteBuffer mNbb;    // Normals
-    private ByteBuffer mTbb1;   // Suit Texture
-    private ByteBuffer mTV2bb;   // Value Texture
-    private ByteBuffer mTV3bb;
-    private ByteBuffer mTV4bb;
-    private ByteBuffer mTV5bb;
-    private ByteBuffer mTV6bb;
-    private ByteBuffer mTV7bb;
-    private ByteBuffer mTV8bb;
-    private ByteBuffer mTV9bb;
-    private ByteBuffer mTV10bb;
-    private ByteBuffer mTVJbb;
-    private ByteBuffer mTVQbb;
-    private ByteBuffer mTVKbb;
-    private ByteBuffer mTVAbb;
+    private ByteBuffer mTbb1;
 
     private FloatBuffer mVertexBuffer;
     private FloatBuffer mNormalBuffer;
@@ -80,7 +76,6 @@ public class Deck {
     private FloatBuffer mTextureValueKBuffer;
     private FloatBuffer mTextureValueABuffer;
 
-    private static int VERTEX_PER_TRIANGLE = 3;
     private static int BYTES_PER_VERTEX = 4;
 
     public int[] mTextures = new int[5];
@@ -89,7 +84,6 @@ public class Deck {
 
     // Constructor
     public Deck(Context context, GL10 gl) {
-        int counter = 0;
         float x = 0f;
         float y = 0f;
         float z = 0f;
@@ -98,98 +92,83 @@ public class Deck {
         int value = 0;
 
         mCtx = context;
-
         gbl = (Global) mCtx.getApplicationContext();
 
-        random = new Random();
-
         loadTexture(gl);
+        buildBuffers();
+
+        card = new Card(mCtx, gl, 0, 2);
+        card.setPosition(0,0,mZBase);
+        card.setVertexBuffer(mVertexBuffer, mVertices.length/3);
+        card.setTexture(mTextures[0], mTextures[4]);
+        card.setTextureBuffer(mSuitBuffer, mTextureValue2Buffer);
+
+        card.setState(gbl.IN_DECK);
 
         // generate the 52 cards
-        for (counter = 0; counter < mNumCards; counter++) {
+        for (int counter = 0; counter < mNumCards; counter++) {
             x = 0f;
             y = 0f;
             z = mZBase;
 
             suit = counter % 4;
-            value = counter/4 + 2;
+            value = counter/4;
 
-            mCards[counter] = new Card(mCtx, suit, value);
+            mCards[counter] = new Card(mCtx, gl, suit, value);
             mCards[counter].setPosition(x, y, z);
-            mCards[counter].setVertices(mVertices);
-            mCards[counter].setTextures(mTextures);
-            mCards[counter].setVertexBuffer(mVertexBuffer);
+            mCards[counter].setVertexBuffer(mVertexBuffer, mVertices.length/3);
+            mCards[counter].setTexture(mTextures[suit], mTextures[4]);
             switch(value) {
-                case 2:
-                    mCards[counter].setTextureBuffers(mSuitBuffer, mTextureValue2Buffer);
+                case 0:  // TWO
+                    mCards[counter].setTextureBuffer(mSuitBuffer, mTextureValue2Buffer);
                     break;
-                case 3:
-                    mCards[counter].setTextureBuffers(mSuitBuffer, mTextureValue3Buffer);
+                case 1:  // THREE
+                    mCards[counter].setTextureBuffer(mSuitBuffer, mTextureValue3Buffer);
                     break;
-                case 4:
-                    mCards[counter].setTextureBuffers(mSuitBuffer, mTextureValue4Buffer);
+                case 2:  // FOUR
+                    mCards[counter].setTextureBuffer(mSuitBuffer, mTextureValue4Buffer);
                     break;
-                case 5:
-                    mCards[counter].setTextureBuffers(mSuitBuffer, mTextureValue5Buffer);
+                case 3:  // FIVE
+                    mCards[counter].setTextureBuffer(mSuitBuffer, mTextureValue5Buffer);
                     break;
-                case 6:
-                    mCards[counter].setTextureBuffers(mSuitBuffer, mTextureValue6Buffer);
+                case 4:  // SIX
+                    mCards[counter].setTextureBuffer(mSuitBuffer, mTextureValue6Buffer);
                     break;
-                case 7:
-                    mCards[counter].setTextureBuffers(mSuitBuffer, mTextureValue7Buffer);
+                case 5:  // SEVEN
+                    mCards[counter].setTextureBuffer(mSuitBuffer, mTextureValue7Buffer);
                     break;
-                case 8:
-                    mCards[counter].setTextureBuffers(mSuitBuffer, mTextureValue8Buffer);
+                case 6:  // EIGHT
+                    mCards[counter].setTextureBuffer(mSuitBuffer, mTextureValue8Buffer);
                     break;
-                case 9:
-                    mCards[counter].setTextureBuffers(mSuitBuffer, mTextureValue9Buffer);
+                case 7:  // NINE
+                    mCards[counter].setTextureBuffer(mSuitBuffer, mTextureValue9Buffer);
                     break;
-                case 10:
-                    mCards[counter].setTextureBuffers(mSuitBuffer, mTextureValue10Buffer);
+                case 8:  // TEN
+                    mCards[counter].setTextureBuffer(mSuitBuffer, mTextureValue10Buffer);
                     break;
-                case 11:
-                    mCards[counter].setTextureBuffers(mSuitBuffer, mTextureValueJBuffer);
+                case 9:  // JACK
+                    mCards[counter].setTextureBuffer(mSuitBuffer, mTextureValueJBuffer);
                     break;
-                case 12:
-                    mCards[counter].setTextureBuffers(mSuitBuffer, mTextureValueQBuffer);
+                case 10:  // QUEEN
+                    mCards[counter].setTextureBuffer(mSuitBuffer, mTextureValueQBuffer);
                     break;
-                case 13:
-                    mCards[counter].setTextureBuffers(mSuitBuffer, mTextureValueKBuffer);
+                case 11:  // KING
+                    mCards[counter].setTextureBuffer(mSuitBuffer, mTextureValueKBuffer);
                     break;
-                case 14:
-                    mCards[counter].setTextureBuffers(mSuitBuffer, mTextureValueABuffer);
+                case 12:  // ACE
+                    mCards[counter].setTextureBuffer(mSuitBuffer, mTextureValueABuffer);
                     break;
             }
         }
 
-        // initialize deck
-        for(int c = 0; c < mNumCards; c++) {
-            mBurnt[c] = c;
-        }
-        mNumBurnt = mNumCards;
-        mNumInDeck = 0;
-        mNumOnTable = 0;
-
-        shuffle();      // shuffle burnt cards.  All cards, in this case
-        reloadDeck();   // move all cards from burnt to deck.
+        reset();
     }
 
     public void draw(GL10 gl) {
         for(int counter = 0; counter < mNumCards; counter++) {
             mCards[counter].draw(gl);
         }
-    }
-
-    public void setXAngle(float angle) {
-        for(int counter = 0; counter < mNumCards; counter++) {
-            mCards[counter].setXAngle( (float) (counter * angle * 0.0005));
-        }
-    }
-
-    public void setYAngle(float angle) {
-        for(int counter = 0; counter < mNumCards; counter++) {
-            mCards[counter].setYAngle( (float) (counter * angle * 0.0005));
-        }
+        // card.draw(gl);
     }
 
     public int deal(int pick) {
@@ -217,7 +196,11 @@ public class Deck {
 
         // Transfer card from top of deck to table
         // change card state and animation
-        mCards[ mInDeck[mNumInDeck-1] ].deal(mNumOnTable);
+        // mCards[ mInDeck[mNumInDeck-1] ].deal(mNumOnTable);
+        mCards[ mInDeck[mNumInDeck-1] ].setState(gbl.ON_TABLE);
+        float offsetH = mNumOnTable * 0.016f;
+        mCards[ mInDeck[mNumInDeck-1] ].setPosition(mTablePos[0], mTablePos[1], mTablePos[2] + offsetH);
+        mCards[ mInDeck[mNumInDeck-1] ].setRotation(0f, 0f, 0f);
 
         mNumOnTable++;
         mOnTable[mNumOnTable-1] = mInDeck[mNumInDeck-1];
@@ -272,7 +255,8 @@ public class Deck {
     public void burnAll() {
         for(int c = 0; c < mNumCards; c++) {
             mBurnt[c] = c;
-            mCards[c].burn();
+            mCards[c].setState(gbl.BURNT);
+            mCards[c].setPosition(mBurntPos[0], mBurntPos[1], mBurntPos[2]);
 
             mInDeck[c] = -1;
             mOnTable[c] = -1;
@@ -284,6 +268,8 @@ public class Deck {
     }
 
     private void shuffle() {
+        Random random = new Random();
+
         for(int c = 0; c < mNumBurnt; c++) {
             int intRand = random.nextInt(mNumBurnt-1);
             int temp = mBurnt[c];
@@ -296,6 +282,10 @@ public class Deck {
         // push up the cards already in the deck
         for(int c = 0; c < mNumInDeck; c++) {
             mInDeck[c] = mInDeck[c+mNumBurnt];
+
+            float offsetH = 0.016f * (c + mNumBurnt);
+            mCards[c].setPosition(mDeckPos[0], mDeckPos[1], mDeckPos[2] + offsetH);
+            mCards[c].setRotation(0f, 180f, 0f);
         }
 
         for(int c = 0; c < mNumBurnt; c++) {
@@ -307,7 +297,10 @@ public class Deck {
         mNumBurnt = 0;
 
         for(int c = 0; c < mNumInDeck; c++) {
-            mCards[ mInDeck[c] ].load(c);
+            mCards[ mInDeck[c] ].setState(gbl.IN_DECK);
+            float offsetH = 0.016f * c;
+            mCards[ mInDeck[c] ].setPosition(mDeckPos[0], mDeckPos[1], mDeckPos[2] + offsetH);
+            mCards[mInDeck[c]].setRotation(0f, 180f, 0f);
         }
     }
 
@@ -321,7 +314,7 @@ public class Deck {
                 // for some reason
                 if(mOnTable[c] != -1) {
 
-                    mCards[mOnTable[c]].burn();
+                    mCards[mOnTable[c]].setState(gbl.BURNT);
                     mBurnt[mNumBurnt] = mOnTable[c];
                     mNumBurnt++;
                     mOnTable[c] = -1;
@@ -335,76 +328,12 @@ public class Deck {
     // Load texture bitmaps
     public void loadTexture(GL10 gl) {
         // Load Suit Bitmaps
-        InputStream is = mCtx.getResources().openRawResource(R.drawable.cardbaseheart);
-        mHeartBitmap = null;
+        mHeartBitmap = loadBitmap(R.drawable.cardbaseheart);
+        mDiamondBitmap = loadBitmap(R.drawable.cardbasediamond);
+        mClubBitmap = loadBitmap(R.drawable.cardbaseclub);
+        mSpadeBitmap = loadBitmap(R.drawable.cardbasespade);
+        mValueBitmap = loadBitmap(R.drawable.cardvalue);
 
-        try {
-            mHeartBitmap = BitmapFactory.decodeStream(is);
-        } finally {
-            try {
-                is.close();
-                is = null;
-            } catch (IOException e) {
-                is = null;
-            }
-        }
-
-        is = mCtx.getResources().openRawResource(R.drawable.cardbasediamond);
-        mDiamondBitmap = null;
-
-        try {
-            mDiamondBitmap = BitmapFactory.decodeStream(is);
-        } finally {
-            try {
-                is.close();
-                is = null;
-            } catch (IOException e) {
-                is = null;
-            }
-        }
-
-        is = mCtx.getResources().openRawResource(R.drawable.cardbaseclub);
-        mClubBitmap = null;
-
-        try {
-            mClubBitmap = BitmapFactory.decodeStream(is);
-        } finally {
-            try {
-                is.close();
-                is = null;
-            } catch (IOException e) {
-                is = null;
-            }
-        }
-
-        is = mCtx.getResources().openRawResource(R.drawable.cardbasespade);
-        mSpadeBitmap = null;
-
-        try {
-            mSpadeBitmap = BitmapFactory.decodeStream(is);
-        } finally {
-            try {
-                is.close();
-                is = null;
-            } catch (IOException e) {
-                is = null;
-            }
-        }
-
-        // Load Value Bitmaps
-        is = mCtx.getResources().openRawResource(R.drawable.cardvalue);
-        mValueBitmap = null;
-
-        try {
-            mValueBitmap = BitmapFactory.decodeStream(is);
-        } finally {
-            try {
-                is.close();
-                is = null;
-            } catch (IOException e) {
-                is = null;
-            }
-        }
 
         // Generate Texture Buffers
         gl.glGenTextures(5, mTextures, 0);
@@ -435,7 +364,6 @@ public class Deck {
         gl.glTexParameterf(GL10.GL_TEXTURE_2D, GL10.GL_TEXTURE_MIN_FILTER, GL10.GL_LINEAR);
 
 
-
         // Value Texture
         gl.glBindTexture(GL10.GL_TEXTURE_2D, mTextures[4]);
         GLUtils.texImage2D(GL10.GL_TEXTURE_2D, 0, mValueBitmap, 0);
@@ -443,129 +371,86 @@ public class Deck {
         gl.glTexParameterf(GL10.GL_TEXTURE_2D, GL10.GL_TEXTURE_MAG_FILTER, GL10.GL_LINEAR);
         gl.glTexParameterf(GL10.GL_TEXTURE_2D, GL10.GL_TEXTURE_MIN_FILTER, GL10.GL_LINEAR);
 
+
+        // Recycle
         mHeartBitmap.recycle();
         mDiamondBitmap.recycle();
         mClubBitmap.recycle();
         mSpadeBitmap.recycle();
         mValueBitmap.recycle();
-
-        buildBuffers();
     }
 
     private void buildBuffers() {
         // Vertices
-        mVbb = ByteBuffer.allocateDirect(mNumVertices * VERTEX_PER_TRIANGLE * BYTES_PER_VERTEX);
-        mVbb.order(ByteOrder.nativeOrder());
-        mVertexBuffer = mVbb.asFloatBuffer();
-        mVertexBuffer.put(mVertices);
-        mVertexBuffer.position(0);
+        mVertexBuffer = makeFloatBuffer(mVertices);
 
-        // Normals
-        /* mNbb = ByteBuffer.allocateDirect(mNumNormals * VERTEX_PER_TRIANGLE * BYTES_PER_VERTEX);
-        mNbb.order(ByteOrder.nativeOrder());
-        mNormalBuffer = mNbb.asFloatBuffer();
-        mNormalBuffer.put(mNormals);
-        mNormalBuffer.position(0);
-        */
-
-        // Textures
         // Suit Coordinates
-        mTbb1 = ByteBuffer.allocateDirect(mNumTexCoordinatesA * VERTEX_PER_TRIANGLE * BYTES_PER_VERTEX);
-        mTbb1.order(ByteOrder.nativeOrder());
-        mSuitBuffer = mTbb1.asFloatBuffer();
-        mSuitBuffer.put(mTexCoordinatesA);
-        mSuitBuffer.position(0);
+        mSuitBuffer = makeFloatBuffer(mTexCoordinatesA);
 
         // Value Coordinates
-        mTV2bb = ByteBuffer.allocateDirect(mNumTexCoordinatesB * VERTEX_PER_TRIANGLE * BYTES_PER_VERTEX);
-        mTV2bb.order(ByteOrder.nativeOrder());
-        mTextureValue2Buffer = mTV2bb.asFloatBuffer();
-        mTextureValue2Buffer.put(mTexCoordinatesB);
-        mTextureValue2Buffer.position(0);
+        mTextureValue2Buffer = makeFloatBuffer(mTexCoordinatesB);
 
         newTexCoords(3);
-        mTV3bb = ByteBuffer.allocateDirect(mNumTexCoordinatesB * VERTEX_PER_TRIANGLE * BYTES_PER_VERTEX);
-        mTV3bb.order(ByteOrder.nativeOrder());
-        mTextureValue3Buffer = mTV3bb.asFloatBuffer();
-        mTextureValue3Buffer.put(mTexCoordinatesB);
-        mTextureValue3Buffer.position(0);
+        mTextureValue3Buffer = makeFloatBuffer(mTexCoordinatesB);
 
         newTexCoords(4);
-        mTV4bb = ByteBuffer.allocateDirect(mNumTexCoordinatesB * VERTEX_PER_TRIANGLE * BYTES_PER_VERTEX);
-        mTV4bb.order(ByteOrder.nativeOrder());
-        mTextureValue4Buffer = mTV4bb.asFloatBuffer();
-        mTextureValue4Buffer.put(mTexCoordinatesB);
-        mTextureValue4Buffer.position(0);
+        mTextureValue4Buffer = makeFloatBuffer(mTexCoordinatesB);
 
         newTexCoords(5);
-        mTV5bb = ByteBuffer.allocateDirect(mNumTexCoordinatesB * VERTEX_PER_TRIANGLE * BYTES_PER_VERTEX);
-        mTV5bb.order(ByteOrder.nativeOrder());
-        mTextureValue5Buffer = mTV5bb.asFloatBuffer();
-        mTextureValue5Buffer.put(mTexCoordinatesB);
-        mTextureValue5Buffer.position(0);
+        mTextureValue5Buffer = makeFloatBuffer(mTexCoordinatesB);
 
         newTexCoords(6);
-        mTV6bb = ByteBuffer.allocateDirect(mNumTexCoordinatesB * VERTEX_PER_TRIANGLE * BYTES_PER_VERTEX);
-        mTV6bb.order(ByteOrder.nativeOrder());
-        mTextureValue6Buffer = mTV6bb.asFloatBuffer();
-        mTextureValue6Buffer.put(mTexCoordinatesB);
-        mTextureValue6Buffer.position(0);
+        mTextureValue6Buffer = makeFloatBuffer(mTexCoordinatesB);
 
         newTexCoords(7);
-        mTV7bb = ByteBuffer.allocateDirect(mNumTexCoordinatesB * VERTEX_PER_TRIANGLE * BYTES_PER_VERTEX);
-        mTV7bb.order(ByteOrder.nativeOrder());
-        mTextureValue7Buffer = mTV7bb.asFloatBuffer();
-        mTextureValue7Buffer.put(mTexCoordinatesB);
-        mTextureValue7Buffer.position(0);
+        mTextureValue7Buffer = makeFloatBuffer(mTexCoordinatesB);
 
         newTexCoords(8);
-        mTV8bb = ByteBuffer.allocateDirect(mNumTexCoordinatesB * VERTEX_PER_TRIANGLE * BYTES_PER_VERTEX);
-        mTV8bb.order(ByteOrder.nativeOrder());
-        mTextureValue8Buffer = mTV8bb.asFloatBuffer();
-        mTextureValue8Buffer.put(mTexCoordinatesB);
-        mTextureValue8Buffer.position(0);
+        mTextureValue8Buffer = makeFloatBuffer(mTexCoordinatesB);
 
         newTexCoords(9);
-        mTV9bb = ByteBuffer.allocateDirect(mNumTexCoordinatesB * VERTEX_PER_TRIANGLE * BYTES_PER_VERTEX);
-        mTV9bb.order(ByteOrder.nativeOrder());
-        mTextureValue9Buffer = mTV9bb.asFloatBuffer();
-        mTextureValue9Buffer.put(mTexCoordinatesB);
-        mTextureValue9Buffer.position(0);
+        mTextureValue9Buffer = makeFloatBuffer(mTexCoordinatesB);
 
         newTexCoords(10);
-        mTV10bb = ByteBuffer.allocateDirect(mNumTexCoordinatesB * VERTEX_PER_TRIANGLE * BYTES_PER_VERTEX);
-        mTV10bb.order(ByteOrder.nativeOrder());
-        mTextureValue10Buffer = mTV10bb.asFloatBuffer();
-        mTextureValue10Buffer.put(mTexCoordinatesB);
-        mTextureValue10Buffer.position(0);
+        mTextureValue10Buffer = makeFloatBuffer(mTexCoordinatesB);
 
         newTexCoords(11);
-        mTVJbb = ByteBuffer.allocateDirect(mNumTexCoordinatesB * VERTEX_PER_TRIANGLE * BYTES_PER_VERTEX);
-        mTVJbb.order(ByteOrder.nativeOrder());
-        mTextureValueJBuffer = mTVJbb.asFloatBuffer();
-        mTextureValueJBuffer.put(mTexCoordinatesB);
-        mTextureValueJBuffer.position(0);
+        mTextureValueJBuffer = makeFloatBuffer(mTexCoordinatesB);
 
         newTexCoords(12);
-        mTVQbb = ByteBuffer.allocateDirect(mNumTexCoordinatesB * VERTEX_PER_TRIANGLE * BYTES_PER_VERTEX);
-        mTVQbb.order(ByteOrder.nativeOrder());
-        mTextureValueQBuffer = mTVQbb.asFloatBuffer();
-        mTextureValueQBuffer.put(mTexCoordinatesB);
-        mTextureValueQBuffer.position(0);
+        mTextureValueQBuffer = makeFloatBuffer(mTexCoordinatesB);
 
         newTexCoords(13);
-        mTVKbb = ByteBuffer.allocateDirect(mNumTexCoordinatesB * VERTEX_PER_TRIANGLE * BYTES_PER_VERTEX);
-        mTVKbb.order(ByteOrder.nativeOrder());
-        mTextureValueKBuffer = mTVKbb.asFloatBuffer();
-        mTextureValueKBuffer.put(mTexCoordinatesB);
-        mTextureValueKBuffer.position(0);
+        mTextureValueKBuffer = makeFloatBuffer(mTexCoordinatesB);
 
         newTexCoords(14);
-        mTVAbb = ByteBuffer.allocateDirect(mNumTexCoordinatesB * VERTEX_PER_TRIANGLE * BYTES_PER_VERTEX);
-        mTVAbb.order(ByteOrder.nativeOrder());
-        mTextureValueABuffer = mTVAbb.asFloatBuffer();
-        mTextureValueABuffer.put(mTexCoordinatesB);
-        mTextureValueABuffer.position(0);
+        mTextureValueABuffer = makeFloatBuffer(mTexCoordinatesB);
+
+    }
+
+    private FloatBuffer makeFloatBuffer(float[] array) {
+        ByteBuffer bb = ByteBuffer.allocateDirect(array.length * BYTES_PER_VERTEX);
+        bb.order(ByteOrder.nativeOrder());
+
+        FloatBuffer fb = bb.asFloatBuffer();
+        fb.put(array);
+        fb.position(0);
+        return fb;
+    }
+
+    public Bitmap loadBitmap(int id) {
+        InputStream is = mCtx.getResources().openRawResource(id);
+
+        try {
+            return BitmapFactory.decodeStream(is);
+        } finally {
+            try {
+                is.close();
+                is = null;
+            } catch (IOException e) {
+                is = null;
+            }
+        }
     }
 
     private void newTexCoords(int count) {
@@ -1373,7 +1258,7 @@ public class Deck {
         -1.125000f, 1.750000f, 0.000000f,
         -1.146706f, 1.748101f, 0.000000f,
     };
-    private int mNumVertices = mVertices.length;
+    private int mNumVertices = mVertices.length / 3;
 
     //TEXTURE COORDINATES
     private float[] mTexCoordinatesA = {
@@ -2134,7 +2019,7 @@ public class Deck {
         1.000000f, 0.257812f,
         0.993076f, 0.257812f,
     };
-    private int mNumTexCoordinatesA = mTexCoordinatesA.length;
+    private int mNumTexCoordinatesA = mTexCoordinatesA.length / 2;
 
     /**
     END IMPORTED DATA
@@ -2917,5 +2802,5 @@ public class Deck {
         0.976000f, 0.021207f,
         0.974615f, 0.020846f,
     };
-    private int mNumTexCoordinatesB = mTexCoordinatesB.length;
+    private int mNumTexCoordinatesB = mTexCoordinatesB.length / 2;
 }

@@ -2,55 +2,70 @@ package net.votebrian.games.sof;
 
 import javax.microedition.khronos.opengles.GL10;
 
+import android.content.Context;
 import android.util.Log;
 
 public class Buttons {
+    private Context mCtx;
+
     private Model mBtnHigher;
     private Model mBtnLower;
     private Model mBtnSmoke;
     private Model mBtnFire;
 
-    private float mBtnBaseZ = 8f;
+    private float mBtnBaseZ = 5.1f;
     private float[] mBtn;
 
-    public Buttons() {
-        mBtnHigher = new Model();
-        mBtnFire = new Model();
-        mBtnLower = new Model();
-        mBtnSmoke = new Model();
+    private float[] mSettle = {1.0f, 1.0f, 1.0f, 0.05f};
+    private float[] mHighlight = {1.0f, 1.0f, 1.0f, 0.3f};
 
-        mBtnHigher.setColor(1.0f, 1.0f, 1.0f, 0.00f);
-        mBtnFire.setColor(1.0f, 1.0f, 1.0f, 0.00f);
-        mBtnLower.setColor(1.0f, 1.0f, 1.0f, 0.00f);
-        mBtnSmoke.setColor(1.0f, 1.0f, 1.0f, 0.00f);
+    public Buttons(Context context, GL10 gl) {
+        mCtx = context;
+
+
+        mBtnHigher = new Model(mCtx, gl);
+        mBtnHigher.setModelColor(mSettle);
+        mBtnHigher.enableOutline();
+
+        mBtnLower = new Model(mCtx, gl);
+        mBtnLower.setModelColor(mSettle);
+        mBtnLower.enableOutline();
+
+        mBtnSmoke = new Model(mCtx, gl);
+        mBtnSmoke.setModelColor(mSettle);
+        mBtnSmoke.enableOutline();
+
+        mBtnFire = new Model(mCtx, gl);
+        mBtnFire.setModelColor(mSettle);
+        mBtnFire.enableOutline();
     }
 
     public void draw(GL10 gl) {
         mBtnHigher.draw(gl);
-        mBtnFire.draw(gl);
         mBtnLower.draw(gl);
         mBtnSmoke.draw(gl);
+        mBtnFire.draw(gl);
     }
 
     public void highlightBtn(int btn) {
 
-        mBtnHigher.setColor(1.0f, 1.0f, 1.0f, 0.00f);
-        mBtnFire.setColor(1.0f, 1.0f, 1.0f, 0.00f);
-        mBtnLower.setColor(1.0f, 1.0f, 1.0f, 0.00f);
-        mBtnSmoke.setColor(1.0f, 1.0f, 1.0f, 0.00f);
+        mBtnHigher.setModelColor(mSettle);
+        mBtnLower.setModelColor(mSettle);
+        mBtnSmoke.setModelColor(mSettle);
+        mBtnFire.setModelColor(mSettle);
 
         switch (btn) {
             case Global.SMOKE:
-                mBtnSmoke.setColor(1.0f, 1.0f, 1.0f, 0.1f);
+                mBtnSmoke.setModelColor(mHighlight);
                 break;
             case Global.FIRE:
-                mBtnFire.setColor(1.0f, 1.0f, 1.0f, 0.1f);
+                mBtnFire.setModelColor(mHighlight);
                 break;
             case Global.HIGHER:
-                mBtnHigher.setColor(1.0f, 1.0f, 1.0f, 0.1f);
+                mBtnHigher.setModelColor(mHighlight);
                 break;
             case Global.LOWER:
-                mBtnLower.setColor(1.0f, 1.0f, 1.0f, 0.1f);
+                mBtnLower.setModelColor(mHighlight);
                 break;
             default:
                 break;
@@ -59,10 +74,10 @@ public class Buttons {
 
     public void settle() {
 
-        mBtnHigher.setColor(1.0f, 1.0f, 1.0f, 0.00f);
-        mBtnFire.setColor(1.0f, 1.0f, 1.0f, 0.00f);
-        mBtnLower.setColor(1.0f, 1.0f, 1.0f, 0.00f);
-        mBtnSmoke.setColor(1.0f, 1.0f, 1.0f, 0.00f);
+        mBtnHigher.setModelColor(mSettle);
+        mBtnFire.setModelColor(mSettle);
+        mBtnLower.setModelColor(mSettle);
+        mBtnSmoke.setModelColor(mSettle);
     }
 
     public void setVertices(float viewW, float viewH, float viewAngle) {
@@ -71,9 +86,9 @@ public class Buttons {
         float h = (float) (mBtnBaseZ * (Math.tan(Math.toRadians(viewAngle))));
         float w = h * ratio;
 
+        // HIGHER
         mBtn = new float[9];
 
-        // HIGHER
         mBtn[0] = -w;
         mBtn[1] =  h;
         mBtn[2] = -mBtnBaseZ;
@@ -88,7 +103,10 @@ public class Buttons {
 
         mBtnHigher.setVertices(mBtn);
 
+
         // LOWER
+        mBtn = new float[9];
+
         mBtn[0] = -w;
         mBtn[1] = -h;
         mBtn[2] = -mBtnBaseZ;
@@ -103,7 +121,10 @@ public class Buttons {
 
         mBtnLower.setVertices(mBtn);
 
+
         // SMOKE
+        mBtn = new float[9];
+
         mBtn[0] = -w;
         mBtn[1] =  h;
         mBtn[2] = -mBtnBaseZ;
@@ -118,7 +139,10 @@ public class Buttons {
 
         mBtnSmoke.setVertices(mBtn);
 
+
         // FIRE
+        mBtn = new float[9];
+
         mBtn[0] =  w;
         mBtn[1] =  h;
         mBtn[2] = -mBtnBaseZ;
@@ -132,5 +156,23 @@ public class Buttons {
         mBtn[8] = -mBtnBaseZ;
 
         mBtnFire.setVertices(mBtn);
+
+
+
+        mBtnHigher.setOutlineIndices(new int[] {0, 1, 1, 2});
+        mBtnHigher.setOutlineColor(mHighlight);
+        mBtnHigher.enableOutline();
+
+        mBtnLower.setOutlineIndices(new int[] {0, 2, 1, 2});
+        mBtnLower.setOutlineColor(mHighlight);
+        mBtnLower.enableOutline();
+
+        mBtnSmoke.setOutlineIndices(new int[] {0, 2, 1, 2});
+        mBtnSmoke.setOutlineColor(mHighlight);
+        mBtnSmoke.enableOutline();
+
+        mBtnFire.setOutlineIndices(new int[] {0, 1, 2, 1});
+        mBtnFire.setOutlineColor(mHighlight);
+        mBtnFire.enableOutline();
     }
 }

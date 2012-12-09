@@ -32,8 +32,9 @@ public class SoFActivity extends Activity
 
     private Resources mRes;
 
-    private TextView mTxtNumDrinks;
+    private TextView mDrinkCounter;
     private LinearLayout mFailBorder;
+    private TextView mFailMessage;
 
     private int mResult = 0;
     private Boolean mFail = false;
@@ -49,8 +50,9 @@ public class SoFActivity extends Activity
         setContentView(R.layout.main);
 
         // View Handles
-        mTxtNumDrinks = (TextView) findViewById(R.id.txt_num_drinks);
+        mDrinkCounter = (TextView) findViewById(R.id.drink_counter);
         mFailBorder = (LinearLayout) findViewById(R.id.fail_border);
+        mFailMessage = (TextView) findViewById(R.id.fail_message);
 
         // Resource Handle
         mRes = getResources();
@@ -103,9 +105,19 @@ public class SoFActivity extends Activity
 
     private void updateCounter() {
         if(mFail) {
-            mTxtNumDrinks.setText("Drink " + String.valueOf(mCounter));
+            mDrinkCounter.setVisibility(LinearLayout.GONE);
+
+            mFailMessage.setVisibility(TextView.VISIBLE);
+            if(mCounter == 1) {
+                mFailMessage.setText("Take 1 Drink");
+            } else {
+                mFailMessage.setText("Take " + String.valueOf(mCounter) + " Drinks");
+            }
         } else {
-            mTxtNumDrinks.setText(String.valueOf(mCounter));
+            mFailMessage.setVisibility(TextView.GONE);
+
+            mDrinkCounter.setVisibility(LinearLayout.VISIBLE);
+            mDrinkCounter.setText(String.valueOf(mCounter));
         }
     }
 

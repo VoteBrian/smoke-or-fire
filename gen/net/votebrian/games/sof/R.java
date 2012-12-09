@@ -18,17 +18,20 @@ public final class R {
         public static final int cardbasespade=0x7f020004;
         public static final int cardsuit=0x7f020005;
         public static final int cardvalue=0x7f020006;
-        public static final int fail_border=0x7f020007;
-        public static final int ic_launcher=0x7f020008;
-        public static final int overlay=0x7f020009;
-        public static final int squares=0x7f02000a;
-        public static final int test=0x7f02000b;
+        public static final int default1=0x7f020007;
+        public static final int default2=0x7f020008;
+        public static final int fail_border=0x7f020009;
+        public static final int ic_launcher=0x7f02000a;
+        public static final int overlay=0x7f02000b;
+        public static final int squares=0x7f02000c;
+        public static final int test=0x7f02000d;
     }
     public static final class id {
         public static final int canvas=0x7f050000;
-        public static final int fail_border=0x7f050002;
-        public static final int menu_reset=0x7f050003;
-        public static final int txt_num_drinks=0x7f050001;
+        public static final int drink_counter=0x7f050001;
+        public static final int fail_border=0x7f050003;
+        public static final int fail_message=0x7f050002;
+        public static final int menu_reset=0x7f050004;
     }
     public static final class layout {
         public static final int main=0x7f030000;

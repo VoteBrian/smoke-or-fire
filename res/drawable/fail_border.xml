@@ -6,7 +6,7 @@
                 android:width="2dp"
                 android:color="#FF0000" />
             <solid
-                android:color="#10FF0000" />
+                android:color="#01FF0000" />
         </shape>
     </item>
 </layer-list>
