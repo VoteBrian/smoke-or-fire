@@ -74,6 +74,7 @@ public class SurfaceView extends GLSurfaceView {
                 mStartX = x;
                 mStartY = y;
                 */
+                renderer.buttonEvent(x,y, EVENT_MOVE);
                 break;
         }
 

@@ -191,25 +191,18 @@ class GLESRenderer
     }
 
     public void buttonEvent(float x, float y, int event) {
-        int temp_count = 0;
-
         // determine region of button event
         int region = regionCalc(x, y);
 
+        // Last selection failed. Selections disabled until cleared
         if(mSelectionFail == 1) {
             // clear cards from table
             mDeck.burnTable();
-            mOverlayBtns.enableAll();
-            mOverlayBtns.disableRelative();
 
-            mSelectionFail = 2;
+            // disable Relative selections
+            mOverlayBtns.enableAbsolute();
 
-            handler.postDelayed( new Runnable() {
-                    public void run() {
-                        Log.v("RENDERER", "Runnable");
-                        mSelectionFail = 0;
-                    }
-                }, 500);
+            mSelectionFail = 0;
 
             // Set counter to zero
             zeroCounter();
@@ -219,6 +212,13 @@ class GLESRenderer
 
         } else if(mSelectionFail == 0) {
             if( event == EVENT_DOWN ) {
+                // highlight button pressed
+                if( (region < 2)  || relBtnsEnabled ) {
+                    mOverlayBtns.highlightBtn(region);
+                }
+            } else if( event == EVENT_MOVE ) {
+                mOverlayBtns.settle();
+
                 // highlight button pressed
                 if( (region < 2)  || relBtnsEnabled ) {
                     mOverlayBtns.highlightBtn(region);

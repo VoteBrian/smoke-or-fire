@@ -17,8 +17,9 @@ public class Buttons {
     private float[] mBtn;
 
     private float[] mSettle = {1.0f, 1.0f, 1.0f, 0.05f};
-    private float[] mHighlight = {1.0f, 1.0f, 1.0f, 0.3f};
+    private float[] mHighlight = {0.2f, 0.7f, 0.9f, 0.3f};
     private float[] mOff = {0.0f, 0.0f, 0.0f, 0.0f};
+    private float[] mBlue = {0.2f, 0.7f, 0.9f, 0.5f};
 
     public Buttons(Context context, GL10 gl) {
         mCtx = context;
@@ -77,47 +78,55 @@ public class Buttons {
     }
 
     public void disableAll() {
-        mBtnHigher.setModelColor(mOff);
+        mBtnHigher.setModelColor(mSettle);
         mBtnHigher.setOutlineColor(mOff);
 
-        mBtnLower.setModelColor(mOff);
+        mBtnLower.setModelColor(mSettle);
         mBtnLower.setOutlineColor(mOff);
 
-        mBtnSmoke.setModelColor(mOff);
+        mBtnSmoke.setModelColor(mSettle);
         mBtnSmoke.setOutlineColor(mOff);
 
-        mBtnFire.setModelColor(mOff);
+        mBtnFire.setModelColor(mSettle);
         mBtnFire.setOutlineColor(mOff);
     }
 
     public void disableRelative() {
-        mBtnHigher.setModelColor(mOff);
+        mBtnHigher.setModelColor(mSettle);
         mBtnHigher.setOutlineColor(mOff);
 
-        mBtnLower.setModelColor(mOff);
+        mBtnLower.setModelColor(mSettle);
         mBtnLower.setOutlineColor(mOff);
     }
 
     public void enableAll() {
         mBtnHigher.setModelColor(mSettle);
-        mBtnHigher.setOutlineColor(mHighlight);
+        mBtnHigher.setOutlineColor(mBlue);
 
         mBtnLower.setModelColor(mSettle);
-        mBtnLower.setOutlineColor(mHighlight);
+        mBtnLower.setOutlineColor(mBlue);
 
         mBtnSmoke.setModelColor(mSettle);
-        mBtnSmoke.setOutlineColor(mHighlight);
+        mBtnSmoke.setOutlineColor(mBlue);
 
         mBtnFire.setModelColor(mSettle);
-        mBtnFire.setOutlineColor(mHighlight);
+        mBtnFire.setOutlineColor(mBlue);
     }
 
     public void enableRelative() {
         mBtnHigher.setModelColor(mSettle);
-        mBtnHigher.setOutlineColor(mHighlight);
+        mBtnHigher.setOutlineColor(mBlue);
 
         mBtnLower.setModelColor(mSettle);
-        mBtnLower.setOutlineColor(mHighlight);
+        mBtnLower.setOutlineColor(mBlue);
+    }
+
+    public void enableAbsolute() {
+        mBtnSmoke.setModelColor(mSettle);
+        mBtnSmoke.setOutlineColor(mBlue);
+
+        mBtnFire.setModelColor(mSettle);
+        mBtnFire.setOutlineColor(mBlue);
     }
 
 
