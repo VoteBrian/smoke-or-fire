@@ -79,10 +79,6 @@ public class Global extends Application {
         return mYAngle;
     }
 
-    public int deal(int pick) {
-        return mDeck.deal(pick);
-    }
-
     public void burnTable() {
         if(mClearable == 1) {
             mDeck.burnTable();

@@ -35,9 +35,9 @@ class GLESRenderer
 
     private Buttons mOverlayBtns;
 
-    private int EVENT_DOWN = 0;
-    private int EVENT_MOVE = 1;
-    private int EVENT_UP   = 2;
+    private final int EVENT_DOWN = 0;
+    private final int EVENT_MOVE = 1;
+    private final int EVENT_UP   = 2;
 
     private ByteBuffer mLbb;
     private FloatBuffer mLinesBuffer;
@@ -164,7 +164,6 @@ class GLESRenderer
         gl.glBlendFunc(GL10.GL_SRC_ALPHA, GL10.GL_ONE_MINUS_SRC_ALPHA);
 
         gl.glDisable(GL10.GL_COLOR_MATERIAL);
-        // gl.glEnable(GL10.GL_COLOR_MATERIAL);
     }
 
     private void initLighting(GL10 gl) {
@@ -192,50 +191,70 @@ class GLESRenderer
 
     public void buttonEvent(float x, float y, int event) {
         // determine region of button event
+        // 0: SMOKE
+        // 1: FIRE
+        // 2: HIGHER
+        // 3: LOWER
         int region = regionCalc(x, y);
 
-        // Last selection failed. Selections disabled until cleared
-        if(mSelectionFail == 1) {
-            // clear cards from table
-            mDeck.burnTable();
-
-            // disable Relative selections
-            mOverlayBtns.enableAbsolute();
-
-            mSelectionFail = 0;
-
-            // Set counter to zero
-            zeroCounter();
-
-            // reset fail indicator
-            resetFailed();
-
-        } else if(mSelectionFail == 0) {
-            if( event == EVENT_DOWN ) {
-                // highlight button pressed
-                if( (region < 2)  || relBtnsEnabled ) {
+        switch(event) {
+            case EVENT_DOWN:
+                if(mSelectionFail == 1) {
+                    // do nothing
+                } else if( (region < 2) || relBtnsEnabled ) {
+                    // highlight button
                     mOverlayBtns.highlightBtn(region);
                 }
-            } else if( event == EVENT_MOVE ) {
-                mOverlayBtns.settle();
+                break;
 
-                // highlight button pressed
-                if( (region < 2)  || relBtnsEnabled ) {
-                    mOverlayBtns.highlightBtn(region);
+            case EVENT_MOVE:
+                if(mSelectionFail == 1) {
+                    // do nothing
+                } else {
+                    // move highlight to correct button
+                    mOverlayBtns.settle();
+                    if( (region < 2) || relBtnsEnabled ) {
+                        mOverlayBtns.highlightBtn(region);
+                    }
                 }
-            } else if( event == EVENT_UP ) {
-                // remove highlight
-                if( (region < 2)  || relBtnsEnabled ) {
+                break;
+
+            case EVENT_UP:
+                if(mSelectionFail == 1) {
+                    clearTable();
+                } else if( (region < 2) || relBtnsEnabled ) {
                     // remove highlight after a slight delay
                     handler.postDelayed( new Runnable() {
                         public void run() {
                             mOverlayBtns.settle();
                         }
-                    }, 50);
+                    }, 100);
 
                     // deal card and determine outcome
-                    int result = mDeck.deal(region);
-                    Log.v("RENDERER", "result: " + result);
+                    // cards[0] is the previous card
+                    // cards[1] is the current card
+                    int[] cards = mDeck.deal();
+                    int result = Global.BAD;
+
+                    if(region < 2) {
+                        // absolute selection
+                        if( (region == Global.SMOKE) && (Deck.getSuit(cards[1]) > 2) ) {
+                            result = Global.GOOD;
+                        } else if( (region == Global.FIRE) && (Deck.getSuit(cards[1]) < 2) ) {
+                            result = Global.GOOD;
+                        }
+                    } else {
+                        // relative selection
+                        int diff = Deck.getValue(cards[1]) - Deck.getValue(cards[0]);
+                        if(diff == 0) {
+                            result = Global.SOCIAL;
+                        } else if(diff > 0 && region == Global.HIGHER) {
+                            result = Global.GOOD;
+                        } else if (diff < 0 && region == Global.LOWER) {
+                            result = Global.GOOD;
+                        }
+                    }
+
 
                     switch(result) {
                         case Global.BAD:
@@ -246,8 +265,6 @@ class GLESRenderer
 
                             // indicate fail preference
                             flagFailed();
-
-                            // show fail splash image
 
                             // show cards on table
 
@@ -275,8 +292,24 @@ class GLESRenderer
                             break;
                     }
                 }
-            }
+                break;
         }
+    }
+
+    private void clearTable() {
+        // clear cards from table
+        mDeck.burnTable();
+
+        // disable Relative selections
+        mOverlayBtns.enableAbsolute();
+
+        // Set counter to zero
+        zeroCounter();
+
+        // reset fail indicator
+        resetFailed();
+
+        mSelectionFail = 0;
     }
 
     private void incrementCounter() {

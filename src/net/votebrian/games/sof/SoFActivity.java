@@ -109,7 +109,7 @@ public class SoFActivity extends Activity
 
             mFailMessage.setVisibility(TextView.VISIBLE);
             if(mCounter == 1) {
-                mFailMessage.setText("Take 1 Drink");
+                mFailMessage.setText("Take a Drink");
             } else {
                 mFailMessage.setText("Take " + String.valueOf(mCounter) + " Drinks");
             }

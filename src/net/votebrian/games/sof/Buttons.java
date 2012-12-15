@@ -27,19 +27,15 @@ public class Buttons {
 
         mBtnHigher = new Model(mCtx, gl);
         mBtnHigher.setModelColor(mSettle);
-        mBtnHigher.enableOutline();
 
         mBtnLower = new Model(mCtx, gl);
         mBtnLower.setModelColor(mSettle);
-        mBtnLower.enableOutline();
 
         mBtnSmoke = new Model(mCtx, gl);
         mBtnSmoke.setModelColor(mSettle);
-        mBtnSmoke.enableOutline();
 
         mBtnFire = new Model(mCtx, gl);
         mBtnFire.setModelColor(mSettle);
-        mBtnFire.enableOutline();
 
         enableAll();
         disableRelative();
@@ -78,53 +74,69 @@ public class Buttons {
     }
 
     public void disableAll() {
-        mBtnHigher.setModelColor(mSettle);
-        mBtnHigher.setOutlineColor(mOff);
+        mBtnHigher.disableModel();
+        mBtnHigher.disableOutline();
 
-        mBtnLower.setModelColor(mSettle);
-        mBtnLower.setOutlineColor(mOff);
+        mBtnLower.disableModel();
+        mBtnLower.disableOutline();
 
-        mBtnSmoke.setModelColor(mSettle);
-        mBtnSmoke.setOutlineColor(mOff);
+        mBtnSmoke.disableModel();
+        mBtnSmoke.disableOutline();
 
-        mBtnFire.setModelColor(mSettle);
-        mBtnFire.setOutlineColor(mOff);
+        mBtnFire.disableModel();
+        mBtnFire.disableOutline();
     }
 
     public void disableRelative() {
-        mBtnHigher.setModelColor(mSettle);
-        mBtnHigher.setOutlineColor(mOff);
+        // mBtnHigher.disableModel();
+        mBtnHigher.disableOutline();
 
-        mBtnLower.setModelColor(mSettle);
-        mBtnLower.setOutlineColor(mOff);
+        // mBtnLower.disableModel();
+        mBtnLower.disableOutline();
     }
 
     public void enableAll() {
+        mBtnHigher.enableModel();
+        mBtnHigher.enableOutline();
         mBtnHigher.setModelColor(mSettle);
         mBtnHigher.setOutlineColor(mBlue);
 
+        mBtnLower.enableModel();
+        mBtnLower.enableOutline();
         mBtnLower.setModelColor(mSettle);
         mBtnLower.setOutlineColor(mBlue);
 
+        mBtnSmoke.enableModel();
+        mBtnSmoke.enableOutline();
         mBtnSmoke.setModelColor(mSettle);
         mBtnSmoke.setOutlineColor(mBlue);
 
+        mBtnFire.enableModel();
+        mBtnFire.enableOutline();
         mBtnFire.setModelColor(mSettle);
         mBtnFire.setOutlineColor(mBlue);
     }
 
     public void enableRelative() {
+        mBtnHigher.enableModel();
+        mBtnHigher.enableOutline();
         mBtnHigher.setModelColor(mSettle);
         mBtnHigher.setOutlineColor(mBlue);
 
+        mBtnLower.enableModel();
+        mBtnLower.enableOutline();
         mBtnLower.setModelColor(mSettle);
         mBtnLower.setOutlineColor(mBlue);
     }
 
     public void enableAbsolute() {
+        mBtnSmoke.enableModel();
+        mBtnSmoke.enableOutline();
         mBtnSmoke.setModelColor(mSettle);
         mBtnSmoke.setOutlineColor(mBlue);
 
+        mBtnFire.enableModel();
+        mBtnFire.enableOutline();
         mBtnFire.setModelColor(mSettle);
         mBtnFire.setOutlineColor(mBlue);
     }
@@ -218,15 +230,8 @@ public class Buttons {
 
 
         mBtnHigher.setOutlineIndices(new int[] {0, 1, 1, 2});
-        mBtnHigher.enableOutline();
-
         mBtnLower.setOutlineIndices(new int[] {0, 2, 1, 2});
-        mBtnLower.enableOutline();
-
         mBtnSmoke.setOutlineIndices(new int[] {0, 2, 1, 2});
-        mBtnSmoke.enableOutline();
-
         mBtnFire.setOutlineIndices(new int[] {0, 1, 2, 1});
-        mBtnFire.enableOutline();
     }
 }
