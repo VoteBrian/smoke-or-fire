@@ -249,7 +249,7 @@ class GLESRenderer
 
                     if(region < 2) {
                         // absolute selection
-                        if( (region == Global.SMOKE) && (Deck.getSuit(cards[1]) > 2) ) {
+                        if( (region == Global.SMOKE) && (Deck.getSuit(cards[1]) > 1) ) {
                             result = Global.GOOD;
                         } else if( (region == Global.FIRE) && (Deck.getSuit(cards[1]) < 2) ) {
                             result = Global.GOOD;
