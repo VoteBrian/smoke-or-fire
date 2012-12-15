@@ -88,9 +88,6 @@ class GLESRenderer
     }
 
     public void onSurfaceCreated(GL10 gl, EGLConfig config) {
-        setDisplayProperties(gl);
-        initLighting(gl);
-
         mDeck = new Deck(mCtx, gl);
         mOverlayBtns = new Buttons(mCtx, gl);
         mPass = new PassButton(mCtx, gl);
@@ -124,6 +121,8 @@ class GLESRenderer
     public void onSurfaceChanged(GL10 gl, int width, int height) {
         mViewW = width;
         mViewH = height;
+
+        initLighting(gl);
 
         setDisplayProperties(gl);
         setProjection(gl);

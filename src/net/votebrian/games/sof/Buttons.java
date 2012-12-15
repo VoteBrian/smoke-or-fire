@@ -13,7 +13,7 @@ public class Buttons {
     private Model mBtnSmoke;
     private Model mBtnFire;
 
-    private float mBtnBaseZ = 5.1f;
+    private float mBtnBaseZ = 5.2f;
     private float[] mBtn;
 
     private float[] mSettle = {1.0f, 1.0f, 1.0f, 0.05f};

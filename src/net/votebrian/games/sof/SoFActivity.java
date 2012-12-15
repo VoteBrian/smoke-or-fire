@@ -70,9 +70,10 @@ public class SoFActivity extends Activity
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.layout.menu_activity, menu);
-        return true;
+        // MenuInflater inflater = getMenuInflater();
+        // inflater.inflate(R.layout.menu_activity, menu);
+        // return true;
+        return false;
     }
 
     @Override
@@ -82,7 +83,7 @@ public class SoFActivity extends Activity
                 mCounter = 0;
                 updateCounter();
 
-                gbl.reset();
+                // gbl.reset();
                 return true;
         }
 
