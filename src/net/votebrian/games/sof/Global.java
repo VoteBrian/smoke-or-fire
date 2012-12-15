@@ -25,6 +25,7 @@ public class Global extends Application {
     public static final int FIRE   = 1;
     public static final int HIGHER = 2;
     public static final int LOWER  = 3;
+    public static final int PASS   = 4;
 
     public static final int HEARTS   = 0;
     public static final int DIAMONDS = 1;

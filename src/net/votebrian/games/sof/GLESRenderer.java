@@ -22,9 +22,11 @@ import android.util.Log;
 
 class GLESRenderer
         implements GLSurfaceView.Renderer {
-    Global gbl;
-    Context mCtx;
-    Deck mDeck;
+    private Global gbl;
+    private Context mCtx;
+    private Deck mDeck;
+    private Buttons mOverlayBtns;
+    private PassButton mPass;
 
     private Handler handler;
 
@@ -32,8 +34,6 @@ class GLESRenderer
 
     public SharedPreferences         mSettings;
     public SharedPreferences.Editor mEditor;
-
-    private Buttons mOverlayBtns;
 
     private final int EVENT_DOWN = 0;
     private final int EVENT_MOVE = 1;
@@ -93,6 +93,7 @@ class GLESRenderer
 
         mDeck = new Deck(mCtx, gl);
         mOverlayBtns = new Buttons(mCtx, gl);
+        mPass = new PassButton(mCtx, gl);
     }
 
     public void onDrawFrame(GL10 gl) {
@@ -117,6 +118,7 @@ class GLESRenderer
         gl.glRotatef(20f, 1f, 0f, 0f);
 
         mOverlayBtns.draw(gl);
+        mPass.draw(gl);
     }
 
     public void onSurfaceChanged(GL10 gl, int width, int height) {
@@ -127,6 +129,7 @@ class GLESRenderer
         setProjection(gl);
 
         mOverlayBtns.setVertices(mViewW, mViewH, mViewAngle);
+        mPass.setVertices(mViewW, mViewH, mViewAngle);
     }
 
     private void setProjection(GL10 gl) {
@@ -201,6 +204,8 @@ class GLESRenderer
             case EVENT_DOWN:
                 if(mSelectionFail == 1) {
                     // do nothing
+                } else if(region == Global.PASS) {
+                    // do nothing
                 } else if( (region < 2) || relBtnsEnabled ) {
                     // highlight button
                     mOverlayBtns.highlightBtn(region);
@@ -222,6 +227,12 @@ class GLESRenderer
             case EVENT_UP:
                 if(mSelectionFail == 1) {
                     clearTable();
+                } else if(region == Global.PASS) {
+                    // User has pressed the pass button on the bottom right
+                    int temp_count = mSettings.getInt( mRes.getString(R.string.counter_pref), -1);
+                    if(temp_count > 4) {
+                        mPass.reset();
+                    }
                 } else if( (region < 2) || relBtnsEnabled ) {
                     // remove highlight after a slight delay
                     handler.postDelayed( new Runnable() {
@@ -274,6 +285,7 @@ class GLESRenderer
                             // disable higher/lower selections
                             relBtnsEnabled = false;
                             mOverlayBtns.disableAll();
+                            mPass.reset();
                             break;
                         case Global.GOOD:
                             // increment drink counter
@@ -317,6 +329,8 @@ class GLESRenderer
         temp_count = temp_count + 1;
         mEditor.putInt( mRes.getString(R.string.counter_pref), temp_count);
         mEditor.commit();
+
+        mPass.increment();
     }
 
     private void zeroCounter() {
@@ -338,6 +352,10 @@ class GLESRenderer
         float slope = (float) mViewH / (float) mViewW;
         float upslope = -1 * slope * (float) x + mViewH;
         float downslope = slope * x;
+
+        if( (y > (mViewH * 0.9)) && (x > (mViewW * 0.75)) ) {
+            return Global.PASS;
+        }
 
         if( y > upslope ) {
             if( y > downslope ) {
