@@ -362,7 +362,9 @@ class GLESRenderer
         float upslope = -1 * slope * (float) x + mViewH;
         float downslope = slope * x;
 
-        if( (y > (mViewH * 0.9)) && (x > (mViewW * 0.75)) ) {
+        // Specify touch region for PASS "button"
+        // Set to the intersection of the bottom 20% and right-most 30% of screen.
+        if( (y > (mViewH * 0.8)) && (x > (mViewW * 0.70)) ) {
             return Global.PASS;
         }
 
