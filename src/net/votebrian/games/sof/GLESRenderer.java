@@ -322,7 +322,8 @@ class GLESRenderer
         mDeck.burnTable();
 
         // disable Relative selections
-        mOverlayBtns.enableAbsolute();
+        mOverlayBtns.enableAll();
+        mOverlayBtns.disableRelative();
 
         // Set counter to zero
         zeroCounter();
