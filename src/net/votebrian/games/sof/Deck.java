@@ -33,14 +33,20 @@ public class Deck {
     private int[] mDeckStack = new int[mNumCards];
     private int mNumInDeck = 0;
     private float[] mDeckPos = {-4.0f, 0.0f, mZBase};
+    private float[] mDeckAngle = {180.0f, 0.0f, 0.0f};
 
     private int[] mTableStack = new int[mNumCards];
     private int mNumOnTable = 0;
     private float[] mTablePos = {0.0f, 0.0f, mZBase};
+    private float[] mTableAngle = {0.0f, 0.0f, 0.0f};
 
     private int[] mBurntStack = new int[mNumCards];
     private int mNumBurnt = 0;
     private float[] mBurntPos = {5.0f, 5.0f, mZBase};
+
+    // Intermediate position and angle for card flip
+    private float[] mInterPos = {-2.0f, -4.0f, -6.0f};
+    private float[] mInterAngle = {150.0f, 0.0f, 0.0f};
 
     // BITMAP HANDLES
     private Bitmap mHeartBitmap;
@@ -114,17 +120,10 @@ public class Deck {
         }
 
         // Update state, position, and rotation of card on top of deck
-        mCards[ mDeckStack[mNumInDeck-1] ].setState(gbl.ON_TABLE);
         float offsetH = mNumOnTable * 0.016f;
-        mCards[ mDeckStack[mNumInDeck-1] ].setPosition(mTablePos[0], mTablePos[1], mTablePos[2] + offsetH);
-        mCards[ mDeckStack[mNumInDeck-1] ].setRotation(0f, 0f, 0f);
+        cardFlip(mDeckStack[mNumInDeck-1], offsetH);
 
-        // Update deck and table arrays
-        mTableStack[mNumOnTable] = mDeckStack[mNumInDeck-1];
-        mNumOnTable++;
-        mDeckStack[mNumInDeck-1] = -1;
-        mNumInDeck--;
-
+        // If there's a card already on the table, return its index.  Otherwise, return -1.
         if(mNumOnTable > 1) {
             cardPair[0] = mTableStack[mNumOnTable -2];
         }
@@ -132,6 +131,57 @@ public class Deck {
 
         // Return the index of the card on top of table stack
         return cardPair;
+    }
+
+    private void cardFlip(final int index, final float offset) {
+        mCards[index].setState(gbl.ON_TABLE);
+
+        Thread t = new Thread(new Runnable() {
+            public void run() {
+                long curr = System.currentTimeMillis();
+                long startTime = curr;
+
+                int duration = 100;
+                while(curr < (startTime + duration) ) {
+                    float x = (mInterPos[0] - mDeckPos[0])*(curr-startTime)/duration + mDeckPos[0];
+                    float y = (mInterPos[1] - mDeckPos[1])*(curr-startTime)/duration + mDeckPos[1];
+                    float z = (mInterPos[2] - mDeckPos[2])*(curr-startTime)/duration + mDeckPos[2];
+
+                    float angleX = (mInterAngle[0] - mDeckAngle[0])*(curr-startTime)/duration + mDeckAngle[0];
+                    float angleY = (mInterAngle[1] - mDeckAngle[1])*(curr-startTime)/duration + mDeckAngle[1];
+                    float angleZ = (mInterAngle[2] - mDeckAngle[2])*(curr-startTime)/duration + mDeckAngle[2];
+
+                    mCards[index].setPosition(x,y,z + offset);
+                    mCards[index].setRotation(angleX, angleY, angleZ);
+                    curr = System.currentTimeMillis();
+                }
+
+                startTime = startTime + duration;
+                while(curr < (startTime + duration) ) {
+                    float x = (mTablePos[0] - mInterPos[0])*(curr-startTime)/duration + mInterPos[0];
+                    float y = (mTablePos[1] - mInterPos[1])*(curr-startTime)/duration + mInterPos[1];
+                    float z = (mTablePos[2] - mInterPos[2])*(curr-startTime)/duration + mInterPos[2];
+
+                    float angleX = (mTableAngle[0] - mInterAngle[0])*(curr-startTime)/duration + mInterAngle[0];
+                    float angleY = (mTableAngle[1] - mInterAngle[1])*(curr-startTime)/duration + mInterAngle[1];
+                    float angleZ = (mTableAngle[2] - mInterAngle[2])*(curr-startTime)/duration + mInterAngle[2];
+
+                    mCards[index].setPosition(x,y,z + offset);
+                    mCards[index].setRotation(angleX, angleY, angleZ);
+                    curr = System.currentTimeMillis();
+                }
+
+                mCards[index].setPosition(mTablePos[0], mTablePos[1], mTablePos[2] + offset);
+                mCards[index].setRotation(mTableAngle[0], mTableAngle[1], mTableAngle[2]);
+
+                mTableStack[mNumOnTable] = mDeckStack[mNumInDeck-1];
+                mNumOnTable++;
+                mDeckStack[mNumInDeck-1] = -1;
+                mNumInDeck--;
+            }
+        });
+
+        t.run();
     }
 
     public void reset() {
