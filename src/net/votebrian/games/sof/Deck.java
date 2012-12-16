@@ -194,47 +194,43 @@ public class Deck {
 
     public void burnTable() {
         if(mNumOnTable != 0) {
-            for(int c = 0; c < mNumOnTable; c++) {
+            for(int c = mNumOnTable - 1; c >= 0; c--) {
 
                 // make sure it hasn't already been burnt
                 // for some reason
                 if(mTableStack[c] != -1) {
-                    final int crd = c;
-
-                    Thread t = new Thread(new Runnable() {
-                        public void run() {
-                            long curr = System.currentTimeMillis();
-                            long startTime = curr;
-
-                            int duration = 50;
-                            while(curr < startTime + duration) {
-                                float x = (mBurntPos[0] - mTablePos[0])*(curr-startTime)/duration + mTablePos[0];
-                                float y = (mBurntPos[1] - mTablePos[1])*(curr-startTime)/duration + mTablePos[1];
-                                float z = (mBurntPos[2] - mTablePos[2])*(curr-startTime)/duration + mTablePos[2];
-
-                                mCards[mTableStack[crd]].setPosition(x,y,z);
-                                try {
-                                    Thread.sleep(10);
-                                } catch (InterruptedException e) {
-                                    // stuff
-                                }
-
-                                curr = System.currentTimeMillis();
-                            }
-
-                            mCards[mTableStack[crd]].setState(gbl.BURNT);
-                            mBurntStack[mNumBurnt] = mTableStack[crd];
-                            mNumBurnt++;
-                            mTableStack[crd] = -1;
-                        }
-                    });
-
-                    t.run();
+                    flyOut(c);
                 }
             }
 
             mNumOnTable = 0;
         }
+    }
+
+    private void flyOut(final int index) {
+        Thread t = new Thread(new Runnable() {
+            public void run() {
+                long curr = System.currentTimeMillis();
+                long startTime = curr;
+
+                int duration = 50;
+                while(curr < startTime + duration) {
+                    float x = (mBurntPos[0] - mTablePos[0])*(curr-startTime)/duration + mTablePos[0];
+                    float y = (mBurntPos[1] - mTablePos[1])*(curr-startTime)/duration + mTablePos[1];
+                    float z = (mBurntPos[2] - mTablePos[2])*(curr-startTime)/duration + mTablePos[2];
+
+                    mCards[mTableStack[index]].setPosition(x,y,z);
+                    curr = System.currentTimeMillis();
+                }
+
+                mCards[mTableStack[index]].setState(gbl.BURNT);
+                mBurntStack[mNumBurnt] = mTableStack[index];
+                mNumBurnt++;
+                mTableStack[index] = -1;
+            }
+        });
+
+        t.run();
     }
 
     public static int getSuit(int index) {
