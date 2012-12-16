@@ -32,6 +32,7 @@ public class SoFActivity extends Activity
 
     private Resources mRes;
 
+    private SurfaceView mSurfaceView;
     private TextView mDrinkCounter;
     private LinearLayout mFailBorder;
     private TextView mFailMessage;
@@ -50,6 +51,8 @@ public class SoFActivity extends Activity
         setContentView(R.layout.main);
 
         // View Handles
+        mSurfaceView = (SurfaceView) findViewById(R.id.canvas);
+
         mDrinkCounter = (TextView) findViewById(R.id.drink_counter);
         mFailBorder = (LinearLayout) findViewById(R.id.fail_border);
         mFailMessage = (TextView) findViewById(R.id.fail_message);
@@ -66,6 +69,13 @@ public class SoFActivity extends Activity
     @Override
     public void onResume() {
         super.onResume();
+        mSurfaceView.onResume();
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        mSurfaceView.onPause();
     }
 
     @Override

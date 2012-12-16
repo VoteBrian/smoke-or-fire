@@ -193,9 +193,7 @@ public class Deck {
 
     public void burnTable() {
         if(mNumOnTable != 0) {
-            Log.v("Burn Table", "mNumOnTable: " + mNumOnTable);
             for(int c = 0; c < mNumOnTable; c++) {
-                Log.v("Burn", String.valueOf(mTableStack[c]));
 
                 // make sure it hasn't already been burnt
                 // for some reason

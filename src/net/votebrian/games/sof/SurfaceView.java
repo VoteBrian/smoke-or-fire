@@ -45,14 +45,4 @@ public class SurfaceView extends GLSurfaceView {
 
         return true;
     }
-
-    @Override
-    public void onPause() {
-        super.onPause();
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
-    }
 }

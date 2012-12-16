@@ -72,12 +72,17 @@ class GLESRenderer
 
     public GLESRenderer(Context context) {
         mCtx = context;
-        gbl = (Global) context.getApplicationContext();
         handler = new Handler();
+    }
+
+    @Override
+    public void onSurfaceCreated(GL10 gl, EGLConfig config) {
+
+        gbl = (Global) mCtx.getApplicationContext();
 
 
         // Shared Preferences Setup
-        mRes = context.getResources();
+        mRes = mCtx.getResources();
 
         mSettings = mCtx.getSharedPreferences( mRes.getString(R.string.prefs), Context.MODE_PRIVATE);
         mEditor = mSettings.edit();
@@ -85,19 +90,19 @@ class GLESRenderer
         // Default Preferences
         zeroCounter();
         resetFailed();
-    }
+        mSelectionFail = 0;
 
-    public void onSurfaceCreated(GL10 gl, EGLConfig config) {
+        // Create Models
         mDeck = new Deck(mCtx, gl);
         mOverlayBtns = new Buttons(mCtx, gl);
         mPass = new PassButton(mCtx, gl);
     }
 
+    @Override
     public void onDrawFrame(GL10 gl) {
         gl.glClear(GL10.GL_COLOR_BUFFER_BIT | GL10.GL_DEPTH_BUFFER_BIT);
 
         gl.glEnableClientState(GL10.GL_VERTEX_ARRAY);
-        gl.glLoadIdentity();
 
         // rotate card table
         gl.glRotatef(-20f, 1f, 0f, 0f);
@@ -118,6 +123,7 @@ class GLESRenderer
         mPass.draw(gl);
     }
 
+    @Override
     public void onSurfaceChanged(GL10 gl, int width, int height) {
         mViewW = width;
         mViewH = height;
@@ -129,6 +135,8 @@ class GLESRenderer
 
         mOverlayBtns.setVertices(mViewW, mViewH, mViewAngle);
         mPass.setVertices(mViewW, mViewH, mViewAngle);
+
+        gl.glLoadIdentity();
     }
 
     private void setProjection(GL10 gl) {
@@ -139,10 +147,12 @@ class GLESRenderer
         mNearH = (float) (mNearZ * (Math.tan(Math.toRadians(mViewAngle))));
         mNearW = mNearH * ratio;
 
+        gl.glViewport(0, 0, mViewW, mViewH);
+
         // Define orthographic projection
         gl.glMatrixMode(GL10.GL_PROJECTION);
+        gl.glLoadIdentity();
         gl.glFrustumf(-mNearW, mNearW, -mNearH, mNearH, mNearZ, mFarZ);
-        gl.glViewport(0, 0, mViewW, mViewH);
 
         gl.glMatrixMode(GL10.GL_MODELVIEW);
     }

@@ -24,17 +24,14 @@ public class Buttons {
     public Buttons(Context context, GL10 gl) {
         mCtx = context;
 
-
         mBtnHigher = new Model(mCtx, gl);
-        mBtnHigher.setModelColor(mSettle);
-
         mBtnLower = new Model(mCtx, gl);
-        mBtnLower.setModelColor(mSettle);
-
         mBtnSmoke = new Model(mCtx, gl);
-        mBtnSmoke.setModelColor(mSettle);
-
         mBtnFire = new Model(mCtx, gl);
+
+        mBtnHigher.setModelColor(mSettle);
+        mBtnLower.setModelColor(mSettle);
+        mBtnSmoke.setModelColor(mSettle);
         mBtnFire.setModelColor(mSettle);
 
         enableAll();
