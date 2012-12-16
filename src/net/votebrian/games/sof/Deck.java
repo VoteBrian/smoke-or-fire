@@ -5,6 +5,7 @@ import javax.microedition.khronos.opengles.GL10;
 import java.io.InputStream;
 import java.io.IOException;
 import java.lang.Math;
+import java.lang.Thread;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.nio.FloatBuffer;
@@ -39,7 +40,7 @@ public class Deck {
 
     private int[] mBurntStack = new int[mNumCards];
     private int mNumBurnt = 0;
-    private float[] mBurntPos = {0.0f, 0.0f, 0.0f};
+    private float[] mBurntPos = {5.0f, 5.0f, mZBase};
 
     // BITMAP HANDLES
     private Bitmap mHeartBitmap;
@@ -198,11 +199,37 @@ public class Deck {
                 // make sure it hasn't already been burnt
                 // for some reason
                 if(mTableStack[c] != -1) {
+                    final int crd = c;
 
-                    mCards[mTableStack[c]].setState(gbl.BURNT);
-                    mBurntStack[mNumBurnt] = mTableStack[c];
-                    mNumBurnt++;
-                    mTableStack[c] = -1;
+                    Thread t = new Thread(new Runnable() {
+                        public void run() {
+                            long curr = System.currentTimeMillis();
+                            long startTime = curr;
+
+                            int duration = 50;
+                            while(curr < startTime + duration) {
+                                float x = (mBurntPos[0] - mTablePos[0])*(curr-startTime)/duration + mTablePos[0];
+                                float y = (mBurntPos[1] - mTablePos[1])*(curr-startTime)/duration + mTablePos[1];
+                                float z = (mBurntPos[2] - mTablePos[2])*(curr-startTime)/duration + mTablePos[2];
+
+                                mCards[mTableStack[crd]].setPosition(x,y,z);
+                                try {
+                                    Thread.sleep(10);
+                                } catch (InterruptedException e) {
+                                    // stuff
+                                }
+
+                                curr = System.currentTimeMillis();
+                            }
+
+                            mCards[mTableStack[crd]].setState(gbl.BURNT);
+                            mBurntStack[mNumBurnt] = mTableStack[crd];
+                            mNumBurnt++;
+                            mTableStack[crd] = -1;
+                        }
+                    });
+
+                    t.run();
                 }
             }
 
