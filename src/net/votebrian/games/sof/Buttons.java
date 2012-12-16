@@ -7,6 +7,7 @@ import android.util.Log;
 
 public class Buttons {
     private Context mCtx;
+    private Global  gbl;
 
     private Model mBtnHigher;
     private Model mBtnLower;
@@ -16,23 +17,19 @@ public class Buttons {
     private float mBtnBaseZ = 5.2f;
     private float[] mBtn;
 
-    private float[] mSettle = {1.0f, 1.0f, 1.0f, 0.05f};
-    private float[] mHighlight = {0.2f, 0.7f, 0.9f, 0.3f};
-    private float[] mOff = {0.0f, 0.0f, 0.0f, 0.0f};
-    private float[] mBlue = {0.2f, 0.7f, 0.9f, 0.5f};
-
     public Buttons(Context context, GL10 gl) {
         mCtx = context;
+        gbl = (Global) mCtx.getApplicationContext();
 
         mBtnHigher = new Model(mCtx, gl);
         mBtnLower = new Model(mCtx, gl);
         mBtnSmoke = new Model(mCtx, gl);
         mBtnFire = new Model(mCtx, gl);
 
-        mBtnHigher.setModelColor(mSettle);
-        mBtnLower.setModelColor(mSettle);
-        mBtnSmoke.setModelColor(mSettle);
-        mBtnFire.setModelColor(mSettle);
+        mBtnHigher.setModelColor(gbl.SETTLE);
+        mBtnLower.setModelColor(gbl.SETTLE);
+        mBtnSmoke.setModelColor(gbl.SETTLE);
+        mBtnFire.setModelColor(gbl.SETTLE);
 
         enableAll();
         disableRelative();
@@ -47,23 +44,23 @@ public class Buttons {
 
     public void highlightBtn(int btn) {
 
-        mBtnHigher.setModelColor(mSettle);
-        mBtnLower.setModelColor(mSettle);
-        mBtnSmoke.setModelColor(mSettle);
-        mBtnFire.setModelColor(mSettle);
+        mBtnHigher.setModelColor(gbl.SETTLE);
+        mBtnLower.setModelColor(gbl.SETTLE);
+        mBtnSmoke.setModelColor(gbl.SETTLE);
+        mBtnFire.setModelColor(gbl.SETTLE);
 
         switch (btn) {
             case Global.SMOKE:
-                mBtnSmoke.setModelColor(mHighlight);
+                mBtnSmoke.setModelColor(gbl.HIGHLIGHT);
                 break;
             case Global.FIRE:
-                mBtnFire.setModelColor(mHighlight);
+                mBtnFire.setModelColor(gbl.HIGHLIGHT);
                 break;
             case Global.HIGHER:
-                mBtnHigher.setModelColor(mHighlight);
+                mBtnHigher.setModelColor(gbl.HIGHLIGHT);
                 break;
             case Global.LOWER:
-                mBtnLower.setModelColor(mHighlight);
+                mBtnLower.setModelColor(gbl.HIGHLIGHT);
                 break;
             default:
                 break;
@@ -95,56 +92,56 @@ public class Buttons {
     public void enableAll() {
         mBtnHigher.enableModel();
         mBtnHigher.enableOutline();
-        mBtnHigher.setModelColor(mSettle);
-        mBtnHigher.setOutlineColor(mBlue);
+        mBtnHigher.setModelColor(gbl.SETTLE);
+        mBtnHigher.setOutlineColor(gbl.BLUE);
 
         mBtnLower.enableModel();
         mBtnLower.enableOutline();
-        mBtnLower.setModelColor(mSettle);
-        mBtnLower.setOutlineColor(mBlue);
+        mBtnLower.setModelColor(gbl.SETTLE);
+        mBtnLower.setOutlineColor(gbl.BLUE);
 
         mBtnSmoke.enableModel();
         mBtnSmoke.enableOutline();
-        mBtnSmoke.setModelColor(mSettle);
-        mBtnSmoke.setOutlineColor(mBlue);
+        mBtnSmoke.setModelColor(gbl.SETTLE);
+        mBtnSmoke.setOutlineColor(gbl.BLUE);
 
         mBtnFire.enableModel();
         mBtnFire.enableOutline();
-        mBtnFire.setModelColor(mSettle);
-        mBtnFire.setOutlineColor(mBlue);
+        mBtnFire.setModelColor(gbl.SETTLE);
+        mBtnFire.setOutlineColor(gbl.BLUE);
     }
 
     public void enableRelative() {
         mBtnHigher.enableModel();
         mBtnHigher.enableOutline();
-        mBtnHigher.setModelColor(mSettle);
-        mBtnHigher.setOutlineColor(mBlue);
+        mBtnHigher.setModelColor(gbl.SETTLE);
+        mBtnHigher.setOutlineColor(gbl.BLUE);
 
         mBtnLower.enableModel();
         mBtnLower.enableOutline();
-        mBtnLower.setModelColor(mSettle);
-        mBtnLower.setOutlineColor(mBlue);
+        mBtnLower.setModelColor(gbl.SETTLE);
+        mBtnLower.setOutlineColor(gbl.BLUE);
     }
 
     public void enableAbsolute() {
         mBtnSmoke.enableModel();
         mBtnSmoke.enableOutline();
-        mBtnSmoke.setModelColor(mSettle);
-        mBtnSmoke.setOutlineColor(mBlue);
+        mBtnSmoke.setModelColor(gbl.SETTLE);
+        mBtnSmoke.setOutlineColor(gbl.BLUE);
 
         mBtnFire.enableModel();
         mBtnFire.enableOutline();
-        mBtnFire.setModelColor(mSettle);
-        mBtnFire.setOutlineColor(mBlue);
+        mBtnFire.setModelColor(gbl.SETTLE);
+        mBtnFire.setOutlineColor(gbl.BLUE);
     }
 
 
     public void settle() {
 
-        mBtnHigher.setModelColor(mSettle);
-        mBtnFire.setModelColor(mSettle);
-        mBtnLower.setModelColor(mSettle);
-        mBtnSmoke.setModelColor(mSettle);
+        mBtnHigher.setModelColor(gbl.SETTLE);
+        mBtnFire.setModelColor(gbl.SETTLE);
+        mBtnLower.setModelColor(gbl.SETTLE);
+        mBtnSmoke.setModelColor(gbl.SETTLE);
     }
 
     public void setVertices(float viewW, float viewH, float viewAngle) {

@@ -26,6 +26,12 @@ public class Global extends Application {
     public static final int ON_TABLE = 1;
     public static final int BURNT    = 3;
 
+    public float[] SETTLE = {0.2f, 0.7f, 0.9f, 0.05f};
+    public float[] HIGHLIGHT = {0.2f, 0.7f, 0.9f, 0.5f};
+    public float[] OFF = {0.0f, 0.0f, 0.0f, 0.0f};
+    public float[] BLUE = {0.2f, 0.7f, 0.9f, 0.5f};
+    public float[] BRIGHT = {0.2f, 0.7f, 0.9f, 1.0f};
+
     public Global() {
         //mDeck = new Deck(this);
     }

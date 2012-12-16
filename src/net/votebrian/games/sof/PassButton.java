@@ -6,14 +6,10 @@ import javax.microedition.khronos.opengles.GL10;
 
 public class PassButton{
     private Context mCtx;
+    private Global  gbl;
 
     private int mCounter = 0;
     private final int mMaxCount = 5;
-
-    private float[] mSettle = {0.0f, 0.0f, 0.0f, 1.0f};
-    private float[] mHighlight = {0.2f, 0.7f, 0.9f, 1.0f};
-    private float[] mOff = {0.0f, 0.0f, 0.0f, 0.0f};
-    private float[] mBlue = {0.2f, 0.7f, 0.9f, 0.5f};
 
     private final int mNumSegments = 5;
     private Model[] mSeg = new Model[mNumSegments];
@@ -22,6 +18,7 @@ public class PassButton{
 
     public PassButton(Context context, GL10 gl) {
         mCtx = context;
+        gbl = (Global) mCtx.getApplicationContext();
 
         for( int c = 0; c < mNumSegments; c++) {
             mSeg[c] = new Model(mCtx, gl);
@@ -41,13 +38,17 @@ public class PassButton{
         }
 
         for(int c = 0; c < mCounter; c++) {
-            mSeg[c].setModelColor(mHighlight);
+            if(mCounter == mMaxCount) {
+                mSeg[c].setModelColor(gbl.BRIGHT);
+            } else {
+                mSeg[c].setModelColor(gbl.HIGHLIGHT);
+            }
         }
     }
 
     public void reset() {
         for(int c = 0; c < mNumSegments; c++) {
-            mSeg[c].setModelColor(mSettle);
+            mSeg[c].setModelColor(gbl.SETTLE);
         }
 
         mCounter = 0;
@@ -99,8 +100,8 @@ public class PassButton{
             float y = -1 * winH + height;
             mSeg[c].setPosition(x, y, 0);
 
-            mSeg[c].setModelColor(mSettle);
-            mSeg[c].setOutlineColor(mBlue);
+            mSeg[c].setModelColor(gbl.SETTLE);
+            mSeg[c].setOutlineColor(gbl.BLUE);
         }
     }
 }
