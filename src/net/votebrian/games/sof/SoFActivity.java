@@ -2,6 +2,7 @@ package net.votebrian.games.sof;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.content.res.Resources;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
@@ -80,21 +81,21 @@ public class SoFActivity extends Activity
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        // MenuInflater inflater = getMenuInflater();
-        // inflater.inflate(R.layout.menu_activity, menu);
-        // return true;
-        return false;
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.layout.menu_activity, menu);
+        return true;
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch(item.getItemId()) {
-            case R.id.menu_reset:
-                mCounter = 0;
-                updateCounter();
-
-                // gbl.reset();
-                return true;
+            case R.id.menu_tutorial:
+                Intent intent = new Intent(this, TutorialActivity.class);
+                startActivity(intent);
+                break;
+            case R.id.menu_about:
+                // stuff
+                break;
         }
 
         return true;

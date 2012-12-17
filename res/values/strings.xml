@@ -4,10 +4,22 @@
     <string name="counter_pref">net.votebrian.games.sof.counterPref</string>
     <string name="fail_pref">net.votebrian.games.sof.failPref</string>
 
-    <string name="menu_reset">Reset</string>
     <string name="app_name">Smoke Or Fire</string>
-    <string name="btn_higher">Higher</string>
-    <string name="btn_lower">Lower</string>
-    <string name="btn_smoke">Smoke</string>
-    <string name="btn_fire">Fire</string>
+
+    <string name="menu_tutorial">How to Play</string>
+    <string name="menu_about">About</string>
+
+    <string name="tutorial">Tutorial</string>
+    <string name="tutorial_intro_header">Introduction</string>
+    <string name="tutorial_intro">Smoke or Fire is a drinking game.\nThe basic idea is just to guess what the next card will be.</string>
+
+    <string name="tutorial_buttons_header">Playing</string>
+    <string name="tutorial_buttons_a">As shown in the image below, this game uses five buttons: SMOKE, FIRE, HIGHER, LOWER, and PASS.\n</string>
+    <string name="tutorial_buttons_b">When you start off, you\'ll only have access to SMOKE and FIRE. If you think the next card drawn will be red, tap FIRE.  If you think it\'ll be black, tap SMOKE.\n\nOnce you\'ve got a card on the table, you\'ll have access to the HIGHER and LOWER buttons.\n\n</string>
+
+    <string name="tutorial_incentive_header">Incentive</string>
+    <string name="tutorial_incentive">If you guess wrong, take as many drinks as there are on the table.  The cards on the table will be cleared, and the counters will be reset.  You\'ll lose access to the HIGHER and LOWER buttons.\n\n</string>
+
+    <string name="tutorial_passing_header">Passing</string>
+    <string name="tutorial_passing">If you get 5 consecutive correct guesses, you\'ll be able to click the PASS bar (lower right).  Clicking that bar resets the PASS count, but not the card/drink count.  Pass the phone to the next guy.\n\n</string>
 </resources>
