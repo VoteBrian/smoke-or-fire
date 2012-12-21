@@ -2,6 +2,7 @@
 
 <RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:ads="http://schemas.android.com/apk/lib/com.google.ads"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent" >
 
@@ -40,6 +41,18 @@
             android:background="@drawable/fail_border"
             android:visibility="gone">
     </LinearLayout>
+
+    <!-- ADS -->
+    <com.google.ads.AdView
+            android:id="@+id/adView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentLeft="true"
+            ads:adUnitId="a150d4dc56dd00d"
+            ads:adSize="BANNER"
+            ads:testDevices="D68CD51F190D1BFB8BEF4382D9B846AC, 0446755D4FF00BCBC1234F9090733AA0, FE43C87B0E15AB1F5DAA7D37C5B23CF5"
+            ads:loadAdOnCreate="true"/>
 
 </RelativeLayout>
 
