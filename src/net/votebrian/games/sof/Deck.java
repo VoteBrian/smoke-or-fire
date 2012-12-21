@@ -113,12 +113,6 @@ public class Deck {
         // Return the previous card and one dealt.
         int[] cardPair = {-1, -1};
 
-        // first check to make sure we have a card in deck to deal
-        if(mNumInDeck == 0) {
-            shuffle();
-            reloadDeck();
-        }
-
         // Update state, position, and rotation of card on top of deck
         float offsetH = mNumOnTable * 0.016f;
         cardFlip(mDeckStack[mNumInDeck-1], offsetH);
@@ -178,6 +172,11 @@ public class Deck {
                 mNumOnTable++;
                 mDeckStack[mNumInDeck-1] = -1;
                 mNumInDeck--;
+
+                if(mNumInDeck == 0) {
+                    shuffle();
+                    reloadDeck();
+                }
             }
         });
 

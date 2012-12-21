@@ -9,10 +9,10 @@ public class Buttons {
     private Context mCtx;
     private Global  gbl;
 
-    private Model mBtnHigher;
-    private Model mBtnLower;
-    private Model mBtnSmoke;
-    private Model mBtnFire;
+    private Btn mBtnHigher;
+    private Btn mBtnLower;
+    private Btn mBtnSmoke;
+    private Btn mBtnFire;
 
     private float mBtnBaseZ = 5.2f;
     private float[] mBtn;
@@ -21,10 +21,10 @@ public class Buttons {
         mCtx = context;
         gbl = (Global) mCtx.getApplicationContext();
 
-        mBtnHigher = new Model(mCtx, gl);
-        mBtnLower = new Model(mCtx, gl);
-        mBtnSmoke = new Model(mCtx, gl);
-        mBtnFire = new Model(mCtx, gl);
+        mBtnHigher = new Btn(mCtx, gl);
+        mBtnLower = new Btn(mCtx, gl);
+        mBtnSmoke = new Btn(mCtx, gl);
+        mBtnFire = new Btn(mCtx, gl);
 
         mBtnHigher.setModelColor(gbl.SETTLE);
         mBtnLower.setModelColor(gbl.SETTLE);
@@ -51,20 +51,86 @@ public class Buttons {
 
         switch (btn) {
             case Global.SMOKE:
-                mBtnSmoke.setModelColor(gbl.HIGHLIGHT);
+                mBtnSmoke.setModelColor(gbl.BLACK);
+                sink(btn);
+                // mBtnSmoke.setRotOffset(2f);
                 break;
             case Global.FIRE:
-                mBtnFire.setModelColor(gbl.HIGHLIGHT);
+                mBtnFire.setModelColor(gbl.RED);
+                sink(btn);
                 break;
             case Global.HIGHER:
-                mBtnHigher.setModelColor(gbl.HIGHLIGHT);
+                mBtnHigher.setModelColor(gbl.WHITE);
+                sink(btn);
                 break;
             case Global.LOWER:
-                mBtnLower.setModelColor(gbl.HIGHLIGHT);
+                mBtnLower.setModelColor(gbl.WHITE);
+                sink(btn);
                 break;
             default:
                 break;
         }
+    }
+
+    private void sink(final int index) {
+        Thread t = new Thread(new Runnable() {
+            public void run() {
+                long curr = System.currentTimeMillis();
+                long startTime = curr;
+
+                int duration = 50;
+                float fullRotation = 35f;
+                while(curr < startTime + duration) {
+                    float x = fullRotation*(curr-startTime)/duration;
+
+                    switch(index) {
+                        case Global.SMOKE:
+                            mBtnSmoke.setRotOffset(x);
+                            break;
+                        case Global.FIRE:
+                            mBtnFire.setRotOffset(x);
+                            break;
+                        case Global.HIGHER:
+                            mBtnHigher.setRotOffset(x);
+                            break;
+                        case Global.LOWER:
+                            mBtnLower.setRotOffset(x);
+                            break;
+                    }
+
+                    curr = System.currentTimeMillis();
+                }
+
+                switch(index) {
+                    case Global.SMOKE:
+                        mBtnSmoke.setRotOffset(fullRotation);
+                        break;
+                    case Global.FIRE:
+                        mBtnFire.setRotOffset(fullRotation);
+                        break;
+                    case Global.HIGHER:
+                        mBtnHigher.setRotOffset(fullRotation);
+                        break;
+                    case Global.LOWER:
+                        mBtnLower.setRotOffset(fullRotation);
+                        break;
+                }
+            }
+        });
+
+        t.run();
+    }
+
+    public void highlightAll() {
+        mBtnHigher.setModelColor(gbl.WHITE);
+        mBtnFire.setModelColor(gbl.RED);
+        mBtnLower.setModelColor(gbl.WHITE);
+        mBtnSmoke.setModelColor(gbl.BLACK);
+    }
+
+    public void highlightAbsolute() {
+        mBtnFire.setModelColor(gbl.RED);
+        mBtnSmoke.setModelColor(gbl.BLACK);
     }
 
     public void disableAll() {
@@ -137,11 +203,19 @@ public class Buttons {
 
 
     public void settle() {
+        Log.v("BUTTONS", "settle()");
 
         mBtnHigher.setModelColor(gbl.SETTLE);
+        mBtnHigher.setRotOffset(0f);
+
         mBtnFire.setModelColor(gbl.SETTLE);
+        mBtnFire.setRotOffset(0f);
+
         mBtnLower.setModelColor(gbl.SETTLE);
+        mBtnLower.setRotOffset(0f);
+
         mBtnSmoke.setModelColor(gbl.SETTLE);
+        mBtnSmoke.setRotOffset(0f);
     }
 
     public void setVertices(float viewW, float viewH, float viewAngle) {
@@ -166,6 +240,8 @@ public class Buttons {
         mBtn[8] = -mBtnBaseZ;
 
         mBtnHigher.setVertices(mBtn);
+        mBtnHigher.setOffsets(0, h, -mBtnBaseZ);
+        mBtnHigher.setRotAxes(new float[] {1f, 0f, 0f});
 
 
         // LOWER
@@ -184,6 +260,8 @@ public class Buttons {
         mBtn[8] = -mBtnBaseZ;
 
         mBtnLower.setVertices(mBtn);
+        mBtnLower.setOffsets(0, -h, -mBtnBaseZ);
+        mBtnLower.setRotAxes(new float[] {-1f, 0f, 0f});
 
 
         // SMOKE
@@ -202,6 +280,8 @@ public class Buttons {
         mBtn[8] = -mBtnBaseZ;
 
         mBtnSmoke.setVertices(mBtn);
+        mBtnSmoke.setOffsets(-w, 0, -mBtnBaseZ);
+        mBtnSmoke.setRotAxes(new float[] {0f, 1f, 0f});
 
 
         // FIRE
@@ -220,6 +300,8 @@ public class Buttons {
         mBtn[8] = -mBtnBaseZ;
 
         mBtnFire.setVertices(mBtn);
+        mBtnFire.setOffsets(w, 0, -mBtnBaseZ);
+        mBtnFire.setRotAxes(new float[] {0f, -1f, 0f});
 
 
 

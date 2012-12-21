@@ -28,9 +28,12 @@ public class Global extends Application {
 
     public float[] SETTLE = {0.2f, 0.7f, 0.9f, 0.05f};
     public float[] HIGHLIGHT = {0.2f, 0.7f, 0.9f, 0.5f};
+    public float[] WHITE = {1.0f, 1.0f, 1.0f, 0.5f};
     public float[] OFF = {0.0f, 0.0f, 0.0f, 0.0f};
-    public float[] BLUE = {0.2f, 0.7f, 0.9f, 0.5f};
     public float[] BRIGHT = {0.2f, 0.7f, 0.9f, 1.0f};
+    public float[] BLUE = {0.2f, 0.7f, 0.9f, 0.5f};
+    public float[] RED = {0.9f, 0.2f, 0.2f, 0.5f};
+    public float[] BLACK = {0.0f, 0.0f, 0.1f, 0.5f};
 
     public Global() {
         //mDeck = new Deck(this);

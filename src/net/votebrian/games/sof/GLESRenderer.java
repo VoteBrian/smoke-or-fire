@@ -61,6 +61,8 @@ class GLESRenderer
     private float mXAngle = 0;
     private float mYAngle = 0;
 
+    private int mCurrRegion = -1;
+
     public final int SS_SUNLIGHT = GL10.GL_LIGHT0;
 
     private boolean relBtnsEnabled = false;
@@ -96,6 +98,8 @@ class GLESRenderer
         mDeck = new Deck(mCtx, gl);
         mOverlayBtns = new Buttons(mCtx, gl);
         mPass = new PassButton(mCtx, gl);
+
+        blink();
     }
 
     @Override
@@ -218,6 +222,7 @@ class GLESRenderer
                 } else if( (region < 2) || relBtnsEnabled ) {
                     // highlight button
                     mOverlayBtns.highlightBtn(region);
+                    mCurrRegion = region;
                 }
                 break;
 
@@ -226,9 +231,14 @@ class GLESRenderer
                     // do nothing
                 } else {
                     // move highlight to correct button
-                    mOverlayBtns.settle();
+                    // mOverlayBtns.settle();
                     if( (region < 2) || relBtnsEnabled ) {
-                        mOverlayBtns.highlightBtn(region);
+                        if(region == mCurrRegion) {
+                            // do nothing
+                        } else {
+                            mOverlayBtns.highlightBtn(region);
+                            mCurrRegion = region;
+                        }
                     }
                 }
                 break;
@@ -249,6 +259,7 @@ class GLESRenderer
                             mOverlayBtns.settle();
                         }
                     }, 100);
+                    mCurrRegion = -1;
 
                     // deal card and determine outcome
                     // cards[0] is the previous card
@@ -382,5 +393,43 @@ class GLESRenderer
                 return Global.HIGHER;
             }
         }
+    }
+
+    private void blink() {
+        handler.postDelayed(new Runnable() {
+            public void run() {
+                mOverlayBtns.highlightAbsolute();
+            }
+        }, 1000);
+
+        handler.postDelayed(new Runnable() {
+            public void run() {
+                mOverlayBtns.settle();
+            }
+        }, 1100);
+
+        handler.postDelayed(new Runnable() {
+            public void run() {
+                mOverlayBtns.highlightAbsolute();
+            }
+        }, 1200);
+
+        handler.postDelayed(new Runnable() {
+            public void run() {
+                mOverlayBtns.settle();
+            }
+        }, 1300);
+
+        handler.postDelayed(new Runnable() {
+            public void run() {
+                mOverlayBtns.highlightAbsolute();
+            }
+        }, 1400);
+
+        handler.postDelayed(new Runnable() {
+            public void run() {
+                mOverlayBtns.settle();
+            }
+        }, 1500);
     }
 }
