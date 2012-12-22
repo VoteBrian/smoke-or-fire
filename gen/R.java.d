@@ -16,6 +16,7 @@
 /Users/brianflores/Documents/android/SmokeOrFire/res/drawable-hdpi/ic_launcher.png \
 /Users/brianflores/Documents/android/SmokeOrFire/res/drawable-ldpi/ic_launcher.png \
 /Users/brianflores/Documents/android/SmokeOrFire/res/drawable-mdpi/ic_launcher.png \
+/Users/brianflores/Documents/android/SmokeOrFire/res/layout/about.xml \
 /Users/brianflores/Documents/android/SmokeOrFire/res/layout/main.xml \
 /Users/brianflores/Documents/android/SmokeOrFire/res/layout/menu_activity.xml \
 /Users/brianflores/Documents/android/SmokeOrFire/res/layout/tutorial.xml \

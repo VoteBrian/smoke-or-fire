@@ -109,11 +109,12 @@ public class SoFActivity extends Activity
     public boolean onOptionsItemSelected(MenuItem item) {
         switch(item.getItemId()) {
             case R.id.menu_tutorial:
-                Intent intent = new Intent(this, TutorialActivity.class);
-                startActivity(intent);
+                Intent tutIntent = new Intent(this, TutorialActivity.class);
+                startActivity(tutIntent);
                 break;
             case R.id.menu_about:
-                // stuff
+                Intent aboutIntent = new Intent(this, AboutActivity.class);
+                startActivity(aboutIntent);
                 break;
         }
 

@@ -42,4 +42,11 @@
 
     <string name="tutorial_passing_header">Passing</string>
     <string name="tutorial_passing">If you manage to get 5 consecutive correct guesses, you\'ll be able to click the PASS bar (lower right).  Clicking that bar resets the PASS count, but not the card/drink count.  Pass the phone to the next guy... make him take your drinks.\n\n</string>
+
+
+    <string name="about">About</string>
+    <string name="copyright">Copyright 2012 Brian Flores</string>
+    <string name="version">Smoke or Fire - v1.0\n\n</string>
+    <string name="contact">Contact: bflores@gmail.com</string>
+    <string name="source">Source/Issues: github.com/votebrian/smoke-or-fire</string>
 </resources>

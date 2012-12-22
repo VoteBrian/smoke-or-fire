@@ -37,17 +37,22 @@ public final class R {
         public static final int menu_tutorial=0x7f050005;
     }
     public static final class layout {
-        public static final int main=0x7f030000;
-        public static final int menu_activity=0x7f030001;
-        public static final int tutorial=0x7f030002;
+        public static final int about=0x7f030000;
+        public static final int main=0x7f030001;
+        public static final int menu_activity=0x7f030002;
+        public static final int tutorial=0x7f030003;
     }
     public static final class string {
+        public static final int about=0x7f040010;
         public static final int app_name=0x7f040003;
+        public static final int contact=0x7f040013;
+        public static final int copyright=0x7f040011;
         public static final int counter_pref=0x7f040001;
         public static final int fail_pref=0x7f040002;
         public static final int menu_about=0x7f040005;
         public static final int menu_tutorial=0x7f040004;
         public static final int prefs=0x7f040000;
+        public static final int source=0x7f040014;
         public static final int tutorial=0x7f040006;
         public static final int tutorial_buttons_a=0x7f04000a;
         public static final int tutorial_buttons_b=0x7f04000b;
@@ -58,5 +63,6 @@ public final class R {
         public static final int tutorial_intro_header=0x7f040007;
         public static final int tutorial_passing=0x7f04000f;
         public static final int tutorial_passing_header=0x7f04000e;
+        public static final int version=0x7f040012;
     }
 }
