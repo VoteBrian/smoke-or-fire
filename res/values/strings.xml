@@ -1,4 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
+
+<!--
+    Copyright 2012 Brian Flores
+
+    This file is part of SmokeOrFire.
+
+    SmokeOrFire is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    SmokeOrFire is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with Foobar.  If not, see <http://www.gnu.org/licenses/>.
+-->
+
 <resources>
     <string name="prefs">net.votebrian.games.sof.shared_prefs</string>
     <string name="counter_pref">net.votebrian.games.sof.counterPref</string>
@@ -11,14 +31,14 @@
 
     <string name="tutorial">Tutorial</string>
     <string name="tutorial_intro_header">Introduction</string>
-    <string name="tutorial_intro">Smoke or Fire is a drinking game.\nThe basic idea is just to guess what the next card will be.</string>
+    <string name="tutorial_intro">Smoke or Fire is a drinking game.\nThe basic idea is just to guess what the next card will be.\n\n</string>
 
     <string name="tutorial_buttons_header">What do I do?</string>
-    <string name="tutorial_buttons_a">As shown in the image below, this game has five buttons: SMOKE, FIRE, HIGHER, LOWER, and PASS.\n</string>
-    <string name="tutorial_buttons_b">When you start off, you\'ll only have access to SMOKE and FIRE. If you think the next card drawn will be red, tap FIRE.  If you think it\'ll be black, tap SMOKE.\n\nOnce you\'ve got a card on the table, you\'ll be able to select HIGHER and LOWER.\n\n</string>
+    <string name="tutorial_buttons_a">As shown in the image below, this game has five buttons: SMOKE, FIRE, HIGHER, LOWER, and PASS.  If you think the next card will be black, click SMOKE.  IF you think it\'ll be red, click FIRE.\n</string>
+    <string name="tutorial_buttons_b">When you start off, you\'ll only have access to SMOKE and FIRE, but once you\'ve got a card on the table, you\'ll be able to select HIGHER and LOWER.\n\n</string>
 
     <string name="tutorial_incentive_header">Mistakes were made...</string>
-    <string name="tutorial_incentive">If you guess wrong, take as many drinks as there are on the table.  The cards on the table will be cleared, and the counters will be reset.  You\'ll lose access to the HIGHER and LOWER buttons.\n\n</string>
+    <string name="tutorial_incentive">If you guess wrong, take as many drinks as there are cards on the table.  The cards on the table will be cleared, and the counters will be reset.  You\'ll lose access to the HIGHER and LOWER buttons.\n\n</string>
 
     <string name="tutorial_passing_header">Passing</string>
     <string name="tutorial_passing">If you manage to get 5 consecutive correct guesses, you\'ll be able to click the PASS bar (lower right).  Clicking that bar resets the PASS count, but not the card/drink count.  Pass the phone to the next guy... make him take your drinks.\n\n</string>
