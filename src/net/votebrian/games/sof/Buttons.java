@@ -222,8 +222,6 @@ public class Buttons {
 
 
     public void settle() {
-        Log.v("BUTTONS", "settle()");
-
         mBtnHigher.setModelColor(gbl.SETTLE);
         mBtnHigher.setRotOffset(0f);
 

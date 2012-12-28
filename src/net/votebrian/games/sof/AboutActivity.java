@@ -20,7 +20,6 @@
 package net.votebrian.games.sof;
 
 import android.app.Activity;
-import android.content.Intent;
 import android.os.Bundle;
 
 public class AboutActivity extends Activity {

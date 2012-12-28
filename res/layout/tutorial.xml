@@ -76,6 +76,20 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1.0"
                 android:textSize="32dp"
+                android:text="@string/tutorial_social_header" />
+
+        <TextView
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1.0"
+                android:textSize="16dp"
+                android:text="@string/tutorial_social" />
+
+        <TextView
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1.0"
+                android:textSize="32dp"
                 android:text="@string/tutorial_incentive_header" />
 
         <TextView

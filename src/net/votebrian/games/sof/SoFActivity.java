@@ -43,9 +43,16 @@ import android.view.View;
 
 import android.util.Log;
 
+import com.google.ads.*;
+
+import java.util.List;
+import java.util.ArrayList;
+
 public class SoFActivity extends Activity
         implements SharedPreferences.OnSharedPreferenceChangeListener {
     private Global gbl;
+
+    private IabHelper mIabHelper;
 
     public SharedPreferences        mSettings;
     public SharedPreferences.Editor mEditor;
@@ -56,10 +63,20 @@ public class SoFActivity extends Activity
     private TextView mDrinkCounter;
     private LinearLayout mFailBorder;
     private TextView mFailMessage;
+    private AdView mAdView;
+
+    private Menu mMenu;
 
     private int mResult = 0;
     private Boolean mFail = false;
     private int mCounter = 0;
+    private int mAdFreeThreshold = 6;
+
+    private String mPubKey;
+
+    private Boolean mAdFree = true;
+
+    private List<String> mSkuList;
 
 
     @Override
@@ -77,6 +94,10 @@ public class SoFActivity extends Activity
         mFailBorder = (LinearLayout) findViewById(R.id.fail_border);
         mFailMessage = (TextView) findViewById(R.id.fail_message);
 
+        mAdView = (AdView) findViewById(R.id.adView);
+
+        mMenu = null;
+
         // Resource Handle
         mRes = getResources();
 
@@ -84,6 +105,84 @@ public class SoFActivity extends Activity
         mSettings = getSharedPreferences(mRes.getString(R.string.prefs), Context.MODE_PRIVATE);
         mSettings.registerOnSharedPreferenceChangeListener(this);
         onSharedPreferenceChanged(mSettings, null);
+        mEditor = mSettings.edit();
+
+        // Clear Ad Preference (Testing purposes only)
+        // mEditor.putInt(mRes.getString(R.string.ad_pref), 0);
+        // mEditor.commit();
+
+
+        /* ---------------------------
+            ADS AND IN-APP PURCHASING
+           --------------------------- */
+        final IabHelper.OnConsumeFinishedListener mConsumeFinishedListener
+                = new IabHelper.OnConsumeFinishedListener() {
+            public void onConsumeFinished(Purchase purchase, IabResult result) {
+                if(result.isSuccess()) {
+                    Log.v("SoFActivity", "Purchase consumption succeeded");
+                }
+            }
+        };
+
+        final IabHelper.QueryInventoryFinishedListener mGotInventoryListener
+                = new IabHelper.QueryInventoryFinishedListener() {
+            public void onQueryInventoryFinished(IabResult result, Inventory inventory) {
+                if(result.isFailure()) {
+                    // handle failure
+                    Log.v("SoFActivity", "onQueryInventoryFinished FAILED");
+                } else {
+                    mAdFree = inventory.hasPurchase(Global.SKU_NO_ADS);
+                    if(!mAdFree) {
+                        if(mSettings.getInt(mRes.getString(R.string.ad_pref), 0) != 1) {
+                            mAdView.loadAd(new AdRequest());
+
+                            mEditor.putInt(mRes.getString(R.string.ad_pref), 0);
+                            mEditor.commit();
+                        }
+                    } else {
+                        // set shared preference
+                        mEditor.putInt(mRes.getString(R.string.ad_pref), 1);
+                        mEditor.commit();
+                    }
+
+
+                    /*
+                    // For testing  purposes.  Consume test purchase at startup.
+                    Boolean testPurchase = inventory.hasPurchase("android.test.purchased");
+                    if(testPurchase) {
+                        mIabHelper.consumeAsync(inventory.getPurchase("android.test.purchased"),
+                                    mConsumeFinishedListener);
+                        mEditor.putInt(mRes.getString(R.string.ad_pref), 0);
+                        mEditor.commit();
+                    }
+                    */
+                }
+            }
+        };
+
+        mPubKey = Global.getPubKey();
+        mIabHelper = new IabHelper(this, mPubKey);
+        mIabHelper.startSetup(new IabHelper.OnIabSetupFinishedListener() {
+            public void onIabSetupFinished(IabResult result) {
+                if(result.isSuccess()) {
+                    mIabHelper.queryInventoryAsync(mGotInventoryListener);
+                } else {
+                    Log.v("IAB", "IAB Setup Failed");
+                }
+            }
+        });
+
+        mSkuList = new ArrayList<String>();
+        mSkuList.add(Global.SKU_NO_ADS);
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        if(mIabHelper != null) {
+            mIabHelper.dispose();
+        }
+        mIabHelper = null;
     }
 
     @Override
@@ -100,8 +199,16 @@ public class SoFActivity extends Activity
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
+        mMenu = menu;
+
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.layout.menu_activity, menu);
+
+        // Check if ad have been removed
+        if(mSettings.getInt( getString(R.string.ad_pref), 0) == 1) {
+            MenuItem adItem = mMenu.findItem(R.id.menu_ads);
+            adItem.setEnabled(false);
+        }
         return true;
     }
 
@@ -111,6 +218,25 @@ public class SoFActivity extends Activity
             case R.id.menu_tutorial:
                 Intent tutIntent = new Intent(this, TutorialActivity.class);
                 startActivity(tutIntent);
+                break;
+            case R.id.menu_ads:
+                final Context context = this;
+                IabHelper.QueryInventoryFinishedListener
+                        mQueryFinishedListener = new IabHelper.QueryInventoryFinishedListener () {
+                    public void onQueryInventoryFinished(IabResult result, Inventory inventory) {
+                        if(result.isFailure()) {
+                            // handle failure
+                            return;
+                        }
+
+                        String price = inventory.getSkuDetails(Global.SKU_NO_ADS).getPrice();
+
+                        Intent purchaseIntent = new Intent(context, PurchaseActivity.class);
+                        purchaseIntent.putExtra("ad_price", price);
+                        startActivity(purchaseIntent);
+                    }
+                };
+                mIabHelper.queryInventoryAsync(true, mSkuList, mQueryFinishedListener);
                 break;
             case R.id.menu_about:
                 Intent aboutIntent = new Intent(this, AboutActivity.class);
@@ -133,6 +259,19 @@ public class SoFActivity extends Activity
         // Update Drink Counter
         mCounter = sharedPreferences.getInt( getString(R.string.counter_pref), -1);
         updateCounter();
+
+
+        // Check ad preference
+        if(sharedPreferences.getInt( getString(R.string.ad_pref), 0) == 1) {
+            // remove ad
+            mAdView.setVisibility(View.GONE);
+
+            // remove purchase menu option
+            if(mMenu != null){
+                MenuItem adItem = mMenu.findItem(R.id.menu_ads);
+                adItem.setEnabled(false);
+            }
+        }
     }
 
     private void updateCounter() {

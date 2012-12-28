@@ -23,11 +23,14 @@
     <string name="prefs">net.votebrian.games.sof.shared_prefs</string>
     <string name="counter_pref">net.votebrian.games.sof.counterPref</string>
     <string name="fail_pref">net.votebrian.games.sof.failPref</string>
+    <string name="ad_pref">net.votebrian.games.sof.adPref</string>
 
-    <string name="app_name">Smoke Or Fire</string>
+    <string name="app_name">Smoke or Fire</string>
+    <string name="title">SMOKE / FIRE</string>
 
     <string name="menu_tutorial">How to Play</string>
     <string name="menu_about">About</string>
+    <string name="menu_ads">Remove Ads</string>
 
     <string name="tutorial">Tutorial</string>
     <string name="tutorial_intro_header">Introduction</string>
@@ -35,7 +38,10 @@
 
     <string name="tutorial_buttons_header">What do I do?</string>
     <string name="tutorial_buttons_a">As shown in the image below, this game has five buttons: SMOKE, FIRE, HIGHER, LOWER, and PASS.  If you think the next card will be black, click SMOKE.  IF you think it\'ll be red, click FIRE.\n</string>
-    <string name="tutorial_buttons_b">When you start off, you\'ll only have access to SMOKE and FIRE, but once you\'ve got a card on the table, you\'ll be able to select HIGHER and LOWER.\n\n</string>
+    <string name="tutorial_buttons_b">When you start off, you\'ll only have access to SMOKE and FIRE, but once you\'ve got a card on the table, you\'ll be able to select HIGHER and LOWER.\n\nAces are high.\n\n</string>
+
+    <string name="tutorial_social_header">Social!</string>
+    <string name="tutorial_social">If the card drawn has the same value as the previous card, everyone takes a drink.\n\n</string>
 
     <string name="tutorial_incentive_header">Mistakes were made...</string>
     <string name="tutorial_incentive">If you guess wrong, take as many drinks as there are cards on the table.  The cards on the table will be cleared, and the counters will be reset.  You\'ll lose access to the HIGHER and LOWER buttons.\n\n</string>
@@ -49,4 +55,7 @@
     <string name="version">Smoke or Fire - v1.0\n\n</string>
     <string name="contact">Contact: bflores@gmail.com</string>
     <string name="source">Source/Issues: github.com/votebrian/smoke-or-fire</string>
+
+    <string name="purchase">Purchases</string>
+    <string name="ads_purchase_desc">Permanently remove ads</string>
 </resources>

@@ -26,11 +26,15 @@ import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.nio.FloatBuffer;
 
+import java.util.HashMap;
+
 import android.content.Context;
 import android.content.res.Resources;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
 import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
+import android.media.AudioManager;
+import android.media.SoundPool;
 
 import android.opengl.GLSurfaceView;
 import android.opengl.GLSurfaceView.Renderer;
@@ -53,6 +57,10 @@ class GLESRenderer
 
     public SharedPreferences         mSettings;
     public SharedPreferences.Editor mEditor;
+
+    private SoundPool mSoundPool;
+    private AudioManager mAudioManager;
+    private HashMap<Integer, Integer> mSoundPoolMap;
 
     private final int EVENT_DOWN = 0;
     private final int EVENT_MOVE = 1;
@@ -94,6 +102,10 @@ class GLESRenderer
     public GLESRenderer(Context context) {
         mCtx = context;
         handler = new Handler();
+
+        mSoundPool = new SoundPool(1, AudioManager.STREAM_MUSIC, 0);
+        mAudioManager = (AudioManager) mCtx.getSystemService(Context.AUDIO_SERVICE);
+        mSoundPoolMap = new HashMap();
     }
 
     @Override
@@ -107,6 +119,9 @@ class GLESRenderer
 
         mSettings = mCtx.getSharedPreferences( mRes.getString(R.string.prefs), Context.MODE_PRIVATE);
         mEditor = mSettings.edit();
+
+        // Load chime
+        mSoundPoolMap.put(1, mSoundPool.load(mCtx, R.raw.audio_chime, 1));
 
         // Default Preferences
         zeroCounter();
@@ -327,6 +342,19 @@ class GLESRenderer
                             mPass.reset();
                             break;
                         case Global.GOOD:
+                            // Check to see if user has earned ad-free preference
+                            int temp_count = mSettings.getInt(mRes.getString(R.string.counter_pref), 0);
+                            if(temp_count + 1 == Global.AD_FREE_THRESHOLD) {
+                                // play sound
+                                if(mSettings.getInt(mRes.getString(R.string.ad_pref), 0) == 0) {
+                                    mSoundPool.play(mSoundPoolMap.get(1), 0.5f, 0.5f, 0, 0, 1f);
+                                }
+
+                                // set preference
+                                mEditor.putInt(mRes.getString(R.string.ad_pref), 1);
+                                mEditor.commit();
+                            }
+
                             // increment drink counter
                             incrementCounter();
 
