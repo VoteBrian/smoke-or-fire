@@ -45,10 +45,10 @@ public class Buttons {
         mBtnSmoke = new Btn(mCtx, gl);
         mBtnFire = new Btn(mCtx, gl);
 
-        mBtnHigher.setModelColor(gbl.SETTLE);
-        mBtnLower.setModelColor(gbl.SETTLE);
-        mBtnSmoke.setModelColor(gbl.SETTLE);
-        mBtnFire.setModelColor(gbl.SETTLE);
+        mBtnHigher.setModelColor(gbl.WHITE_LITE);
+        mBtnLower.setModelColor(gbl.WHITE_LITE);
+        mBtnSmoke.setModelColor(gbl.BLACK_LITE);
+        mBtnFire.setModelColor(gbl.RED_LITE);
 
         enableAll();
         disableRelative();
@@ -63,27 +63,27 @@ public class Buttons {
 
     public void highlightBtn(int btn) {
 
-        mBtnHigher.setModelColor(gbl.SETTLE);
-        mBtnLower.setModelColor(gbl.SETTLE);
-        mBtnSmoke.setModelColor(gbl.SETTLE);
-        mBtnFire.setModelColor(gbl.SETTLE);
+        mBtnHigher.setModelColor(gbl.WHITE_LITE);
+        mBtnLower.setModelColor(gbl.WHITE_LITE);
+        mBtnSmoke.setModelColor(gbl.BLACK_LITE);
+        mBtnFire.setModelColor(gbl.RED_LITE);
 
         switch (btn) {
             case Global.SMOKE:
-                mBtnSmoke.setModelColor(gbl.BLACK);
+                mBtnSmoke.setModelColor(gbl.BLACK_FULL);
                 sink(btn);
                 // mBtnSmoke.setRotOffset(2f);
                 break;
             case Global.FIRE:
-                mBtnFire.setModelColor(gbl.RED);
+                mBtnFire.setModelColor(gbl.RED_FULL);
                 sink(btn);
                 break;
             case Global.HIGHER:
-                mBtnHigher.setModelColor(gbl.WHITE);
+                mBtnHigher.setModelColor(gbl.WHITE_FULL);
                 sink(btn);
                 break;
             case Global.LOWER:
-                mBtnLower.setModelColor(gbl.WHITE);
+                mBtnLower.setModelColor(gbl.WHITE_FULL);
                 sink(btn);
                 break;
             default:
@@ -141,15 +141,15 @@ public class Buttons {
     }
 
     public void highlightAll() {
-        mBtnHigher.setModelColor(gbl.WHITE);
-        mBtnFire.setModelColor(gbl.RED);
-        mBtnLower.setModelColor(gbl.WHITE);
-        mBtnSmoke.setModelColor(gbl.BLACK);
+        mBtnHigher.setModelColor(gbl.WHITE_FULL);
+        mBtnFire.setModelColor(gbl.RED_FULL);
+        mBtnLower.setModelColor(gbl.WHITE_FULL);
+        mBtnSmoke.setModelColor(gbl.BLACK_FULL);
     }
 
     public void highlightAbsolute() {
-        mBtnFire.setModelColor(gbl.RED);
-        mBtnSmoke.setModelColor(gbl.BLACK);
+        mBtnFire.setModelColor(gbl.RED_FULL);
+        mBtnSmoke.setModelColor(gbl.BLACK_FULL);
     }
 
     public void disableAll() {
@@ -167,71 +167,71 @@ public class Buttons {
     }
 
     public void disableRelative() {
-        // mBtnHigher.disableModel();
+        mBtnHigher.disableModel();
         mBtnHigher.disableOutline();
 
-        // mBtnLower.disableModel();
+        mBtnLower.disableModel();
         mBtnLower.disableOutline();
     }
 
     public void enableAll() {
         mBtnHigher.enableModel();
         mBtnHigher.enableOutline();
-        mBtnHigher.setModelColor(gbl.SETTLE);
-        mBtnHigher.setOutlineColor(gbl.BLUE);
+        mBtnHigher.setModelColor(gbl.WHITE_LITE);
+        mBtnHigher.setOutlineColor(gbl.WHITE_FULL);
 
         mBtnLower.enableModel();
         mBtnLower.enableOutline();
-        mBtnLower.setModelColor(gbl.SETTLE);
-        mBtnLower.setOutlineColor(gbl.BLUE);
+        mBtnLower.setModelColor(gbl.WHITE_LITE);
+        mBtnLower.setOutlineColor(gbl.WHITE_FULL);
 
         mBtnSmoke.enableModel();
         mBtnSmoke.enableOutline();
-        mBtnSmoke.setModelColor(gbl.SETTLE);
-        mBtnSmoke.setOutlineColor(gbl.BLUE);
+        mBtnSmoke.setModelColor(gbl.BLACK_LITE);
+        mBtnSmoke.setOutlineColor(gbl.BLACK_FULL);
 
         mBtnFire.enableModel();
         mBtnFire.enableOutline();
-        mBtnFire.setModelColor(gbl.SETTLE);
-        mBtnFire.setOutlineColor(gbl.BLUE);
+        mBtnFire.setModelColor(gbl.RED_LITE);
+        mBtnFire.setOutlineColor(gbl.RED_FULL);
     }
 
     public void enableRelative() {
         mBtnHigher.enableModel();
         mBtnHigher.enableOutline();
-        mBtnHigher.setModelColor(gbl.SETTLE);
-        mBtnHigher.setOutlineColor(gbl.BLUE);
+        mBtnHigher.setModelColor(gbl.WHITE_LITE);
+        mBtnHigher.setOutlineColor(gbl.WHITE_FULL);
 
         mBtnLower.enableModel();
         mBtnLower.enableOutline();
-        mBtnLower.setModelColor(gbl.SETTLE);
-        mBtnLower.setOutlineColor(gbl.BLUE);
+        mBtnLower.setModelColor(gbl.WHITE_LITE);
+        mBtnLower.setOutlineColor(gbl.WHITE_FULL);
     }
 
     public void enableAbsolute() {
         mBtnSmoke.enableModel();
         mBtnSmoke.enableOutline();
-        mBtnSmoke.setModelColor(gbl.SETTLE);
-        mBtnSmoke.setOutlineColor(gbl.BLUE);
+        mBtnSmoke.setModelColor(gbl.BLACK_LITE);
+        mBtnSmoke.setOutlineColor(gbl.BLACK_FULL);
 
         mBtnFire.enableModel();
         mBtnFire.enableOutline();
-        mBtnFire.setModelColor(gbl.SETTLE);
-        mBtnFire.setOutlineColor(gbl.BLUE);
+        mBtnFire.setModelColor(gbl.RED_LITE);
+        mBtnFire.setOutlineColor(gbl.RED_FULL);
     }
 
 
     public void settle() {
-        mBtnHigher.setModelColor(gbl.SETTLE);
+        mBtnHigher.setModelColor(gbl.WHITE_LITE);
         mBtnHigher.setRotOffset(0f);
 
-        mBtnFire.setModelColor(gbl.SETTLE);
+        mBtnFire.setModelColor(gbl.RED_LITE);
         mBtnFire.setRotOffset(0f);
 
-        mBtnLower.setModelColor(gbl.SETTLE);
+        mBtnLower.setModelColor(gbl.WHITE_LITE);
         mBtnLower.setRotOffset(0f);
 
-        mBtnSmoke.setModelColor(gbl.SETTLE);
+        mBtnSmoke.setModelColor(gbl.BLACK_LITE);
         mBtnSmoke.setRotOffset(0f);
     }
 

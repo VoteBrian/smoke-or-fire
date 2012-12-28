@@ -67,7 +67,7 @@ public class PassButton{
 
     public void reset() {
         for(int c = 0; c < mNumSegments; c++) {
-            mSeg[c].setModelColor(gbl.SETTLE);
+            mSeg[c].setModelColor(gbl.BLACK_FULL);
         }
 
         mCounter = 0;
@@ -119,8 +119,8 @@ public class PassButton{
             float y = -1 * winH + height;
             mSeg[c].setPosition(x, y, 0);
 
-            mSeg[c].setModelColor(gbl.SETTLE);
-            mSeg[c].setOutlineColor(gbl.BLUE);
+            mSeg[c].setModelColor(gbl.BLACK_FULL);
+            mSeg[c].setOutlineColor(gbl.WHITE_FULL);
         }
     }
 }

@@ -237,6 +237,7 @@ public class Model {
 
             gl.glColorPointer(4, GL10.GL_FLOAT, 0, mOutlineColorBuffer);
             gl.glVertexPointer(3, GL10.GL_FLOAT, 0, mOutlineBuffer);
+            gl.glLineWidth(2f);
             gl.glDrawArrays(GL10.GL_LINES, 0, mNumOutlineVertices);
 
             gl.glDisableClientState(GL10.GL_COLOR_ARRAY);

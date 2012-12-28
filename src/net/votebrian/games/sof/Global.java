@@ -47,14 +47,14 @@ public class Global extends Application {
 
     public static final int AD_FREE_THRESHOLD = 26;
 
-    public float[] SETTLE = {0.2f, 0.7f, 0.9f, 0.05f};
     public float[] HIGHLIGHT = {0.2f, 0.7f, 0.9f, 0.5f};
-    public float[] WHITE = {1.0f, 1.0f, 1.0f, 0.5f};
-    public float[] OFF = {0.0f, 0.0f, 0.0f, 0.0f};
     public float[] BRIGHT = {0.2f, 0.7f, 0.9f, 1.0f};
-    public float[] BLUE = {0.2f, 0.7f, 0.9f, 0.5f};
-    public float[] RED = {0.9f, 0.2f, 0.2f, 0.5f};
-    public float[] BLACK = {0.0f, 0.0f, 0.1f, 0.5f};
+    public float[] RED_FULL   = {0.4f, 0.0f, 0.0f, 0.7f};
+    public float[] RED_LITE   = {0.4f, 0.0f, 0.0f, 0.2f};
+    public float[] BLACK_FULL = {0.2f, 0.2f, 0.2f, 0.7f};
+    public float[] BLACK_LITE = {0.2f, 0.2f, 0.2f, 0.2f};
+    public float[] WHITE_FULL = {0.8f, 0.8f, 0.8f, 0.7f};
+    public float[] WHITE_LITE = {0.8f, 0.8f, 0.8f, 0.2f};
 
     private static final String mPub = "";
 
