@@ -133,8 +133,9 @@ public class Deck {
         int[] cardPair = {-1, -1};
 
         // Update state, position, and rotation of card on top of deck
-        float offsetH = mNumOnTable * 0.016f;
-        cardFlip(mDeckStack[mNumInDeck-1], offsetH);
+        float startOffsetH = mNumInDeck * 0.016f;
+        float endOffsetH = mNumOnTable * 0.016f;
+        cardFlip(mDeckStack[mNumInDeck-1], startOffsetH, endOffsetH);
 
         // If there's a card already on the table, return its index.  Otherwise, return -1.
         if(mNumOnTable > 1) {
@@ -146,7 +147,7 @@ public class Deck {
         return cardPair;
     }
 
-    private void cardFlip(final int index, final float offset) {
+    private void cardFlip(final int index, final float startOffset, final float endOffset) {
         mCards[index].setState(gbl.ON_TABLE);
 
         Thread t = new Thread(new Runnable() {
@@ -154,17 +155,17 @@ public class Deck {
                 long curr = System.currentTimeMillis();
                 long startTime = curr;
 
-                int duration = 100;
+                int duration = 150;
                 while(curr < (startTime + duration) ) {
                     float x = (mInterPos[0] - mDeckPos[0])*(curr-startTime)/duration + mDeckPos[0];
                     float y = (mInterPos[1] - mDeckPos[1])*(curr-startTime)/duration + mDeckPos[1];
-                    float z = (mInterPos[2] - mDeckPos[2])*(curr-startTime)/duration + mDeckPos[2];
+                    float z = (mInterPos[2] - mDeckPos[2] + startOffset)*(curr-startTime)/duration + mDeckPos[2] + startOffset;
 
                     float angleX = (mInterAngle[0] - mDeckAngle[0])*(curr-startTime)/duration + mDeckAngle[0];
                     float angleY = (mInterAngle[1] - mDeckAngle[1])*(curr-startTime)/duration + mDeckAngle[1];
                     float angleZ = (mInterAngle[2] - mDeckAngle[2])*(curr-startTime)/duration + mDeckAngle[2];
 
-                    mCards[index].setPosition(x,y,z + offset);
+                    mCards[index].setPosition(x,y,z);
                     mCards[index].setRotation(angleX, angleY, angleZ);
                     curr = System.currentTimeMillis();
                 }
@@ -179,12 +180,12 @@ public class Deck {
                     float angleY = (mTableAngle[1] - mInterAngle[1])*(curr-startTime)/duration + mInterAngle[1];
                     float angleZ = (mTableAngle[2] - mInterAngle[2])*(curr-startTime)/duration + mInterAngle[2];
 
-                    mCards[index].setPosition(x,y,z + offset);
+                    mCards[index].setPosition(x,y,z + endOffset);
                     mCards[index].setRotation(angleX, angleY, angleZ);
                     curr = System.currentTimeMillis();
                 }
 
-                mCards[index].setPosition(mTablePos[0], mTablePos[1], mTablePos[2] + offset);
+                mCards[index].setPosition(mTablePos[0], mTablePos[1], mTablePos[2] + endOffset);
                 mCards[index].setRotation(mTableAngle[0], mTableAngle[1], mTableAngle[2]);
 
                 mTableStack[mNumOnTable] = mDeckStack[mNumInDeck-1];
