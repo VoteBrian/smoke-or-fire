@@ -142,23 +142,26 @@ class GLESRenderer
 
         gl.glEnableClientState(GL10.GL_VERTEX_ARRAY);
 
+
+        gl.glPushMatrix();
+
         // rotate card table
         gl.glRotatef(-20f, 1f, 0f, 0f);
-        gl.glRotatef(5, 0f, 1f, 0f);
-        gl.glRotatef( -10f, 0f, 0f, 1f);
-        gl.glTranslatef(1f, 3f, 0f);
+        gl.glRotatef(  5f, 0f, 1f, 0f);
+        gl.glRotatef(-10f, 0f, 0f, 1f);
+        gl.glTranslatef( 1f, 3f, 0f);
 
         mDeck.draw(gl);
 
+        gl.glPopMatrix();
 
-        // undo rotate for buttons/overlays
-        gl.glTranslatef(-1f, -3f, 0f);
-        gl.glRotatef(10f, 0f, 0f, 1f);
-        gl.glRotatef(-5f, 0f, 1f, 0f);
-        gl.glRotatef(20f, 1f, 0f, 0f);
+
+        gl.glPushMatrix();
 
         mOverlayBtns.draw(gl);
         mPass.draw(gl);
+
+        gl.glPopMatrix();
     }
 
     @Override
