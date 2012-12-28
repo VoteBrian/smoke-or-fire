@@ -19,7 +19,9 @@
 /Users/brianflores/Documents/android/SmokeOrFire/res/layout/about.xml \
 /Users/brianflores/Documents/android/SmokeOrFire/res/layout/main.xml \
 /Users/brianflores/Documents/android/SmokeOrFire/res/layout/menu_activity.xml \
+/Users/brianflores/Documents/android/SmokeOrFire/res/layout/purchase.xml \
 /Users/brianflores/Documents/android/SmokeOrFire/res/layout/tutorial.xml \
+/Users/brianflores/Documents/android/SmokeOrFire/res/raw/audio_chime.ogg \
 /Users/brianflores/Documents/android/SmokeOrFire/res/values/arrays.xml \
 /Users/brianflores/Documents/android/SmokeOrFire/res/values/strings.xml \
 /Users/brianflores/Documents/android/SmokeOrFire/bin/res/drawable/button.png \

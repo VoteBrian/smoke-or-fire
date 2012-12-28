@@ -45,6 +45,8 @@ public class Global extends Application {
     public static final int ON_TABLE = 1;
     public static final int BURNT    = 3;
 
+    public static final int AD_FREE_THRESHOLD = 26;
+
     public float[] SETTLE = {0.2f, 0.7f, 0.9f, 0.05f};
     public float[] HIGHLIGHT = {0.2f, 0.7f, 0.9f, 0.5f};
     public float[] WHITE = {1.0f, 1.0f, 1.0f, 0.5f};
@@ -54,7 +56,15 @@ public class Global extends Application {
     public float[] RED = {0.9f, 0.2f, 0.2f, 0.5f};
     public float[] BLACK = {0.0f, 0.0f, 0.1f, 0.5f};
 
+    private static final String mPub = "";
+
+    public static final String SKU_NO_ADS = "sof_no_ads";
+
     public Global() {
         //mDeck = new Deck(this);
+    }
+
+    public static String getPubKey() {
+        return  mPub;
     }
 }
