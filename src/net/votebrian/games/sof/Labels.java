@@ -49,6 +49,8 @@ public class Labels {
 
     public int[] mTexture = new int[1];
 
+    public Boolean mRelative = false;
+
     public Labels(Context context, GL10 gl) {
         mCtx = context;
         gbl = (Global) mCtx.getApplicationContext();
@@ -79,7 +81,7 @@ public class Labels {
         mLower.setTexture(mTexture[0]);
         mLower.setTextureBuffer( makeFloatBuffer(genTexCoords(3)) );
 
-        disableAll();
+        disable();
     }
 
     public void draw(GL10 gl) {
@@ -89,23 +91,29 @@ public class Labels {
         mLower.draw(gl);
     }
 
-    public void enableAll() {
+    public void enable() {
         mSmoke.enableModel();
         mFire.enableModel();
-        mHigher.enableModel();
-        mLower.enableModel();
+
+        if(mRelative) {
+            mHigher.enableModel();
+            mLower.enableModel();
+        }
     }
 
-    public void disableAll() {
+    public void disable() {
         mSmoke.disableModel();
         mFire.disableModel();
         mHigher.disableModel();
         mLower.disableModel();
     }
 
-    public void enableAbsolute() {
-        mSmoke.enableModel();
-        mFire.enableModel();
+    public void enableRelative() {
+        mRelative = true;
+    }
+
+    public void disableRelative() {
+        mRelative = false;
     }
 
     public void setVertices(float viewW, float viewH, float viewAngle) {

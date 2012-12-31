@@ -66,7 +66,6 @@ public class PurchaseActivity extends Activity {
         mIabHelper.startSetup(new IabHelper.OnIabSetupFinishedListener() {
             public void onIabSetupFinished(IabResult result) {
                 if(result.isSuccess()) {
-                    Log.v(" PURCHASE ACTIVITY", "IAB Setup Succeeded");
                     setContentView(R.layout.purchase);
 
 

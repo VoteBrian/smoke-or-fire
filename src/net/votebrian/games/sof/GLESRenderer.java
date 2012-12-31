@@ -22,10 +22,10 @@ package net.votebrian.games.sof;
 import javax.microedition.khronos.opengles.GL10;
 import javax.microedition.khronos.egl.EGLConfig;
 
+import java.lang.Thread;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.nio.FloatBuffer;
-
 import java.util.HashMap;
 
 import android.content.Context;
@@ -35,6 +35,8 @@ import android.content.SharedPreferences.Editor;
 import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
 import android.media.AudioManager;
 import android.media.SoundPool;
+import android.os.Looper;
+import android.os.Message;
 
 import android.opengl.GLSurfaceView;
 import android.opengl.GLSurfaceView.Renderer;
@@ -95,6 +97,10 @@ class GLESRenderer
     public final int SS_SUNLIGHT = GL10.GL_LIGHT0;
 
     private boolean relBtnsEnabled = false;
+    private boolean mRunning = true;
+
+    private long mIdleTime;
+    private long maxIdleTime = 5000;
 
     private int mSelectionFail = 0;
     // 0:  Ready for selection
@@ -136,10 +142,13 @@ class GLESRenderer
         mPass = new PassButton(mCtx, gl);
 
         mLbl = new Labels(mCtx, gl);
-        mLbl.enableAbsolute();
+        mLbl.enable();
 
 
         blink();
+
+        handler.removeCallbacks(mCheckIdle);
+        handler.postDelayed(mCheckIdle, maxIdleTime);
     }
 
     @Override
@@ -260,6 +269,9 @@ class GLESRenderer
         // 3: LOWER
         int region = regionCalc(x, y);
 
+        mIdleTime = System.currentTimeMillis();
+        mLbl.disable();
+
         switch(event) {
             case EVENT_DOWN:
                 if(mSelectionFail == 1) {
@@ -353,6 +365,7 @@ class GLESRenderer
                             relBtnsEnabled = false;
                             mOverlayBtns.disableAll();
                             mPass.reset();
+                            mLbl.disableRelative();
                             break;
                         case Global.GOOD:
                             // Check to see if user has earned ad-free preference
@@ -374,6 +387,7 @@ class GLESRenderer
                             // enable higher/lower selections
                             relBtnsEnabled = true;
                             mOverlayBtns.enableRelative();
+                            mLbl.enableRelative();
                             break;
                         case Global.SOCIAL:
                             // highlight drink counter increment
@@ -488,9 +502,30 @@ class GLESRenderer
 
         handler.postDelayed(new Runnable() {
             public void run() {
-                mLbl.disableAll();
+                mLbl.disable();
                 mOverlayBtns.settle();
             }
         }, 1500);
+    }
+
+
+    // Check idle
+    public Runnable mCheckIdle = new Runnable() {
+        public void run() {
+            long curr = System.currentTimeMillis();
+            if(curr > mIdleTime + maxIdleTime) {
+                // turn on labels
+                mLbl.enable();
+            }
+
+            if(mRunning) {
+                handler.postDelayed(this, 1000);
+            }
+        }
+    };
+
+    public void onPause() {
+        mRunning = false;
+        handler.removeCallbacks(mCheckIdle);
     }
 }
