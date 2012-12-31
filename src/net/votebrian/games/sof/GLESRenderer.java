@@ -51,6 +51,8 @@ class GLESRenderer
     private Buttons mOverlayBtns;
     private PassButton mPass;
 
+    private Labels mLbl;
+
     private Handler handler;
 
     private Resources mRes;
@@ -133,6 +135,10 @@ class GLESRenderer
         mOverlayBtns = new Buttons(mCtx, gl);
         mPass = new PassButton(mCtx, gl);
 
+        mLbl = new Labels(mCtx, gl);
+        mLbl.enableAbsolute();
+
+
         blink();
     }
 
@@ -161,6 +167,8 @@ class GLESRenderer
         mOverlayBtns.draw(gl);
         mPass.draw(gl);
 
+        mLbl.draw(gl);
+
         gl.glPopMatrix();
     }
 
@@ -176,6 +184,8 @@ class GLESRenderer
 
         mOverlayBtns.setVertices(mViewW, mViewH, mViewAngle);
         mPass.setVertices(mViewW, mViewH, mViewAngle);
+
+        mLbl.setVertices(mViewW, mViewH, mViewAngle);
 
         gl.glLoadIdentity();
     }
@@ -478,6 +488,7 @@ class GLESRenderer
 
         handler.postDelayed(new Runnable() {
             public void run() {
+                mLbl.disableAll();
                 mOverlayBtns.settle();
             }
         }, 1500);

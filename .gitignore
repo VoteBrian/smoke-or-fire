@@ -2,3 +2,4 @@ $ cat .gitignore
 
 # directories to ignore
 /bin/
+/gen/
