@@ -4,10 +4,17 @@ Simple drinking game built from scratch to learn some OpenGL ES programming.
 
 Predict the color or relative value of the next card dealt.
 
+<a href="http://play.google.com/store/apps/details?id=https://play.google.com/store/apps/details?id=net.votebrian.games.sof">
+  <img alt="Android app on Google Play"
+       src="http://developer.android.com/images/brand/en_generic_rgb_wo_60.png" />
+</a>
+
 ---
 
 ## Downloads
-Current: www.votebrian.net/android/apk/SmokeOrFire.apk
+Current:
+
+  2.0 - www.votebrian.net/android/apk/SmokeOrFire.apk
 
 Previous:
 
