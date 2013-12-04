@@ -189,6 +189,8 @@ public class SoFActivity extends Activity
     public void onResume() {
         super.onResume();
         mSurfaceView.onResume();
+
+        setImersiveMode();
     }
 
     @Override
@@ -295,6 +297,17 @@ public class SoFActivity extends Activity
     private void resetCounters() {
         mCounter = 0;
         updateCounter();
+    }
+
+    private void setImersiveMode() {
+        View decorView = getWindow().getDecorView();
+        int uiOptions = decorView.getSystemUiVisibility();
+        int newUiOptions = uiOptions;
+
+        newUiOptions |= View.SYSTEM_UI_FLAG_FULLSCREEN;
+        newUiOptions |= View.SYSTEM_UI_FLAG_HIDE_NAVIGATION;
+        newUiOptions |= View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY;
+        decorView.setSystemUiVisibility(newUiOptions);
     }
 }
 
