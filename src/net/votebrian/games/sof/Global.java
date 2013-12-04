@@ -60,11 +60,21 @@ public class Global extends Application {
 
     public static final String SKU_NO_ADS = "sof_no_ads";
 
+    private static boolean mReady = false;
+
     public Global() {
-        //mDeck = new Deck(this);
+        // do nothing
     }
 
     public static String getPubKey() {
         return  mPub;
+    }
+
+    public static void setReady() {
+        mReady = true;
+    }
+
+    public static boolean getReady() {
+        return mReady;
     }
 }

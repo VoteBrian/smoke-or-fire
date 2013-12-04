@@ -99,6 +99,7 @@ class GLESRenderer
     private boolean relBtnsEnabled = false;
     private boolean mRunning = true;
 
+    private long mStartTime = 0;
     private long mIdleTime;
     private long maxIdleTime = 5000;
 
@@ -144,6 +145,7 @@ class GLESRenderer
         mLbl = new Labels(mCtx, gl);
         mLbl.enable();
 
+        Global.setReady();
 
         blink();
 
@@ -274,6 +276,8 @@ class GLESRenderer
 
         switch(event) {
             case EVENT_DOWN:
+                mStartTime = System.currentTimeMillis();
+
                 if(mSelectionFail == 1) {
                     // do nothing
                 } else if(region == Global.PASS) {
@@ -286,6 +290,10 @@ class GLESRenderer
                 break;
 
             case EVENT_MOVE:
+                if(System.currentTimeMillis() - mStartTime > 10000) {
+                    removeAds();
+                }
+
                 if(mSelectionFail == 1) {
                     // do nothing
                 } else {
@@ -303,6 +311,10 @@ class GLESRenderer
                 break;
 
             case EVENT_UP:
+                if(System.currentTimeMillis() - mStartTime > 10000) {
+                    removeAds();
+                }
+
                 if(mSelectionFail == 1) {
                     clearTable();
                 } else if(region == Global.PASS) {
@@ -371,14 +383,7 @@ class GLESRenderer
                             // Check to see if user has earned ad-free preference
                             int temp_count = mSettings.getInt(mRes.getString(R.string.counter_pref), 0);
                             if(temp_count + 1 == Global.AD_FREE_THRESHOLD) {
-                                // play sound
-                                if(mSettings.getInt(mRes.getString(R.string.ad_pref), 0) == 0) {
-                                    mSoundPool.play(mSoundPoolMap.get(1), 0.5f, 0.5f, 0, 0, 1f);
-                                }
-
-                                // set preference
-                                mEditor.putInt(mRes.getString(R.string.ad_pref), 1);
-                                mEditor.commit();
+                                removeAds();
                             }
 
                             // increment drink counter
@@ -527,5 +532,16 @@ class GLESRenderer
     public void onPause() {
         mRunning = false;
         handler.removeCallbacks(mCheckIdle);
+    }
+
+    private void removeAds() {
+        // play sound
+        if(mSettings.getInt(mRes.getString(R.string.ad_pref), 0) == 0) {
+            mSoundPool.play(mSoundPoolMap.get(1), 0.5f, 0.5f, 0, 0, 1f);
+        }
+
+        // set preference
+        mEditor.putInt(mRes.getString(R.string.ad_pref), 1);
+        mEditor.commit();
     }
 }

@@ -48,18 +48,20 @@ public class SurfaceView extends GLSurfaceView {
         float x = event.getX();
         float y = event.getY();
 
-        switch(action) {
-            case MotionEvent.ACTION_DOWN:
-                renderer.buttonEvent(x, y, EVENT_DOWN);
-                break;
+        if(Global.getReady()) {
+            switch(action) {
+                case MotionEvent.ACTION_DOWN:
+                    renderer.buttonEvent(x, y, EVENT_DOWN);
+                    break;
 
-            case MotionEvent.ACTION_UP:
-                renderer.buttonEvent(x, y, EVENT_UP);
-                break;
+                case MotionEvent.ACTION_UP:
+                    renderer.buttonEvent(x, y, EVENT_UP);
+                    break;
 
-            case MotionEvent.ACTION_MOVE:
-                renderer.buttonEvent(x,y, EVENT_MOVE);
-                break;
+                case MotionEvent.ACTION_MOVE:
+                    renderer.buttonEvent(x,y, EVENT_MOVE);
+                    break;
+            }
         }
 
         return true;
